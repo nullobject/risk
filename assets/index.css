@@ -15,3 +15,8 @@ svg polygon {
 svg polygon:hover {
   fill: gray;
 }
+
+svg polygon.selected {
+  fill: green;
+  transition: fill .5s ease-in-out;
+}

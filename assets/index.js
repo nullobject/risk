@@ -1,4 +1,3 @@
-var Bacon = require('bacon.js');
 var d3 = require('d3');
 var Hexgrid = require('./hexgrid')
 
@@ -16,6 +15,17 @@ var svg = d3
   .attr('height', 480)
   .append('g');
 
-var polygon = svg.selectAll('polygon').data(hexgrid.hexagons);
-polygon.enter().append('svg:polygon');
-polygon.attr('points', function(d, i) { return d.vertices.join(" "); });
+function redraw() {
+  var polygon = svg
+    .selectAll('polygon')
+    .data(hexgrid.hexagons);
+
+  polygon.enter().append('svg:polygon');
+
+  polygon
+    .attr('points', function(d, i) { return d.vertices.join(" "); })
+    .classed('selected', function(hexagon) { return hexagon.selected; })
+    .on('mousedown', function(hexagon) { hexagon.selected = true; redraw(); });
+}
+
+redraw();
