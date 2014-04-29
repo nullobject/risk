@@ -1,0 +1,17 @@
+body {
+  background: white;
+}
+
+svg {
+  border: 1px solid;
+}
+
+svg polygon {
+  fill: lightgray;
+  stroke: black;
+  stroke-width: 0.25px;
+}
+
+svg polygon:hover {
+  fill: gray;
+}
