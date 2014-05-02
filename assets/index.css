@@ -1,5 +1,6 @@
 body {
   background: white;
+  color: #333;
 }
 
 svg {
@@ -8,15 +9,21 @@ svg {
 
 svg polygon {
   fill: lightgray;
-  stroke: black;
+  stroke: gray;
   stroke-width: 0.25px;
 }
 
-svg polygon:hover {
+svg polygon.hexagon:hover {
   fill: gray;
 }
 
-svg polygon.selected {
-  fill: green;
+svg polygon.hexagon.selected {
+  fill: #1cadcf;
   transition: fill .5s ease-in-out;
+}
+
+svg polygon.cell {
+  fill: none;
+  stroke: #1cadcf;
+  stroke-width: 2px;
 }

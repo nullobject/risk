@@ -8,6 +8,7 @@
   },
   "scripts": [
     "assets/index.js",
+    "assets/clipper.js",
     "assets/core.js",
     "assets/hexagon.js",
     "assets/hexgrid.js"
