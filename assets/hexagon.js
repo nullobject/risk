@@ -1,8 +1,8 @@
-var Core = require('./core')
+var core = require('./core')
 
 function calculateVertices(position, radius) {
-  var r = radius * Math.cos(Core.degreesToRadians(30));
-  var h = radius * Math.sin(Core.degreesToRadians(30));
+  var r = radius * Math.cos(core.degreesToRadians(30));
+  var h = radius * Math.sin(core.degreesToRadians(30));
 
   return [
     [position.x + r,       position.y                   ],

@@ -1,11 +1,11 @@
 var _ = require('lodash');
-var Core = require('./core')
+var core = require('./core')
 var Hexagon = require('./hexagon')
 
 function calculatePosition(origin, point, radius, padding) {
-  var r = radius * Math.cos(Core.degreesToRadians(30));
-  var h = radius * Math.sin(Core.degreesToRadians(30));
-  var d = padding / 2 / Math.tan(Core.degreesToRadians(30));
+  var r = radius * Math.cos(core.degreesToRadians(30));
+  var h = radius * Math.sin(core.degreesToRadians(30));
+  var d = padding / 2 / Math.tan(core.degreesToRadians(30));
 
   var width = (2 * r) + padding,
       height = radius + h + d;
@@ -17,7 +17,7 @@ function calculatePosition(origin, point, radius, padding) {
 }
 
 var Hexgrid = function(cols, rows, radius, padding) {
-  var points = Core.cartesianProduct(_.range(cols), _.range(rows));
+  var points = core.cartesianProduct(_.range(cols), _.range(rows));
 
   this.hexagons = points.map(function(point) {
     var position = calculatePosition({x: 0, y: 0}, point, radius, padding);
