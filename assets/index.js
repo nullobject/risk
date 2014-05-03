@@ -20,10 +20,7 @@ svg
   .data(world.hexagons)
   .enter().append('svg:polygon')
   .attr('class', 'hexagon')
-  .attr('points', function(d, i) { return d.vertices.join(' '); })
-  .on('mousedown', function(hexagon) {
-    d3.select(this).classed('selected', true)
-  });
+  .attr('points', function(d, i) { return d.vertices.join(' '); });
 
 svg
   .append('g')
@@ -31,4 +28,7 @@ svg
   .data(world.cells)
   .enter().append('svg:polygon')
   .attr('class', 'cell')
-  .attr('points', function(d, i) { return d.vertices.join(' '); });
+  .attr('points', function(d, i) { return d.vertices.join(' '); })
+  .on('mousedown', function(hexagon) {
+    d3.select(this).classed('selected', true)
+  });

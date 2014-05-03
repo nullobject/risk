@@ -7,23 +7,25 @@ svg {
   border: 1px solid;
 }
 
-svg polygon {
+svg polygon.hexagon {
   fill: lightgray;
   stroke: gray;
   stroke-width: 0.25px;
 }
 
-svg polygon.hexagon:hover {
-  fill: gray;
-}
-
-svg polygon.hexagon.selected {
-  fill: #1cadcf;
-  transition: fill .5s ease-in-out;
-}
-
 svg polygon.cell {
+  opacity: 0.3;
   fill: none;
   stroke: #1cadcf;
   stroke-width: 2px;
+  pointer-events: all;
+}
+
+svg polygon.cell:hover {
+  fill: gray;
+}
+
+svg polygon.cell.selected {
+  fill: #1cadcf;
+  transition: fill .2s ease-in-out;
 }
