@@ -11,7 +11,8 @@
     "assets/clipper.js",
     "assets/core.js",
     "assets/hexagon.js",
-    "assets/hexgrid.js"
+    "assets/hexgrid.js",
+    "assets/world.js"
   ],
   "styles": [
     "assets/index.css"
