@@ -1,18 +1,16 @@
-var _ = require('lodash');
 var d3 = require('d3');
 var World = require('./world')
 
-var RADIUS = 16,
-    ROWS = 20,
-    COLS = 20;
+// SVG dimensions.
+var width = 640, height = 480;
 
-var world = new World(COLS, ROWS, RADIUS);
+var world = new World(width, height);
 
 var svg = d3
   .select('.container')
   .append('svg')
-  .attr('width', 640)
-  .attr('height', 480);
+  .attr('width', width)
+  .attr('height', height);
 
 svg
   .append('g')
@@ -27,8 +25,20 @@ svg
   .selectAll('polygon')
   .data(world.cells)
   .enter().append('svg:polygon')
-  .attr('class', 'cell')
-  .attr('points', function(d, i) { return d.vertices.join(' '); })
+  .attr('points', function(d, i) { return d.join(' '); })
+  .attr('class', function(d, i) { return 'cell q' + (i % 9) + '-9'; })
   .on('mousedown', function(hexagon) {
     d3.select(this).classed('selected', true)
   });
+
+svg
+  .append('g')
+  .selectAll('path')
+  .data(world.regions, polygon)
+  .enter().append('path')
+  .attr('d', polygon)
+  .order();
+
+function polygon(d) {
+  return 'M' + d.join('L') + 'Z';
+}

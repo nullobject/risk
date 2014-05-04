@@ -4,28 +4,44 @@ body {
 }
 
 svg {
-  border: 1px solid;
+  stroke: #1cadcf;
+}
+
+svg path {
+  fill: none;
+}
+
+svg polygon {
+  fill: lightgray;
 }
 
 svg polygon.hexagon {
-  fill: lightgray;
   stroke: gray;
   stroke-width: 0.25px;
 }
 
 svg polygon.cell {
   opacity: 0.3;
-  fill: none;
-  stroke: #1cadcf;
+  stroke: black;
   stroke-width: 2px;
   pointer-events: all;
 }
 
 svg polygon.cell:hover {
-  fill: gray;
+  fill: coral;
 }
 
 svg polygon.cell.selected {
-  fill: #1cadcf;
+  fill: red;
   transition: fill .2s ease-in-out;
 }
+
+.q0-9{fill:rgb(247,252,240)}
+.q1-9{fill:rgb(224,243,219)}
+.q2-9{fill:rgb(204,235,197)}
+.q3-9{fill:rgb(168,221,181)}
+.q4-9{fill:rgb(123,204,196)}
+.q5-9{fill:rgb(78,179,211)}
+.q6-9{fill:rgb(43,140,190)}
+.q7-9{fill:rgb(8,104,172)}
+.q8-9{fill:rgb(8,64,129)}

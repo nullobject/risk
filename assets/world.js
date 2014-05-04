@@ -1,40 +1,75 @@
 var _ = require('lodash');
-var clipper = require('./clipper');
+var core = require('./core')
+var d3 = require('d3');
 var Hexgrid = require('./hexgrid')
+var PolygonSet = require('./polygon_set')
 
-var PADDING = 0,
+var ROWS = 20, COLS = 20;
+var RADIUS = 16,
+    PADDING = 0,
     SCALE = 100;
 
 function Cell(vertices) {
   this.vertices = vertices;
 }
 
-function World(cols, rows, radius) {
-  var hexgrid = new Hexgrid(cols, rows, radius, PADDING);
+// Ray-casting algorithm based on
+// http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
+function pointInPolygon(point, vs) {
+  var x = point[0],
+      y = point[1],
+      inside = false;
 
-  this.hexagons = _.sample(hexgrid.hexagons, cols * rows / 2);
+  for (var i = 0, j = vs.length - 1; i < vs.length; j = i++) {
+    var xi = vs[i][0], yi = vs[i][1];
+    var xj = vs[j][0], yj = vs[j][1];
 
-  var cpr = new clipper.Clipper();
-      solutionPaths = [];
+    var intersect = ((yi > y) != (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
 
-  var subjectPaths = _.map(this.hexagons, function(hexagon) {
-    var path = _.map(hexagon.vertices, function(vertex) {
-      return {X: vertex[0], Y: vertex[1]};
-    });
-    clipper.JS.ScaleUpPath(path, SCALE);
-    return path;
+    if (intersect) {
+      inside = !inside;
+    }
+  }
+
+  return inside;
+}
+
+// Calculates the Voronoi regions.
+function calculateRegions(width, height) {
+  var vertices = d3.range(20).map(function(d) {
+    return [Math.random() * width, Math.random() * height];
   });
 
-  cpr.AddPaths(subjectPaths, clipper.PolyType.ptSubject, true);
-  var result = cpr.Execute(clipper.ClipType.ctUnion, solutionPaths, clipper.PolyFillType.pftNonZero, clipper.PolyFillType.pftNonZero);
+  var voronoi = d3.geom.voronoi().clipExtent([[0, 0], [width, height]]);
 
-  this.cells = _.map(solutionPaths, function(path) {
-    clipper.JS.ScaleDownPath(path, SCALE);
-    var vertices = _.map(path, function(point) {
-      return [point.X, point.Y];
-    });
-    return new Cell(vertices);
-  });
+  return voronoi(vertices);
+}
+
+// Merge the hexagons inside the Voronoi regions into cells.
+function calculateCells(hexagons, regions) {
+  return _.flatten(regions.map(function(region) {
+    // Find all hexagons inside the Voronoi region.
+    var polygonSet = new PolygonSet(hexagons.filter(function(hexagon) {
+      return pointInPolygon(hexagon.centroid, region);
+    }));
+
+    // Merge the hexagons into a cell.
+    return polygonSet.merge();
+  }), true);
+}
+
+function World(width, height) {
+  var r = RADIUS * Math.cos(core.degreesToRadians(30));
+  var h = RADIUS * Math.sin(core.degreesToRadians(30));
+
+  var cols = Math.floor(width / (2 * r)) - 1,
+      rows = Math.floor(height / (RADIUS + h)) - 1;
+
+  var hexgrid = new Hexgrid(cols, rows, RADIUS, PADDING);
+
+  this.hexagons = hexgrid.hexagons;
+  this.regions  = calculateRegions(width, height);
+  this.cells    = calculateCells(this.hexagons, this.regions);
 }
 
 module.exports = World;
