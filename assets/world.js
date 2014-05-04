@@ -4,10 +4,7 @@ var d3 = require('d3');
 var Hexgrid = require('./hexgrid')
 var PolygonSet = require('./polygon_set')
 
-var ROWS = 20, COLS = 20;
-var RADIUS = 16,
-    PADDING = 0,
-    SCALE = 100;
+var RADIUS = 16, PADDING = 0;
 
 // Ray-casting algorithm based on
 // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
