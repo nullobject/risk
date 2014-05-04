@@ -39,6 +39,16 @@ svg
   .attr('d', polygon)
   .order();
 
+svg
+  .append('g')
+  .selectAll('line')
+  .data(world.links)
+  .enter().append('line')
+  .attr('x1', function(d) { return d.source[0]; })
+  .attr('y1', function(d) { return d.source[1]; })
+  .attr('x2', function(d) { return d.target[0]; })
+  .attr('y2', function(d) { return d.target[1]; });
+
 function polygon(d) {
   return 'M' + d.join('L') + 'Z';
 }

@@ -75,6 +75,11 @@ function World(width, height) {
   this.hexagons = hexgrid.hexagons;
   this.regions  = calculateRegions(width, height);
   this.cells    = calculateCells(this.hexagons, this.regions);
+
+  // TODO: Link adjacent cells together.
+  this.links = d3.geom.voronoi().links(this.regions.map(function(region) {
+    return region.point;
+  }));
 }
 
 module.exports = World;
