@@ -5,7 +5,6 @@ var Hexgrid = require('./hexgrid')
 var PolygonSet = require('./polygon_set')
 
 var RADIUS = 8, // Hexgrid Radius.
-    PADDING = 0, // Hexgrid padding.
 
     // The number of "seed" points to apply to the Voronoi function. More seeds
     // will result in more cells.
@@ -72,15 +71,8 @@ function calculateCells(hexagons, regions) {
 }
 
 function World(width, height) {
-  var r = RADIUS * Math.cos(core.degreesToRadians(30));
-  var h = RADIUS * Math.sin(core.degreesToRadians(30));
-
-  // Calculate the number of columns and rows.
-  var cols = Math.floor(width / (2 * r)) - 1,
-      rows = Math.floor(height / (RADIUS + h)) - 1;
-
   // Create a hexgrid.
-  var hexgrid = new Hexgrid(cols, rows, RADIUS, PADDING);
+  var hexgrid = new Hexgrid(width, height, RADIUS);
 
   // Create a Voronoi function.
   var voronoi = d3.geom.voronoi().clipExtent([[0, 0], [width, height]]);
