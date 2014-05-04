@@ -1,7 +1,7 @@
-var _ = require('lodash');
 var core = require('./core')
+var d3 = require('d3');
 
-function calculatePoints(position, radius) {
+function calculateVertices(position, radius) {
   var r = radius * Math.cos(core.degreesToRadians(30));
   var h = radius * Math.sin(core.degreesToRadians(30));
 
@@ -16,18 +16,12 @@ function calculatePoints(position, radius) {
 }
 
 var Hexagon = function(position, radius) {
-  this.vertices = calculatePoints(position, radius);
+  var vertices = calculateVertices(position, radius);
+  vertices.__proto__ = Hexagon.prototype;
+  vertices.centroid = d3.geom.polygon(vertices).centroid();
+  return vertices;
 };
 
-Hexagon.prototype = {
-  selected: false,
-
-  // Returns true if the polygon contains a given vertex, false otherwise.
-  containsVertex: function(v) {
-    return _.some(this.vertices, function(w) {
-      return _.isEqual(v, w);
-    });
-  }
-};
+Hexagon.prototype = [];
 
 module.exports = Hexagon;
