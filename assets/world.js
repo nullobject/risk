@@ -2,6 +2,7 @@ var _ = require('lodash');
 var core = require('./core')
 var d3 = require('d3');
 var Hexgrid = require('./hexgrid')
+var Polygon = require('./polygon')
 var PolygonSet = require('./polygon_set')
 
 var RADIUS = 8, // Hexgrid Radius.
@@ -13,27 +14,6 @@ var RADIUS = 8, // Hexgrid Radius.
     // The number of Lloyd relaxations to apply to the Voronoi regions. More
     // relaxations will result in cells more uniform in shape and size.
     RELAXATIONS = 2;
-
-// Ray-casting algorithm based on
-// http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
-function pointInPolygon(point, vs) {
-  var x = point[0],
-      y = point[1],
-      inside = false;
-
-  for (var i = 0, j = vs.length - 1; i < vs.length; j = i++) {
-    var xi = vs[i][0], yi = vs[i][1];
-    var xj = vs[j][0], yj = vs[j][1];
-
-    var intersect = ((yi > y) != (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-
-    if (intersect) {
-      inside = !inside;
-    }
-  }
-
-  return inside;
-}
 
 // Calculates the Voronoi regions for a set of points using a given Voronoi
 // function.
@@ -50,7 +30,7 @@ function calculateRegions(voronoi, points) {
 function relaxRegions(voronoi, regions, relaxations) {
   return _.range(relaxations - 1).reduce(function(regions, i) {
     var points = regions.map(function(region) {
-      return d3.geom.polygon(region).centroid();
+      return Polygon(region).centroid;
     });
 
     return voronoi(points);
@@ -62,7 +42,7 @@ function calculateCells(hexagons, regions) {
   return _.flatten(regions.map(function(region) {
     // Find all hexagons inside the Voronoi region.
     var polygonSet = new PolygonSet(hexagons.filter(function(hexagon) {
-      return pointInPolygon(hexagon.centroid, region);
+      return Polygon(region).containsPoint(hexagon.centroid);
     }));
 
     // Merge the hexagons into a cell.
