@@ -9,10 +9,6 @@ var RADIUS = 16,
     PADDING = 0,
     SCALE = 100;
 
-function Cell(vertices) {
-  this.vertices = vertices;
-}
-
 // Ray-casting algorithm based on
 // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
 function pointInPolygon(point, vs) {

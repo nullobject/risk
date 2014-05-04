@@ -5,7 +5,7 @@ var SCALE = 100;
 var PolygonSet = function(polygons) {
   polygons.__proto__ = PolygonSet.prototype;
   return polygons;
-}
+};
 
 PolygonSet.prototype = [];
 
@@ -15,10 +15,12 @@ PolygonSet.prototype.merge = function() {
       solutionPaths = [];
 
   var subjectPaths = this.map(function(polygon) {
-    var path = polygon.vertices.map(function(vertex) {
+    var path = polygon.map(function(vertex) {
       return {X: vertex[0], Y: vertex[1]};
     });
+
     clipper.JS.ScaleUpPath(path, SCALE);
+
     return path;
   });
 
@@ -28,6 +30,7 @@ PolygonSet.prototype.merge = function() {
 
   return solutionPaths.map(function(path) {
     clipper.JS.ScaleDownPath(path, SCALE);
+
     return path.map(function(point) {
       return [point.X, point.Y];
     });

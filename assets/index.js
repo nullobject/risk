@@ -18,7 +18,7 @@ svg
   .data(world.hexagons)
   .enter().append('svg:polygon')
   .attr('class', 'hexagon')
-  .attr('points', function(d, i) { return d.vertices.join(' '); });
+  .attr('points', function(d, i) { return d.join(' '); });
 
 svg
   .append('g')
