@@ -40,6 +40,13 @@ svg polygon.cell.selected {
   transition: fill .2s ease-in-out;
 }
 
+svg polygon.cell.neighbour {
+  opacity: 0.5;
+  stroke: none;
+  fill: black;
+  pointer-events: none;
+}
+
 .q0-9{fill:rgb(247,252,240)}
 .q1-9{fill:rgb(224,243,219)}
 .q2-9{fill:rgb(204,235,197)}

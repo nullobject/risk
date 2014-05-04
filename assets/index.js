@@ -12,6 +12,7 @@ var svg = d3
   .attr('width', width)
   .attr('height', height);
 
+// Draw hexagons.
 svg
   .append('g')
   .selectAll('polygon')
@@ -20,6 +21,21 @@ svg
   .attr('class', 'hexagon')
   .attr('points', function(d, i) { return d.join(' '); });
 
+var neighbours = svg.append('g').selectAll('polygon');
+
+function redrawNeighbours(cells) {
+  neighbours = neighbours.data(cells);
+
+  neighbours
+    .enter().append('svg:polygon')
+    .attr('points', function(d, i) { return d.join(' '); })
+    .attr('class', 'cell neighbour')
+
+  neighbours
+    .exit().remove();
+}
+
+// Draw cells.
 svg
   .append('g')
   .selectAll('polygon')
@@ -27,10 +43,17 @@ svg
   .enter().append('svg:polygon')
   .attr('points', function(d, i) { return d.join(' '); })
   .attr('class', function(d, i) { return 'cell q' + (i % 9) + '-9'; })
+  .on('mouseover', function(hexagon) {
+    redrawNeighbours(hexagon.neighbours);
+  })
+  .on('mouseout', function() {
+    redrawNeighbours([]);
+  })
   .on('mousedown', function(hexagon) {
     d3.select(this).classed('selected', true)
   });
 
+// Draw regions.
 svg
   .append('g')
   .selectAll('path')
@@ -39,6 +62,7 @@ svg
   .attr('d', polygon)
   .order();
 
+// Draw links.
 svg
   .append('g')
   .selectAll('line')

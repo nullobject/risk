@@ -48,16 +48,19 @@ function calculateCells(hexagons, regions, links) {
     // Merge the hexagons into a cell.
     var cell = polygonSet.merge()[0];
 
-    // Calculate nearby cells.
-    cell.nearbyCells = links
-      .filter(function(link) {
-        return (link.target === region.point);
-      })
-      .map(function(link) {
-        return _.find(regions, function(region) { return link.source === region.point });
-      });
+    // Calculate neighbouring cells.
+    cell.neighbours = links
+      .filter(function(link) { return (link.source === region.point) || (link.target === region.point); })
+      .map(function(link) { return linkedRegion(regions, region, link); });
 
     return cell;
+  });
+}
+
+// Returns the region linked from a given region.
+function linkedRegion(regions, a, link) {
+  return _.find(regions, function(b) {
+    return a !== b && ((link.source === b.point) || (link.target === b.point));
   });
 }
 
