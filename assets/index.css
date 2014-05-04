@@ -4,11 +4,15 @@ body {
 }
 
 svg {
-  stroke: #1cadcf;
+}
+
+svg line {
+  stroke: red;
 }
 
 svg path {
   fill: none;
+  stroke: #1cadcf;
 }
 
 svg polygon {
