@@ -38,16 +38,27 @@ function relaxRegions(voronoi, regions, relaxations) {
 }
 
 // Merge the hexagons inside the Voronoi regions into cells.
-function calculateCells(hexagons, regions) {
-  return _.flatten(regions.map(function(region) {
+function calculateCells(hexagons, regions, links) {
+  return regions.map(function(region) {
     // Find all hexagons inside the Voronoi region.
     var polygonSet = new PolygonSet(hexagons.filter(function(hexagon) {
       return Polygon(region).containsPoint(hexagon.centroid);
     }));
 
     // Merge the hexagons into a cell.
-    return polygonSet.merge();
-  }), true);
+    var cell = polygonSet.merge()[0];
+
+    // Calculate nearby cells.
+    cell.nearbyCells = links
+      .filter(function(link) {
+        return (link.target === region.point);
+      })
+      .map(function(link) {
+        return _.find(regions, function(region) { return link.source === region.point });
+      });
+
+    return cell;
+  });
 }
 
 function World(width, height) {
@@ -64,12 +75,12 @@ function World(width, height) {
 
   this.hexagons = hexgrid.hexagons;
   this.regions  = calculateRegions(voronoi, points);
-  this.cells    = calculateCells(this.hexagons, this.regions);
 
-  // TODO: Link adjacent cells together.
   this.links = voronoi.links(this.regions.map(function(region) {
     return region.point;
   }));
+
+  this.cells = calculateCells(this.hexagons, this.regions, this.links);
 }
 
 module.exports = World;
