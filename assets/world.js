@@ -4,7 +4,7 @@ var d3 = require('d3');
 var Hexgrid = require('./hexgrid')
 var PolygonSet = require('./polygon_set')
 
-var RADIUS = 16, PADDING = 0;
+var RADIUS = 8, PADDING = 0;
 
 // Ray-casting algorithm based on
 // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
@@ -29,13 +29,25 @@ function pointInPolygon(point, vs) {
 
 // Calculates the Voronoi regions.
 function calculateRegions(width, height) {
-  var vertices = d3.range(20).map(function(d) {
+  var points = d3.range(25).map(function(d) {
     return [Math.random() * width, Math.random() * height];
   });
 
   var voronoi = d3.geom.voronoi().clipExtent([[0, 0], [width, height]]);
 
-  return voronoi(vertices);
+  return applyVoronoi(voronoi, points, 5);
+}
+
+// Applies a Voronoi function to a given set of points, with a given number of Lloyd relaxations.
+// http://en.wikipedia.org/wiki/Lloyd's_algorithm
+function applyVoronoi(voronoi, points, relaxations) {
+  return _.range(relaxations - 1).reduce(function(regions, i) {
+    var points = regions.map(function(region) {
+      return d3.geom.polygon(region).centroid();
+    });
+
+    return voronoi(points);
+  }, voronoi(points));
 }
 
 // Merge the hexagons inside the Voronoi regions into cells.
