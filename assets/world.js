@@ -5,11 +5,11 @@ var Hexgrid = require('./hexgrid')
 var Polygon = require('./polygon')
 var PolygonSet = require('./polygon_set')
 
-var RADIUS = 8, // Hexgrid Radius.
+var RADIUS = 8, // Hexgrid radius.
 
     // The number of "seed" points to apply to the Voronoi function. More seeds
     // will result in more cells.
-    SEEDS = 10,
+    SEEDS = 20,
 
     // The number of Lloyd relaxations to apply to the Voronoi regions. More
     // relaxations will result in cells more uniform in shape and size.
