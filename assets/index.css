@@ -10,9 +10,14 @@ svg line {
   stroke: red;
 }
 
-svg path {
+svg .voronoi {
   fill: none;
   stroke: #1cadcf;
+}
+
+svg .delaunay {
+  fill: none;
+  stroke: red;
 }
 
 svg polygon {
