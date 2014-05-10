@@ -46,9 +46,9 @@ svg polygon.cell.selected {
 }
 
 svg polygon.cell.neighbour {
-  opacity: 0.5;
+  opacity: 0.95;
   stroke: none;
-  fill: black;
+  fill: green;
   pointer-events: none;
 }
 

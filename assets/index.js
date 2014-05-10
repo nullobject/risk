@@ -23,8 +23,8 @@ svg
 
 var neighbours = svg.append('g').selectAll('polygon');
 
-function redrawNeighbours(cells) {
-  neighbours = neighbours.data(cells);
+function redrawNeighbours(countries) {
+  neighbours = neighbours.data(countries);
 
   neighbours
     .enter().append('svg:polygon')
@@ -35,21 +35,21 @@ function redrawNeighbours(cells) {
     .exit().remove();
 }
 
-// Draw cells.
+// Draw countries.
 svg
   .append('g')
   .selectAll('polygon')
-  .data(world.cells)
+  .data(world.countries)
   .enter().append('svg:polygon')
   .attr('points', function(d, i) { return d.join(' '); })
   .attr('class', function(d, i) { return 'cell q' + (i % 9) + '-9'; })
-  .on('mouseover', function(hexagon) {
-    redrawNeighbours(hexagon.neighbours);
+  .on('mouseover', function(country) {
+    redrawNeighbours(country.neighbours);
   })
   .on('mouseout', function() {
     redrawNeighbours([]);
   })
-  .on('mousedown', function(hexagon) {
+  .on('mousedown', function(country) {
     d3.select(this).classed('selected', true)
   });
 
@@ -62,25 +62,6 @@ svg
   .attr('class', 'voronoi')
   .attr('d', polygon)
   .order();
-
-// Draw links.
-// svg
-//   .append('g')
-//   .selectAll('line')
-//   .data(world.links)
-//   .enter().append('line')
-//   .attr('x1', function(d) { return d.source[0]; })
-//   .attr('y1', function(d) { return d.source[1]; })
-//   .attr('x2', function(d) { return d.target[0]; })
-//   .attr('y2', function(d) { return d.target[1]; });
-
-svg
-  .append('g')
-  .selectAll('path')
-  .data(world.mesh)
-  .enter().append('path')
-  .attr('class', 'delaunay')
-  .attr('d', polygon)
 
 function polygon(d) {
   return 'M' + d.join('L') + 'Z';
