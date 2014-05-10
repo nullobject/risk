@@ -1,11 +1,12 @@
 {
   "name": "hexgrid",
   "dependencies": {
-    "mbostock/d3": "*",
     "lodash/lodash": "*",
     "baconjs/bacon.js": "*",
     "necolas/normalize.css": "*"
   },
+  "paths": ["vendor"],
+  "locals": ["d3"],
   "scripts": [
     "assets/index.js",
     "assets/clipper.js",

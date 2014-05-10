@@ -18,11 +18,25 @@ var RADIUS = 8, // Hexgrid radius.
 // Calculates the Voronoi regions for a set of points using a given Voronoi
 // function.
 function calculateRegions(voronoi, points) {
-  // Calculate the Voronoi regions for the points.
-  var regions = voronoi(points);
+  // Calculate and relax the Voronoi regions for the points.
+  var regions = relaxRegions(voronoi, voronoi(points), RELAXATIONS);
 
-  // Relax the Voronoi regions.
-  return relaxRegions(voronoi, regions, RELAXATIONS);
+  regions.forEach(function(region) {
+    region.neighbours = calculateNeighbouringRegions(regions, region);
+  });
+
+  return regions;
+}
+
+// Calculates the regions neighbouring a given region.
+function calculateNeighbouringRegions(regions, region) {
+  return region.cell.edges
+    .map(function(edge) { return edge.edge; })
+    .filter(function(edge) { return edge.l && edge.r; })
+    .map(function(edge) {
+      var i = (edge.l === region.cell.site ? edge.r.i : edge.l.i);
+      return regions[i];
+    });
 }
 
 // Applies a given number of Lloyd relaxations to a set of regions using a
@@ -37,17 +51,36 @@ function relaxRegions(voronoi, regions, relaxations) {
   }, regions);
 }
 
-// Merge the hexagons inside the Voronoi regions into cells.
-function calculateCells(hexagons, regions) {
-  return _.flatten(regions.map(function(region) {
+// Merge the hexagons inside the Voronoi regions into countries.
+function calculateCountries(hexagons, regions, links) {
+  var countries = regions.map(function(region) {
     // Find all hexagons inside the Voronoi region.
     var polygonSet = new PolygonSet(hexagons.filter(function(hexagon) {
       return Polygon(region).containsPoint(hexagon.centroid);
     }));
 
     // Merge the hexagons into a cell.
-    return polygonSet.merge();
-  }), true);
+    var country = polygonSet.merge()[0];
+
+    country.region = region;
+
+    return country;
+  });
+
+  countries.forEach(function(country) {
+    country.neighbours = calculateNeighbouringCountries(countries, country);
+  });
+
+  return countries;
+}
+
+// Calculates the countries neighbouring a given country.
+function calculateNeighbouringCountries(countries, country) {
+  return countries.filter(function(neighbour) {
+    return neighbour.region.neighbours.some(function(region) {
+      return region === country.region;
+    });
+  });
 }
 
 function World(width, height) {
@@ -63,13 +96,8 @@ function World(width, height) {
   });
 
   this.hexagons = hexgrid.hexagons;
-  this.regions  = calculateRegions(voronoi, points);
-  this.cells    = calculateCells(this.hexagons, this.regions);
-
-  // TODO: Link adjacent cells together.
-  this.links = voronoi.links(this.regions.map(function(region) {
-    return region.point;
-  }));
+  this.regions = calculateRegions(voronoi, points);
+  this.countries = calculateCountries(this.hexagons, this.regions);
 }
 
 module.exports = World;

@@ -12,6 +12,7 @@ var svg = d3
   .attr('width', width)
   .attr('height', height);
 
+// Draw hexagons.
 svg
   .append('g')
   .selectAll('polygon')
@@ -20,34 +21,47 @@ svg
   .attr('class', 'hexagon')
   .attr('points', function(d, i) { return d.join(' '); });
 
+var neighbours = svg.append('g').selectAll('polygon');
+
+function redrawNeighbours(countries) {
+  neighbours = neighbours.data(countries);
+
+  neighbours
+    .enter().append('svg:polygon')
+    .attr('points', function(d, i) { return d.join(' '); })
+    .attr('class', 'cell neighbour')
+
+  neighbours
+    .exit().remove();
+}
+
+// Draw countries.
 svg
   .append('g')
   .selectAll('polygon')
-  .data(world.cells)
+  .data(world.countries)
   .enter().append('svg:polygon')
   .attr('points', function(d, i) { return d.join(' '); })
   .attr('class', function(d, i) { return 'cell q' + (i % 9) + '-9'; })
-  .on('mousedown', function(hexagon) {
+  .on('mouseover', function(country) {
+    redrawNeighbours(country.neighbours);
+  })
+  .on('mouseout', function() {
+    redrawNeighbours([]);
+  })
+  .on('mousedown', function(country) {
     d3.select(this).classed('selected', true)
   });
 
+// Draw regions.
 svg
   .append('g')
   .selectAll('path')
   .data(world.regions, polygon)
   .enter().append('path')
+  .attr('class', 'voronoi')
   .attr('d', polygon)
   .order();
-
-svg
-  .append('g')
-  .selectAll('line')
-  .data(world.links)
-  .enter().append('line')
-  .attr('x1', function(d) { return d.source[0]; })
-  .attr('y1', function(d) { return d.source[1]; })
-  .attr('x2', function(d) { return d.target[0]; })
-  .attr('y2', function(d) { return d.target[1]; });
 
 function polygon(d) {
   return 'M' + d.join('L') + 'Z';

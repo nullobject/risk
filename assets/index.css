@@ -10,9 +10,14 @@ svg line {
   stroke: red;
 }
 
-svg path {
+svg .voronoi {
   fill: none;
   stroke: #1cadcf;
+}
+
+svg .delaunay {
+  fill: none;
+  stroke: red;
 }
 
 svg polygon {
@@ -38,6 +43,13 @@ svg polygon.cell:hover {
 svg polygon.cell.selected {
   fill: red;
   transition: fill .2s ease-in-out;
+}
+
+svg polygon.cell.neighbour {
+  opacity: 0.95;
+  stroke: none;
+  fill: green;
+  pointer-events: none;
 }
 
 .q0-9{fill:rgb(247,252,240)}
