@@ -1,18 +1,19 @@
-var _ = require('lodash');
-var core = require('./core')
-var d3 = require('d3');
-var Hexgrid = require('./hexgrid')
-var Polygon = require('./polygon')
+var _          = require('lodash');
+var core       = require('./core')
+var d3         = require('d3');
+var Country    = require('./country')
+var Hexgrid    = require('./hexgrid')
+var Polygon    = require('./polygon')
 var PolygonSet = require('./polygon_set')
 
 var RADIUS = 8, // Hexgrid radius.
 
     // The number of "seed" points to apply to the Voronoi function. More seeds
-    // will result in more cells.
+    // will result in more countries.
     SEEDS = 20,
 
     // The number of Lloyd relaxations to apply to the Voronoi regions. More
-    // relaxations will result in cells more uniform in shape and size.
+    // relaxations will result in countries more uniform in shape and size.
     RELAXATIONS = 2;
 
 // Calculates the Voronoi regions for a set of points using a given Voronoi
@@ -59,28 +60,20 @@ function calculateCountries(hexagons, regions, links) {
       return Polygon(region).containsPoint(hexagon.centroid);
     }));
 
-    // Merge the hexagons into a cell.
-    var country = polygonSet.merge()[0];
+    // Merge the hexagons into a country.
+    var vertices = polygonSet.merge()[0];
 
+    // Create a new country.
+    var country = new Country(vertices);
     country.region = region;
-
     return country;
   });
 
   countries.forEach(function(country) {
-    country.neighbours = calculateNeighbouringCountries(countries, country);
+    country.calculateNeighbouringCountries(countries);
   });
 
   return countries;
-}
-
-// Calculates the countries neighbouring a given country.
-function calculateNeighbouringCountries(countries, country) {
-  return countries.filter(function(neighbour) {
-    return neighbour.region.neighbours.some(function(region) {
-      return region === country.region;
-    });
-  });
 }
 
 function World(width, height) {

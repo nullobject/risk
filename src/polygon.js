@@ -1,6 +1,6 @@
-var _ = require('lodash');
+var _    = require('lodash');
 var core = require('./core')
-var d3 = require('d3');
+var d3   = require('d3');
 
 var Polygon = function(vertices) {
   vertices.__proto__ = Polygon.prototype;

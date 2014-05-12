@@ -1,6 +1,9 @@
 body {
   background: white;
   color: #333;
+  font-family: 'Surveyor SSm A', 'Surveyor SSm B';
+  font-weight: 400;
+  font-style: normal;
 }
 
 svg {
@@ -45,7 +48,7 @@ svg polygon.cell.selected {
   transition: fill .2s ease-in-out;
 }
 
-svg polygon.cell.neighbour {
+svg polygon.cell.nearby {
   opacity: 0.95;
   stroke: none;
   fill: green;

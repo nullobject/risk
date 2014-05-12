@@ -1,4 +1,6 @@
-var d3 = require('d3');
+var _     = require('lodash');
+var d3    = require('d3');
+var Bacon = require('baconjs').Bacon;
 var World = require('./world')
 
 // SVG dimensions.
@@ -21,48 +23,57 @@ svg
   .attr('class', 'hexagon')
   .attr('points', function(d, i) { return d.join(' '); });
 
-var neighbours = svg.append('g').selectAll('polygon');
+// Draw countries.
+var selections = new Bacon.Bus();
 
-function redrawNeighbours(countries) {
-  neighbours = neighbours.data(countries);
+var countries = svg.append('g');
 
-  neighbours
-    .enter().append('svg:polygon')
-    .attr('points', function(d, i) { return d.join(' '); })
-    .attr('class', 'cell neighbour')
+function drawCountries(selectedCountry) {
+  var country = countries
+    .selectAll('polygon')
+    .data(world.countries);
 
-  neighbours
-    .exit().remove();
+  // country.enter().append('g');
+  country.enter().append('polygon');
+
+  country
+    .attr('points', function(country, i) { return country.join(' '); })
+    .attr('class', function(country, i) { return 'cell q' + (i % 9) + '-9'; })
+    .classed('selected', function(country) { return country === selectedCountry; })
+    .classed('nearby', function(country) { return selectedCountry && _.contains(selectedCountry.neighbours, country); })
+    .on('mousedown', function(country) { selections.push(country); });
+
+  // country
+  //   .append('text')
+  //   .attr('transform', function(country) {
+  //     var centroid = calculateCentroid(this.previousSibling);
+  //     return 'translate(' + centroid[0] + ',' + centroid[1] + ')';
+  //   })
+  //   .text(function(country) { return country.armies; });
 }
 
-// Draw countries.
-svg
-  .append('g')
-  .selectAll('polygon')
-  .data(world.countries)
-  .enter().append('svg:polygon')
-  .attr('points', function(d, i) { return d.join(' '); })
-  .attr('class', function(d, i) { return 'cell q' + (i % 9) + '-9'; })
-  .on('mouseover', function(country) {
-    redrawNeighbours(country.neighbours);
-  })
-  .on('mouseout', function() {
-    redrawNeighbours([]);
-  })
-  .on('mousedown', function(country) {
-    d3.select(this).classed('selected', true)
-  });
+selections.scan(null, function(a, b) {
+  // Toggle the selection if the same country is selected.
+  return a === b ? null : b;
+}).onValue(drawCountries);
+
+drawCountries(null);
+
+// function calculateCentroid(selection) {
+//   var bbox = selection.getBBox();
+//   return [bbox.x + bbox.width / 2, bbox.y + bbox.height / 2];
+// }
 
 // Draw regions.
-svg
-  .append('g')
-  .selectAll('path')
-  .data(world.regions, polygon)
-  .enter().append('path')
-  .attr('class', 'voronoi')
-  .attr('d', polygon)
-  .order();
+// svg
+//   .append('g')
+//   .selectAll('path')
+//   .data(world.regions, polygon)
+//   .enter().append('path')
+//   .attr('class', 'voronoi')
+//   .attr('d', polygon)
+//   .order();
 
-function polygon(d) {
-  return 'M' + d.join('L') + 'Z';
-}
+// function polygon(d) {
+//   return 'M' + d.join('L') + 'Z';
+// }

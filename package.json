@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/nullobject/hexgrid",
   "dependencies": {
+    "baconjs": "*",
     "d3": "git://github.com/nullobject/d3.git#feature/voronoi-neighbours",
     "lodash": "~2.4.1",
     "normalize.css": "~3.0.1"
