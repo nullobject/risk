@@ -1,0 +1,33 @@
+{
+  "name": "hexgrid",
+  "version": "0.1.0",
+  "description": "A game of risk played on a hex grid.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha",
+    "start": "beefy src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nullobject/hexgrid.git"
+  },
+  "author": "Josh Bassett",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nullobject/hexgrid/issues"
+  },
+  "homepage": "https://github.com/nullobject/hexgrid",
+  "dependencies": {
+    "d3": "git://github.com/nullobject/d3.git#feature/voronoi-neighbours",
+    "lodash": "~2.4.1",
+    "normalize.css": "~3.0.1"
+  },
+  "devDependencies": {
+    "beefy": "~1.1.0",
+    "chai": "~1.9.1",
+    "mocha": "~1.18.2"
+  }
+}
