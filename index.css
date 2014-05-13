@@ -1,9 +1,11 @@
+* {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+};
+
 body {
   background: white;
   color: #333;
-  font-family: 'Surveyor SSm A', 'Surveyor SSm B';
-  font-weight: 400;
-  font-style: normal;
 }
 
 svg {
@@ -39,20 +41,12 @@ svg polygon.cell {
   pointer-events: all;
 }
 
-svg polygon.cell:hover {
-  fill: coral;
-}
-
 svg polygon.cell.selected {
   fill: red;
-  transition: fill .2s ease-in-out;
 }
 
 svg polygon.cell.nearby {
-  opacity: 0.95;
-  stroke: none;
   fill: green;
-  pointer-events: none;
 }
 
 .q0-9{fill:rgb(247,252,240)}
