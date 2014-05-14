@@ -1,7 +1,7 @@
 var _     = require('lodash');
 var d3    = require('d3');
 var Bacon = require('baconjs').Bacon;
-var World = require('./world')
+var World = require('./world');
 
 var width = 640, height = 480;
 var world = new World(width, height);

@@ -1,5 +1,5 @@
 var _    = require('lodash');
-var core = require('./core')
+var core = require('./core');
 var d3   = require('d3');
 
 var Polygon = function(vertices) {

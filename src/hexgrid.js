@@ -1,6 +1,6 @@
 var _ = require('lodash');
-var core = require('./core')
-var Polygon = require('./polygon')
+var core = require('./core');
+var Polygon = require('./polygon');
 
 var Hexgrid = function(width, height, radius) {
   var r = radius * Math.cos(core.degreesToRadians(30));

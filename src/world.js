@@ -1,10 +1,10 @@
 var _          = require('lodash');
-var core       = require('./core')
+var core       = require('./core');
 var d3         = require('d3');
-var Country    = require('./country')
-var Hexgrid    = require('./hexgrid')
-var Polygon    = require('./polygon')
-var PolygonSet = require('./polygon_set')
+var Country    = require('./country');
+var Hexgrid    = require('./hexgrid');
+var Polygon    = require('./polygon');
+var PolygonSet = require('./polygon_set');
 
 var RADIUS = 8, // Hexgrid radius.
 

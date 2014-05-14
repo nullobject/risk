@@ -14,6 +14,6 @@ Country.prototype.calculateNeighbouringCountries = function(countries) {
       return region === self.region;
     });
   });
-}
+};
 
 module.exports = Country;
