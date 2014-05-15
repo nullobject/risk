@@ -61,10 +61,11 @@ function calculateCountries(hexagons, regions, links) {
     }));
 
     // Merge the hexagons into a country.
-    var vertices = polygonSet.merge()[0];
+    var vertices = polygonSet.merge();
 
     // Create a new country.
-    var country = new Country(vertices);
+    var deflatedVertices = Polygon(vertices).offset(-2.0);
+    var country = new Country(deflatedVertices);
     country.region = region;
     return country;
   });

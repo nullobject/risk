@@ -14,7 +14,7 @@ var svg = d3
   .attr('height', height);
 
 var hexgrid = svg.append('g');
-var countries = svg.append('g');
+var countries = svg.append('g').attr('class', 'PiYG');
 var regions = svg.append('g');
 
 drawHexgrid();

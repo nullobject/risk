@@ -26,7 +26,7 @@ PolygonSet.prototype.merge = function() {
 
   cpr.AddPaths(subjectPaths, clipper.PolyType.ptSubject, true);
 
-  var result = cpr.Execute(clipper.ClipType.ctUnion, solutionPaths, clipper.PolyFillType.pftNonZero, clipper.PolyFillType.pftNonZero);
+  cpr.Execute(clipper.ClipType.ctUnion, solutionPaths, clipper.PolyFillType.pftNonZero, clipper.PolyFillType.pftNonZero);
 
   return solutionPaths.map(function(path) {
     clipper.JS.ScaleDownPath(path, SCALE);
@@ -34,7 +34,7 @@ PolygonSet.prototype.merge = function() {
     return path.map(function(point) {
       return [point.X, point.Y];
     });
-  });
+  })[0];
 };
 
 module.exports = PolygonSet;

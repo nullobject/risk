@@ -1,6 +1,9 @@
 var _    = require('lodash');
+var clipper = require('../lib/clipper');
 var core = require('./core');
 var d3   = require('d3');
+
+var SCALE = 100;
 
 var Polygon = function(vertices) {
   vertices.__proto__ = Polygon.prototype;
@@ -29,6 +32,30 @@ Polygon.prototype.containsPoint = function(point) {
   }
 
   return inside;
+};
+
+// Offsets the polygon by a given delta.
+Polygon.prototype.offset = function(delta) {
+  var co = new clipper.ClipperOffset(),
+      solution = [];
+
+  var path = this.map(function(vertex) {
+    return {X: vertex[0], Y: vertex[1]};
+  });
+
+  clipper.JS.ScaleUpPath(path, SCALE);
+
+  co.AddPath(path, clipper.JoinType.jtMiter, clipper.EndType.etClosedPolygon);
+
+  co.Execute(solution, delta * SCALE);
+
+  return solution.map(function(path) {
+    clipper.JS.ScaleDownPath(path, SCALE);
+
+    return path.map(function(point) {
+      return [point.X, point.Y];
+    });
+  })[0];
 };
 
 module.exports = Polygon;

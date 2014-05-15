@@ -3,9 +3,9 @@ var expect = require('chai').expect;
 var Polygon = require('../src/polygon');
 
 describe('Polygon', function() {
-  describe('#containsPoint', function() {
-    p = new Polygon([[-1, -1], [-1, 1], [1, 1], [1, -1]]);
+  var p = new Polygon([[-1, -1], [-1, 1], [1, 1], [1, -1]]);
 
+  describe('#containsPoint', function() {
     it('should return true if the polygon contains a given point', function() {
       expect(p.containsPoint([0, 0])).to.be.true;
     });

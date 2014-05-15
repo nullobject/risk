@@ -4,7 +4,6 @@
 };
 
 body {
-  background: white;
   color: #333;
 }
 
@@ -35,35 +34,26 @@ svg polygon.hexagon {
 }
 
 svg polygon.cell {
-  opacity: 0.3;
-  stroke: black;
-  stroke-width: 2px;
+  fill: currentColor;
+  fill-opacity: 0.5;
+  stroke: currentColor;
+  stroke-opacity: 0.7;
+  stroke-width: 3px;
   pointer-events: all;
 }
 
 svg polygon.cell.selected {
-  fill: red;
-}
-
-@-webkit-keyframes pulsate {
-  0%   { opacity: 0.0; }
-  50%  { opacity: 0.3; }
-  100% { opacity: 0.0; }
+  color: red;
 }
 
 svg polygon.cell.nearby {
-  opacity: 0;
-  fill: green;
-  -webkit-animation: pulsate 1s ease-out;
-  -webkit-animation-iteration-count: infinite;
+  color: green;
+  -webkit-animation: pulsate 1s ease-in-out 0s infinite alternate;
 }
 
-.q0-9{fill:rgb(247,252,240)}
-.q1-9{fill:rgb(224,243,219)}
-.q2-9{fill:rgb(204,235,197)}
-.q3-9{fill:rgb(168,221,181)}
-.q4-9{fill:rgb(123,204,196)}
-.q5-9{fill:rgb(78,179,211)}
-.q6-9{fill:rgb(43,140,190)}
-.q7-9{fill:rgb(8,104,172)}
-.q8-9{fill:rgb(8,64,129)}
+@-webkit-keyframes pulsate {
+  0%   { opacity: 0.5; }
+  100% { opacity: 1.0; }
+}
+
+.PiYG .q0-9{color:rgb(197,27,125)} .PiYG .q1-9{color:rgb(222,119,174)} .PiYG .q2-9{color:rgb(241,182,218)} .PiYG .q3-9{color:rgb(253,224,239)} .PiYG .q4-9{color:rgb(247,247,247)} .PiYG .q5-9{color:rgb(230,245,208)} .PiYG .q6-9{color:rgb(184,225,134)} .PiYG .q7-9{color:rgb(127,188,65)} .PiYG .q8-9{color:rgb(77,146,33)}
