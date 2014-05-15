@@ -1,4 +1,4 @@
-var clipper = require('./clipper');
+var clipper = require('../lib/clipper');
 
 var SCALE = 100;
 
