@@ -45,8 +45,17 @@ svg polygon.cell.selected {
   fill: red;
 }
 
+@-webkit-keyframes pulsate {
+  0%   { opacity: 0.0; }
+  50%  { opacity: 0.3; }
+  100% { opacity: 0.0; }
+}
+
 svg polygon.cell.nearby {
+  opacity: 0;
   fill: green;
+  -webkit-animation: pulsate 1s ease-out;
+  -webkit-animation-iteration-count: infinite;
 }
 
 .q0-9{fill:rgb(247,252,240)}
