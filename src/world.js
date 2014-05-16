@@ -3,6 +3,7 @@ var core       = require('./core');
 var d3         = require('d3');
 var Country    = require('./country');
 var Hexgrid    = require('./hexgrid');
+var Point      = require('./point');
 var Polygon    = require('./polygon');
 var PolygonSet = require('./polygon_set');
 
@@ -29,6 +30,18 @@ function calculateRegions(voronoi, points) {
   return regions;
 }
 
+// Applies a given number of Lloyd relaxations to a set of regions using a
+// Voronoi function. http://en.wikipedia.org/wiki/Lloyd's_algorithm
+function relaxRegions(voronoi, regions, relaxations) {
+  return _.range(relaxations - 1).reduce(function(regions, i) {
+    var points = regions.map(function(region) {
+      return d3.geom.polygon(region).centroid();
+    });
+
+    return voronoi(points);
+  }, regions);
+}
+
 // Calculates the regions neighbouring a given region.
 function calculateNeighbouringRegions(regions, region) {
   return region.cell.edges
@@ -40,32 +53,19 @@ function calculateNeighbouringRegions(regions, region) {
     });
 }
 
-// Applies a given number of Lloyd relaxations to a set of regions using a
-// Voronoi function. http://en.wikipedia.org/wiki/Lloyd's_algorithm
-function relaxRegions(voronoi, regions, relaxations) {
-  return _.range(relaxations - 1).reduce(function(regions, i) {
-    var points = regions.map(function(region) {
-      return Polygon(region).centroid;
-    });
-
-    return voronoi(points);
-  }, regions);
-}
-
 // Merge the hexagons inside the Voronoi regions into countries.
 function calculateCountries(hexagons, regions, links) {
   var countries = regions.map(function(region) {
     // Find all hexagons inside the Voronoi region.
     var polygonSet = new PolygonSet(hexagons.filter(function(hexagon) {
-      return Polygon(region).containsPoint(hexagon.centroid);
+      return regionToPolygon(region).containsPoint(hexagon.centroid);
     }));
 
-    // Merge the hexagons into a country.
-    var vertices = polygonSet.merge();
+    // Merge the hexagons into a larger polygon.
+    var polygon = polygonSet.merge();
 
     // Create a new country.
-    var deflatedVertices = Polygon(vertices).offset(-2.0);
-    var country = new Country(deflatedVertices);
+    var country = new Country(polygon.offset(-2.0));
     country.region = region;
     return country;
   });
@@ -75,6 +75,13 @@ function calculateCountries(hexagons, regions, links) {
   });
 
   return countries;
+}
+
+// Converts a region to a polygon.
+function regionToPolygon(region) {
+  return new Polygon(region.map(function(vertex) {
+    return new Point(vertex);
+  }));
 }
 
 function World(width, height) {

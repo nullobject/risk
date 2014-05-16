@@ -34,7 +34,7 @@ function drawHexgrid() {
     .data(world.hexagons)
     .enter().append('polygon')
     .attr('class', 'hexagon')
-    .attr('points', function(d, i) { return d.join(' '); });
+    .attr('points', function(d, i) { return d.toString(); });
 }
 
 function drawCountries(selectedCountry) {
@@ -45,7 +45,7 @@ function drawCountries(selectedCountry) {
   country.enter().append('polygon');
 
   country
-    .attr('points', function(country, i) { return country.polygon.join(' '); })
+    .attr('points', function(country, i) { return country.polygon.toString(); })
     .attr('class', function(country, i) { return 'cell q' + (i % 9) + '-9'; })
     .classed('selected', function(country) { return country === selectedCountry; })
     .classed('nearby', function(country) { return selectedCountry && _.contains(selectedCountry.neighbours, country); })

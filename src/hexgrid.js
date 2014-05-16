@@ -1,5 +1,6 @@
-var _ = require('lodash');
-var core = require('./core');
+var _       = require('lodash');
+var core    = require('./core');
+var Point   = require('./point');
 var Polygon = require('./polygon');
 
 var Hexgrid = function(width, height, radius) {
@@ -10,21 +11,21 @@ var Hexgrid = function(width, height, radius) {
   function calculatePosition(coordinate) {
     var width = 2 * r, height = radius + h;
 
-    return {
-      x: (coordinate[0] * width) + ((coordinate[1] % 2) * (width / 2)),
-      y: coordinate[1] * height
-    };
+    return new Point(
+      (coordinate[0] * width) + ((coordinate[1] % 2) * (width / 2)),
+      coordinate[1] * height
+    );
   }
 
   // Calculates the vertices of a hexagon at a given position.
   function calculateVertices(position) {
     return [
-      [position.x,           position.y + h               ],
-      [position.x + r,       position.y                   ],
-      [position.x + (2 * r), position.y + h               ],
-      [position.x + (2 * r), position.y + h + radius      ],
-      [position.x + r,       position.y + (2 * h) + radius],
-      [position.x,           position.y + h + radius      ]
+      new Point(position.x,           position.y + h               ),
+      new Point(position.x + r,       position.y                   ),
+      new Point(position.x + (2 * r), position.y + h               ),
+      new Point(position.x + (2 * r), position.y + h + radius      ),
+      new Point(position.x + r,       position.y + (2 * h) + radius),
+      new Point(position.x,           position.y + h + radius      )
     ];
   }
 

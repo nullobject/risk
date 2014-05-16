@@ -1,18 +1,15 @@
-var Point = function(x, y) {
-  this.x = x;
-  this.y = y;
+var Point = function() {
+  var a = arguments;
+
+  if (a.length == 2) {
+    this.x = a[0];
+    this.y = a[1];
+  } else if (a.length == 1) {
+    this.x = a[0][0];
+    this.y = a[0][1];
+  }
 };
 
 Point.prototype.constructor = Point;
-
-// Uppercase accessor for Clipper.js compatibility.
-Object.defineProperty(Point.prototype, "X", {
-  get: function() { return this.x; }
-});
-
-// Uppercase accessor for Clipper.js compatibility.
-Object.defineProperty(Point.prototype, "Y", {
-  get: function() { return this.y; }
-});
 
 module.exports = Point;

@@ -1,30 +1,32 @@
-var _    = require('lodash');
 var clipper = require('../lib/clipper');
-var core = require('./core');
-var d3   = require('d3');
+var d3      = require('d3');
+var Point   = require('./point');
 
 var SCALE = 100;
 
 var Polygon = function(vertices) {
-  vertices.__proto__ = Polygon.prototype;
+  this.vertices = vertices;
 
   // Cache the centroid of the polygon.
-  vertices.centroid = d3.geom.polygon(_.clone(vertices)).centroid();
-
-  return vertices;
+  this.centroid = new Point(d3.geom.polygon(vertices.map(function(vertex) {
+    return [vertex.x, vertex.y];
+  })).centroid());
 };
 
-Polygon.prototype = [];
+Polygon.prototype.constructor = Polygon;
 
 // Ray-casting algorithm based on
 // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
 Polygon.prototype.containsPoint = function(point) {
-  var x = point[0], y = point[1];
   var inside = false;
 
-  for (var i = 0, j = this.length - 1; i < this.length; j = i++) {
-    var xi = this[i][0], yi = this[i][1], xj = this[j][0], yj = this[j][1];
-    var intersect = ((yi > y) != (yj > y)) && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+  for (var i = 0, j = this.vertices.length - 1; i < this.vertices.length; j = i++) {
+    var xi = this.vertices[i].x,
+        yi = this.vertices[i].y,
+        xj = this.vertices[j].x,
+        yj = this.vertices[j].y;
+
+    var intersect = ((yi > point.y) != (yj > point.y)) && (point.x < (xj - xi) * (point.y - yi) / (yj - yi) + xi);
 
     if (intersect) {
       inside = !inside;
@@ -39,8 +41,8 @@ Polygon.prototype.offset = function(delta) {
   var co = new clipper.ClipperOffset(),
       solution = [];
 
-  var path = this.map(function(vertex) {
-    return {X: vertex[0], Y: vertex[1]};
+  var path = this.vertices.map(function(vertex) {
+    return {X: vertex.x, Y: vertex.y};
   });
 
   clipper.JS.ScaleUpPath(path, SCALE);
@@ -49,13 +51,21 @@ Polygon.prototype.offset = function(delta) {
 
   co.Execute(solution, delta * SCALE);
 
-  return solution.map(function(path) {
+  var vertices = solution.map(function(path) {
     clipper.JS.ScaleDownPath(path, SCALE);
 
     return path.map(function(point) {
-      return [point.X, point.Y];
+      return new Point(point.X, point.Y);
     });
   })[0];
+
+  return new Polygon(vertices);
+};
+
+Polygon.prototype.toString = function() {
+  return this.vertices.map(function(vertex) {
+    return vertex.x + ',' + vertex.y;
+  }).join(' ');
 };
 
 module.exports = Polygon;
