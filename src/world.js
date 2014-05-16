@@ -1,11 +1,10 @@
-var _          = require('lodash');
-var core       = require('./core');
-var d3         = require('d3');
-var Country    = require('./country');
-var Hexgrid    = require('./hexgrid');
-var Point      = require('./point');
-var Polygon    = require('./polygon');
-var PolygonSet = require('./polygon_set');
+var _       = require('lodash');
+var core    = require('./core');
+var d3      = require('d3');
+var Country = require('./country');
+var Hexgrid = require('./hexgrid');
+var Point   = require('./point');
+var Polygon = require('./polygon');
 
 var RADIUS = 8, // Hexgrid radius.
 
@@ -57,12 +56,12 @@ function calculateNeighbouringRegions(regions, region) {
 function calculateCountries(hexagons, regions, links) {
   var countries = regions.map(function(region) {
     // Find all hexagons inside the Voronoi region.
-    var polygonSet = new PolygonSet(hexagons.filter(function(hexagon) {
+    var innerHexagons = hexagons.filter(function(hexagon) {
       return regionToPolygon(region).containsPoint(hexagon.centroid);
-    }));
+    });
 
     // Merge the hexagons into a larger polygon.
-    var polygon = polygonSet.merge();
+    var polygon = Polygon.merge(innerHexagons);
 
     // Create a new country.
     var country = new Country(polygon.offset(-2.0));
