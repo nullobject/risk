@@ -98,6 +98,7 @@ function World(width, height) {
   this.hexagons = hexgrid.hexagons;
   this.regions = calculateRegions(voronoi, points);
   this.countries = calculateCountries(this.hexagons, this.regions);
+  this.selectedCountry = null;
 }
 
 module.exports = World;

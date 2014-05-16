@@ -18,15 +18,50 @@ var countries = svg.append('g').attr('class', 'PiYG');
 var regions = svg.append('g');
 
 drawHexgrid();
-drawCountries(null);
+drawCountries();
 drawRegions();
 
-// TODO: If the country is a nearby country of the currently selected country,
-// then trigger a 'move' event. Otherwise, trigger a 'select' event.
-selections.scan(null, function(a, b) {
-  // Toggle the selection if the same country is selected.
-  return a === b ? null : b;
-}).onValue(drawCountries);
+function selectCountry(country, world) {
+  console.log('select', country);
+  world.selectedCountry = country;
+  drawCountries();
+}
+
+function deselectCountry(country, world) {
+  console.log('deselect', country);
+  world.selectedCountry = null;
+  drawCountries();
+}
+
+function move(from, to, world) {
+  console.log('move', from, to);
+  world.selectedCountry = null;
+  drawCountries();
+}
+
+selections.withStateMachine(null, function(selectedCountry, event) {
+  if (event.hasValue()) {
+    var fn, country = event.value();
+
+    if (selectedCountry && _.contains(selectedCountry.neighbours, country)) {
+      // The user selected one of the nearby countries.
+      fn = _.partial(move, selectedCountry, country);
+      return [undefined, [new Bacon.Next(function() { return fn; })]];
+    } else if (selectedCountry === country) {
+      // The user selected the currently selected country.
+      fn = _.partial(deselectCountry, country);
+      return [undefined, [new Bacon.Next(function() { return fn; })]];
+    } else {
+      fn = _.partial(selectCountry, country);
+      return [country, [new Bacon.Next(function() { return fn; })]];
+    }
+  } else {
+    return [selectedCountry, [event]];
+  }
+}).onValue(function(fn) {
+  // Call the partial function.
+  fn(world);
+});
 
 function drawHexgrid() {
   hexgrid
@@ -37,7 +72,7 @@ function drawHexgrid() {
     .attr('points', function(d, i) { return d.toString(); });
 }
 
-function drawCountries(selectedCountry) {
+function drawCountries() {
   var country = countries
     .selectAll('polygon')
     .data(world.countries);
@@ -47,8 +82,8 @@ function drawCountries(selectedCountry) {
   country
     .attr('points', function(country, i) { return country.polygon.toString(); })
     .attr('class', function(country, i) { return 'cell q' + (i % 9) + '-9'; })
-    .classed('selected', function(country) { return country === selectedCountry; })
-    .classed('nearby', function(country) { return selectedCountry && _.contains(selectedCountry.neighbours, country); })
+    .classed('selected', function(country) { return country === world.selectedCountry; })
+    .classed('nearby', function(country) { return world.selectedCountry && _.contains(world.selectedCountry.neighbours, country); })
     .on('click', function(country) { selections.push(country); });
 }
 
