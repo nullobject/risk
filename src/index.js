@@ -45,7 +45,7 @@ function drawCountries(selectedCountry) {
   country.enter().append('polygon');
 
   country
-    .attr('points', function(country, i) { return country.join(' '); })
+    .attr('points', function(country, i) { return country.polygon.join(' '); })
     .attr('class', function(country, i) { return 'cell q' + (i % 9) + '-9'; })
     .classed('selected', function(country) { return country === selectedCountry; })
     .classed('nearby', function(country) { return selectedCountry && _.contains(selectedCountry.neighbours, country); })

@@ -1,10 +1,9 @@
-function Country(vertices) {
-  vertices.__proto__ = Country.prototype;
-  vertices.armies = 10;
-  return vertices;
+function Country(polygon) {
+  this.armies = 10;
+  this.polygon = polygon;
 }
 
-Country.prototype = [];
+Country.prototype.constructor = Country;
 
 // Calculates the neighbouring countries.
 Country.prototype.calculateNeighbouringCountries = function(countries) {
