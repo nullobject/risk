@@ -70,7 +70,7 @@ Polygon.prototype.toString = function() {
 
 // Merges the polygons in the set into a single polygon.
 Polygon.merge = function(polygons) {
-  var cpr = new clipper.Clipper(),
+  var c = new clipper.Clipper(),
       solutionPaths = [];
 
   var subjectPaths = polygons.map(function(polygon) {
@@ -83,9 +83,9 @@ Polygon.merge = function(polygons) {
     return path;
   });
 
-  cpr.AddPaths(subjectPaths, clipper.PolyType.ptSubject, true);
+  c.AddPaths(subjectPaths, clipper.PolyType.ptSubject, true);
 
-  cpr.Execute(clipper.ClipType.ctUnion, solutionPaths, clipper.PolyFillType.pftNonZero, clipper.PolyFillType.pftNonZero);
+  c.Execute(clipper.ClipType.ctUnion, solutionPaths, clipper.PolyFillType.pftNonZero, clipper.PolyFillType.pftNonZero);
 
   var vertices = solutionPaths.map(function(path) {
     clipper.JS.ScaleDownPath(path, SCALE);
