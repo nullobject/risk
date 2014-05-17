@@ -7,30 +7,18 @@ body {
   color: #333;
 }
 
-svg {
-}
-
-svg line {
-  stroke: red;
-}
-
 svg .voronoi {
   fill: none;
   stroke: #1cadcf;
 }
 
-svg .delaunay {
-  fill: none;
-  stroke: red;
+svg .hexgrid {
+  stroke: gray;
+  stroke-width: 0.25px;
 }
 
 svg polygon {
   fill: lightgray;
-}
-
-svg polygon.hexagon {
-  stroke: gray;
-  stroke-width: 0.25px;
 }
 
 svg polygon.cell {

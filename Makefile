@@ -1,5 +1,5 @@
 start:
-	@node_modules/.bin/beefy src/index.js
+	@node_modules/.bin/beefy src/index.js -- -t reactify
 
 lint:
 	@node_modules/.bin/jshint src
