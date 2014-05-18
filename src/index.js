@@ -4,13 +4,14 @@ var Bacon             = require('baconjs').Bacon;
 var PathsComponent    = require('./paths_component');
 var PolygonsComponent = require('./polygons_component');
 var React             = require('react');
-var World             = require('./world');
 var WorldComponent    = require('./world_component');
 var _                 = require('lodash');
+var builder           = require('./builder');
 
-var container = document.getElementsByClassName('container')[0];
-var world = new World(640, 480);
+var WIDTH = 640, HEIGHT = 480;
+var world = builder.buildWorld(WIDTH, HEIGHT);
 var selections = new Bacon.Bus();
+var container = document.getElementsByClassName('container')[0];
 
 selections.withStateMachine(null, function(selectedCountry, event) {
   if (event.hasValue()) {
@@ -41,7 +42,7 @@ drawWorld();
 
 function drawWorld() {
   React.renderComponent(
-    <svg width={world.width} height={world.height}>
+    <svg width={WIDTH} height={HEIGHT}>
       <PolygonsComponent className="hexgrid" polygons={world.hexagons} />
       <WorldComponent className="PiYG" stream={selections} world={world} />
       <PathsComponent className="voronoi" paths={world.cells} />
