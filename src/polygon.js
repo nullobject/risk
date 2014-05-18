@@ -1,19 +1,20 @@
-var clipper = require('../lib/clipper');
-var d3      = require('d3');
 var Point   = require('./point');
+var clipper = require('../lib/clipper');
 
 var SCALE = 100;
 
 var Polygon = function(vertices) {
   this.vertices = vertices;
-
-  // Cache the centroid of the polygon.
-  this.centroid = new Point(d3.geom.polygon(vertices.map(function(vertex) {
-    return [vertex.x, vertex.y];
-  })).centroid());
 };
 
 Polygon.prototype.constructor = Polygon;
+
+// Returns the centroid of the polygon.
+Polygon.prototype.centroid = function() {
+  return this.vertices.reduce(function(sum, vertex) {
+    return sum.add(vertex);
+  }).divide(this.vertices.length);
+};
 
 // Ray-casting algorithm based on
 // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
@@ -36,7 +37,7 @@ Polygon.prototype.containsPoint = function(point) {
   return inside;
 };
 
-// Offsets the polygon by a given delta.
+// Returns a new polygon which is offset from this polygon by a given delta.
 Polygon.prototype.offset = function(delta) {
   var co = new clipper.ClipperOffset(),
       solution = [];
@@ -63,9 +64,7 @@ Polygon.prototype.offset = function(delta) {
 };
 
 Polygon.prototype.toString = function() {
-  return this.vertices.map(function(vertex) {
-    return vertex.x + ',' + vertex.y;
-  }).join(' ');
+  return this.vertices.join(' ');
 };
 
 // Merges the polygons in the set into a single polygon.

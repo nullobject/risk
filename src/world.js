@@ -1,103 +1,116 @@
-var _       = require('lodash');
-var core    = require('./core');
-var d3      = require('d3');
 var Country = require('./country');
 var Hexgrid = require('./hexgrid');
 var Point   = require('./point');
 var Polygon = require('./polygon');
+var Voronoi = require('../lib/voronoi');
+var _       = require('lodash');
+var core    = require('./core');
 
 var RADIUS = 8, // Hexgrid radius.
 
-    // The number of "seed" points to apply to the Voronoi function. More seeds
+    // The number of "seed" sites to apply to the Voronoi function. More seeds
     // will result in more countries.
     SEEDS = 20,
 
-    // The number of Lloyd relaxations to apply to the Voronoi regions. More
+    // The number of Lloyd relaxations to apply to the Voronoi cells. More
     // relaxations will result in countries more uniform in shape and size.
     RELAXATIONS = 2;
 
-// Calculates the Voronoi regions for a set of points using a given Voronoi
-// function.
-function calculateRegions(voronoi, points) {
-  // Calculate and relax the Voronoi regions for the points.
-  var regions = relaxRegions(voronoi, voronoi(points), RELAXATIONS);
-
-  regions.forEach(function(region) {
-    region.neighbours = calculateNeighbouringRegions(regions, region);
+function cellVertices(cell) {
+  return cell.halfedges.map(function(halfedge) {
+    return new Point(halfedge.getStartpoint());
   });
-
-  return regions;
 }
 
-// Applies a given number of Lloyd relaxations to a set of regions using a
-// Voronoi function. http://en.wikipedia.org/wiki/Lloyd's_algorithm
-function relaxRegions(voronoi, regions, relaxations) {
-  return _.range(relaxations - 1).reduce(function(regions, i) {
-    var points = regions.map(function(region) {
-      return d3.geom.polygon(region).centroid();
+// Returns the polygon for a given cell.
+function cellPolygon(cell) {
+  return new Polygon(cellVertices(cell));
+}
+
+// Calculates the Voronoi diagram for a given set of sites using a tessellation
+// function. A number of Lloyd relaxations will also be applied to the
+// resulting diagram. http://en.wikipedia.org/wiki/Lloyd's_algorithm
+function calculateDiagram(t, sites, relaxations) {
+  // Calculate the initial Voronoi diagram.
+  var diagram = t(sites);
+
+  // Apply a number of relaxations to the Voronoi diagram.
+  return _.range(relaxations).reduce(function(diagram) {
+    // Calculate the new sites from the centroids of the cells.
+    var sites = diagram.cells.map(function(cell) {
+      return cellPolygon(cell).centroid();
     });
 
-    return voronoi(points);
-  }, regions);
+    // Recycle the diagram before computing it again.
+    diagram.recycle();
+
+    // Return a new Voronoi diagram.
+    return t(sites);
+  }, diagram);
 }
 
-// Calculates the regions neighbouring a given region.
-function calculateNeighbouringRegions(regions, region) {
-  return region.cell.edges
-    .map(function(edge) { return edge.edge; })
-    .filter(function(edge) { return edge.l && edge.r; })
-    .map(function(edge) {
-      var i = (edge.l === region.cell.site ? edge.r.i : edge.l.i);
-      return regions[i];
-    });
-}
-
-// Merge the hexagons inside the Voronoi regions into countries.
-function calculateCountries(hexagons, regions, links) {
-  var countries = regions.map(function(region) {
-    // Find all hexagons inside the Voronoi region.
+// Merges the given set of hexagons inside the Voronoi cells into countries.
+function calculateCountries(hexagons, diagram) {
+  var countries = diagram.cells.reduce(function(countries, cell) {
+    // Find the hexagons inside the cell.
     var innerHexagons = hexagons.filter(function(hexagon) {
-      return regionToPolygon(region).containsPoint(hexagon.centroid);
+      return cellPolygon(cell).containsPoint(hexagon.centroid());
     });
 
     // Merge the hexagons into a larger polygon.
     var polygon = Polygon.merge(innerHexagons);
 
     // Create a new country.
-    var country = new Country(polygon.offset(-2.0));
-    country.region = region;
+    countries[cell.site.voronoiId] = new Country(polygon.offset(-2.0));
+
+    return countries;
+  }, {});
+
+  return _.map(countries, function(country, id) {
+    var cell = diagram.cells[id];
+    var neighbours = neighbouringCells(cell, diagram);
+
+    country.neighbours = neighbours.map(function(neighbour) {
+      return countries[neighbour.site.voronoiId];
+    });
+
     return country;
   });
-
-  countries.forEach(function(country) {
-    country.calculateNeighbouringCountries(countries);
-  });
-
-  return countries;
 }
 
-// Converts a region to a polygon.
-function regionToPolygon(region) {
-  return new Polygon(region.map(function(vertex) {
-    return new Point(vertex);
-  }));
+// Returns the cells neighbouring a given cell.
+function neighbouringCells(cell, diagram) {
+  return cell.getNeighborIds().map(function(id) {
+    return diagram.cells[id];
+  });
 }
 
 function World(width, height) {
   // Create a hexgrid.
   var hexgrid = new Hexgrid(width, height, RADIUS);
 
-  // Create a Voronoi function.
-  var voronoi = d3.geom.voronoi().clipExtent([[0, 0], [width, height]]);
+  // Create a Voronoi tessellation function.
+  var voronoi = new Voronoi();
+  var bbox = {xl:0, xr:width, yt:0, yb:height};
+  var t = function(points) {
+    var diagram = voronoi.compute(points, bbox);
+    diagram.recycle = function() { voronoi.recycle(diagram); };
+    return diagram;
+  };
 
-  // Generate a number of random "seed" points within the clipping region.
-  var points = d3.range(SEEDS).map(function(d) {
-    return [Math.random() * width, Math.random() * height];
+  // Generate a set of random "seed" sites within the clipping region.
+  var sites = _.range(SEEDS).map(function(d) {
+    return new Point(_.random(width, true), _.random(height, true));
   });
 
+  // Calculate the Voronoi diagram.
+  var diagram = calculateDiagram(t, sites, RELAXATIONS);
+
+  this.width = width;
+  this.height = height;
   this.hexagons = hexgrid.hexagons;
-  this.regions = calculateRegions(voronoi, points);
-  this.countries = calculateCountries(this.hexagons, this.regions);
+  this.cells = diagram.cells.map(cellVertices);
+  this.countries = calculateCountries(hexgrid.hexagons, diagram);
   this.selectedCountry = null;
 }
 
