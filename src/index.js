@@ -17,23 +17,22 @@ selections.withStateMachine(null, function(selectedCountry, event) {
 
     if (selectedCountry && _.contains(selectedCountry.neighbours, country)) {
       // The user selected one of the nearby countries.
-      fn = _.partial(attackOrMove, selectedCountry, country);
+      fn = attackOrMove.bind(this, selectedCountry, country);
       return [undefined, [new Bacon.Next(function() { return fn; })]];
     } else if (selectedCountry === country) {
       // The user selected the currently selected country.
-      fn = _.partial(deselectCountry, country);
+      fn = deselectCountry.bind(this, country);
       return [undefined, [new Bacon.Next(function() { return fn; })]];
     } else {
       // The user selected a country.
-      fn = _.partial(selectCountry, country);
+      fn = selectCountry.bind(this, country);
       return [country, [new Bacon.Next(function() { return fn; })]];
     }
   } else {
     return [selectedCountry, [event]];
   }
 }).onValue(function(fn) {
-  // Call the partial function.
-  fn(world);
+  fn();
 });
 
 var worldComponent = React.renderComponent(
@@ -41,17 +40,19 @@ var worldComponent = React.renderComponent(
   container
 );
 
-function selectCountry(country, world) {
+function selectCountry(country) {
   console.log('select', country);
   worldComponent.selectCountry(country);
 }
 
-function deselectCountry(country, world) {
+function deselectCountry(country) {
   console.log('deselect', country);
   worldComponent.selectCountry(null);
 }
 
-function attackOrMove(from, to, world) {
-  console.log('attackOrMove', from, to);
+function attackOrMove(source, target) {
+  console.log('attackOrMove', source, target);
   worldComponent.selectCountry(null);
+  // TODO: Figure out if we're moving or attacking.
+  world.move(source, target);
 }
