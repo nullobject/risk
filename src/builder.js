@@ -5,7 +5,6 @@ var Polygon = require('./polygon');
 var Voronoi = require('../lib/voronoi');
 var World   = require('./world');
 var _       = require('lodash');
-var core    = require('./core');
 
 var RADIUS = 8, // Hexgrid radius.
 
@@ -93,9 +92,9 @@ module.exports = {
 
     // Create a Voronoi tessellation function.
     var voronoi = new Voronoi();
-    var bbox = {xl:0, xr:width, yt:0, yb:height};
+    var box = {xl:0, xr:width, yt:0, yb:height};
     var t = function(points) {
-      var diagram = voronoi.compute(points, bbox);
+      var diagram = voronoi.compute(points, box);
       diagram.recycle = function() { voronoi.recycle(diagram); };
       return diagram;
     };
@@ -115,6 +114,6 @@ module.exports = {
     var cells = diagram.cells.map(cellVertices);
 
     // Return a new world.
-    return new World(hexgrid.hexagons, countries, cells);
+    return new World(width, height, hexgrid.hexagons, countries, cells);
   }
 };

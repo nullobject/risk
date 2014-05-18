@@ -1,8 +1,6 @@
 /** @jsx React.DOM */
 
 var Bacon             = require('baconjs').Bacon;
-var PathsComponent    = require('./paths_component');
-var PolygonsComponent = require('./polygons_component');
 var React             = require('react');
 var WorldComponent    = require('./world_component');
 var _                 = require('lodash');
@@ -19,7 +17,7 @@ selections.withStateMachine(null, function(selectedCountry, event) {
 
     if (selectedCountry && _.contains(selectedCountry.neighbours, country)) {
       // The user selected one of the nearby countries.
-      fn = _.partial(move, selectedCountry, country);
+      fn = _.partial(attackOrMove, selectedCountry, country);
       return [undefined, [new Bacon.Next(function() { return fn; })]];
     } else if (selectedCountry === country) {
       // The user selected the currently selected country.
@@ -38,33 +36,22 @@ selections.withStateMachine(null, function(selectedCountry, event) {
   fn(world);
 });
 
-drawWorld();
-
-function drawWorld() {
-  React.renderComponent(
-    <svg width={WIDTH} height={HEIGHT}>
-      <PolygonsComponent className="hexgrid" polygons={world.hexagons} />
-      <WorldComponent className="PiYG" stream={selections} world={world} />
-      <PathsComponent className="voronoi" paths={world.cells} />
-    </svg>,
-    container
-  );
-}
+var worldComponent = React.renderComponent(
+  <WorldComponent world={world} stream={selections} />,
+  container
+);
 
 function selectCountry(country, world) {
   console.log('select', country);
-  world.selectedCountry = country;
-  drawWorld();
+  worldComponent.selectCountry(country);
 }
 
 function deselectCountry(country, world) {
   console.log('deselect', country);
-  world.selectedCountry = null;
-  drawWorld();
+  worldComponent.selectCountry(null);
 }
 
-function move(from, to, world) {
-  console.log('move', from, to);
-  world.selectedCountry = null;
-  drawWorld();
+function attackOrMove(from, to, world) {
+  console.log('attackOrMove', from, to);
+  worldComponent.selectCountry(null);
 }

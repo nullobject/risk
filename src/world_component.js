@@ -1,37 +1,22 @@
 /** @jsx React.DOM */
 
-var _     = require('lodash');
-var React = require('react/addons');
-
-var cx = React.addons.classSet;
+var CountriesComponent = require('./countries_component');
+var PathsComponent     = require('./paths_component');
+var PolygonsComponent  = require('./polygons_component');
+var React              = require('react');
 
 module.exports = React.createClass({
-  didSelectCountry: function(country) {
-    this.props.stream.push(country);
+  selectCountry: function(country) {
+    this.refs.countries.setState({selectedCountry: country});
   },
 
   render: function() {
     var world = this.props.world;
 
-    var polygons = world.countries.map(function(country, index) {
-      var color = 'q' + (index % 9) + '-9';
-
-      var classes = {
-        cell:     true,
-        selected: country === world.selectedCountry,
-        nearby:   world.selectedCountry && _.contains(world.selectedCountry.neighbours, country)
-      };
-
-      classes[color] = true;
-
-      return <polygon
-        className={cx(classes)}
-        key={index}
-        points={country.polygon.toString()}
-        onClick={this.didSelectCountry.bind(this, country)}
-      />;
-    }, this);
-
-    return <g className={this.props.className}>{polygons}</g>;
+    return <svg width={world.width} height={world.height}>
+      <PolygonsComponent className="hexgrid" polygons={world.hexagons} />
+      <CountriesComponent ref="countries" className="PiYG" countries={world.countries} stream={this.props.stream} />
+      <PathsComponent className="voronoi" paths={world.cells} />
+    </svg>;
   }
 });
