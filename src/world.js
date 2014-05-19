@@ -32,7 +32,7 @@ World.prototype.move = function(source, target) {
 };
 
 // Attacks with armies from the source country to the target country.
-World.prototype.attack = function(from, to) {
+World.prototype.attack = function(source, target) {
   console.log('World#attack');
 };
 
