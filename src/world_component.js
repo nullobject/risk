@@ -6,8 +6,14 @@ var PolygonsComponent  = require('./polygons_component');
 var React              = require('react');
 
 module.exports = React.createClass({
+  // Selects a given country.
   selectCountry: function(country) {
     this.refs.countries.setState({selectedCountry: country});
+  },
+
+  // Deselects the currently selected country.
+  deselectCountry: function() {
+    this.selectCountry(null);
   },
 
   render: function() {
