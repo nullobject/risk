@@ -28,9 +28,11 @@
   },
   "devDependencies": {
     "beefy": "~1.1.0",
+    "browserify": "~4.1.5",
     "chai": "~1.9.1",
     "jshint": "~2.5.0",
     "mocha": "~1.18.2",
-    "reactify": "~0.13.1"
+    "reactify": "~0.13.1",
+    "uglifyify": "~2.1.1"
   }
 }
