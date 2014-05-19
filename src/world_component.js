@@ -19,10 +19,12 @@ module.exports = React.createClass({
   render: function() {
     var world = this.props.world;
 
+    /* jshint ignore:start */
     return <svg width={world.width} height={world.height}>
       <PolygonsComponent className="hexgrid" polygons={world.hexagons} />
       <CountriesComponent ref="countries" className="PiYG" countries={world.countries} stream={this.props.stream} />
       <PathsComponent className="voronoi" paths={world.cells} />
     </svg>;
+    /* jshint ignore:end */
   }
 });

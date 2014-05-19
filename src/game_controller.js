@@ -1,10 +1,8 @@
-/** @jsx React.DOM */
-
-var Bacon             = require('baconjs').Bacon;
-var React             = require('react');
-var WorldComponent    = require('./world_component');
-var _                 = require('lodash');
-var builder           = require('./builder');
+var Bacon          = require('baconjs').Bacon;
+var React          = require('react');
+var WorldComponent = require('./world_component');
+var _              = require('lodash');
+var builder        = require('./builder');
 
 function dispatch(fn) {
   fn();
@@ -24,7 +22,7 @@ function GameController(options) {
   this.world = builder.buildWorld(options.width, options.height);
 
   this.worldComponent = React.renderComponent(
-    <WorldComponent world={this.world} stream={countryStream} />,
+    WorldComponent({world: this.world, stream: countryStream}),
     options.el
   );
 }
@@ -50,24 +48,24 @@ GameController.prototype.stateTransform = function(previousCountry, event) {
   } else {
     return [previousCountry, [event]];
   }
-}
+};
 
 GameController.prototype.selectCountry = function(country) {
   console.log('select', country);
   this.worldComponent.selectCountry(country);
-}
+};
 
 GameController.prototype.deselectCountry = function(country) {
   console.log('deselect', country);
   this.worldComponent.deselectCountry();
-}
+};
 
 GameController.prototype.attackOrMove = function(source, target) {
   console.log('attackOrMove', source, target);
   // TODO: Figure out if we're moving or attacking.
   this.world.move(source, target);
   this.worldComponent.deselectCountry();
-}
+};
 
 GameController.prototype.constructor = GameController;
 

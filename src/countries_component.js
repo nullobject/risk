@@ -30,14 +30,18 @@ module.exports = React.createClass({
 
       classes[color] = true;
 
+      /* jshint ignore:start */
       return <polygon
         key={index}
         className={cx(classes)}
         points={country.polygon.toString()}
         onClick={this.didSelectCountry.bind(this, country)}
       />;
+      /* jshint ignore:end */
     }, this);
 
+    /* jshint ignore:start */
     return <g className={this.props.className}>{polygons}</g>;
+    /* jshint ignore:end */
   }
 });
