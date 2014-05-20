@@ -5,6 +5,8 @@
 var React = require('react');
 
 module.exports = React.createClass({
+  displayName: 'PolygonsComponent',
+
   render: function() {
     var polygons = this.props.polygons.map(function(polygon, index) {
       /* jshint ignore:start */

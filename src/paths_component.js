@@ -9,6 +9,8 @@ function polygon(d) {
 }
 
 module.exports = React.createClass({
+  displayName: 'PathsComponent',
+
   render: function() {
     var paths = this.props.paths.map(function(path, index) {
       /* jshint ignore:start */

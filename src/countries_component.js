@@ -8,6 +8,8 @@ var React = require('react/addons');
 var cx = React.addons.classSet;
 
 module.exports = React.createClass({
+  displayName: 'CountriesComponent',
+
   getInitialState: function() {
     return {
       selectedCountry: null
