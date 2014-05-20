@@ -1,3 +1,5 @@
+'use strict';
+
 var Point   = require('./point');
 var Polygon = require('./polygon');
 var _       = require('lodash');

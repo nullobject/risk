@@ -1,5 +1,7 @@
 /** @jsx React.DOM */
 
+'use strict';
+
 var CountriesComponent = require('./countries_component');
 var PathsComponent     = require('./paths_component');
 var PolygonsComponent  = require('./polygons_component');

@@ -1,3 +1,5 @@
+'use strict';
+
 function Country(polygon) {
   this.polygon = polygon;
   this.neighbours = [];

@@ -1,3 +1,5 @@
+'use strict';
+
 var Country = require('./country');
 var Hexgrid = require('./hexgrid');
 var Point   = require('./point');

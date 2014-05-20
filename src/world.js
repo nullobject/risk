@@ -1,3 +1,5 @@
+'use strict';
+
 var _ = require('lodash');
 
 function World(width, height, hexagons, countries, cells) {

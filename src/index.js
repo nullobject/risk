@@ -1,3 +1,7 @@
+/* jshint browser:true */
+
+'use strict';
+
 var GameController = require('./game_controller');
 
 new GameController({

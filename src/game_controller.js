@@ -1,3 +1,5 @@
+'use strict';
+
 var Bacon          = require('baconjs').Bacon;
 var React          = require('react');
 var WorldComponent = require('./world_component');
