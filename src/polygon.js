@@ -6,7 +6,11 @@ var clipper = require('../lib/clipper');
 var SCALE = 100;
 
 var Polygon = function(vertices) {
-  this.vertices = vertices;
+  var polygon = Object.create(Polygon.prototype);
+
+  polygon.vertices = vertices;
+
+  return polygon;
 };
 
 Polygon.prototype.constructor = Polygon;
@@ -62,7 +66,7 @@ Polygon.prototype.offset = function(delta) {
     });
   })[0];
 
-  return new Polygon(vertices);
+  return Polygon(vertices);
 };
 
 Polygon.prototype.toString = function() {
@@ -96,7 +100,7 @@ Polygon.merge = function(polygons) {
     });
   })[0];
 
-  return new Polygon(vertices);
+  return Polygon(vertices);
 };
 
 module.exports = Polygon;

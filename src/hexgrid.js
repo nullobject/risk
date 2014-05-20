@@ -42,7 +42,7 @@ var Hexgrid = function(width, height, radius) {
   this.hexagons = coordinates.map(function(coordinate) {
     var position = calculatePosition(coordinate, radius);
     var vertices = calculateVertices(position);
-    return new Polygon(vertices);
+    return Polygon(vertices);
   });
 };
 

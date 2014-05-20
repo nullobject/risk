@@ -26,7 +26,7 @@ function cellVertices(cell) {
 
 // Returns the polygon for a given cell.
 function cellPolygon(cell) {
-  return new Polygon(cellVertices(cell));
+  return Polygon(cellVertices(cell));
 }
 
 // Calculates the Voronoi diagram for a given set of sites using a tessellation

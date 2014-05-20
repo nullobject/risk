@@ -3,7 +3,7 @@ var Polygon = require('../src/polygon');
 var expect  = require('chai').expect;
 
 describe('Polygon', function() {
-  var polygon = new Polygon([
+  var polygon = Polygon([
     Point(-1, -1),
     Point(-1,  1),
     Point( 1,  1),
