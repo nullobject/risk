@@ -58,7 +58,7 @@ Polygon.prototype.offset = function(delta) {
     clipper.JS.ScaleDownPath(path, SCALE);
 
     return path.map(function(point) {
-      return new Point(point.X, point.Y);
+      return Point(point.X, point.Y);
     });
   })[0];
 
@@ -92,7 +92,7 @@ Polygon.merge = function(polygons) {
     clipper.JS.ScaleDownPath(path, SCALE);
 
     return path.map(function(point) {
-      return new Point(point.X, point.Y);
+      return Point(point.X, point.Y);
     });
   })[0];
 

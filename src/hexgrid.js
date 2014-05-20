@@ -13,7 +13,7 @@ var Hexgrid = function(width, height, radius) {
   function calculatePosition(coordinate) {
     var width = 2 * r, height = radius + h;
 
-    return new Point(
+    return Point(
       (coordinate[0] * width) + ((coordinate[1] % 2) * (width / 2)),
       coordinate[1] * height
     );
@@ -22,12 +22,12 @@ var Hexgrid = function(width, height, radius) {
   // Calculates the vertices of a hexagon at a given position.
   function calculateVertices(position) {
     return [
-      new Point(position.x,           position.y + h               ),
-      new Point(position.x + r,       position.y                   ),
-      new Point(position.x + (2 * r), position.y + h               ),
-      new Point(position.x + (2 * r), position.y + h + radius      ),
-      new Point(position.x + r,       position.y + (2 * h) + radius),
-      new Point(position.x,           position.y + h + radius      )
+      Point(position.x,           position.y + h               ),
+      Point(position.x + r,       position.y                   ),
+      Point(position.x + (2 * r), position.y + h               ),
+      Point(position.x + (2 * r), position.y + h + radius      ),
+      Point(position.x + r,       position.y + (2 * h) + radius),
+      Point(position.x,           position.y + h + radius      )
     ];
   }
 

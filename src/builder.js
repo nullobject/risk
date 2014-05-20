@@ -20,7 +20,7 @@ var RADIUS = 8, // Hexgrid radius.
 
 function cellVertices(cell) {
   return cell.halfedges.map(function(halfedge) {
-    return new Point(halfedge.getStartpoint());
+    return Point(halfedge.getStartpoint());
   });
 }
 
@@ -103,7 +103,7 @@ module.exports = {
 
     // Generate a set of random "seed" sites within the clipping region.
     var sites = _.range(SEEDS).map(function(d) {
-      return new Point(_.random(width, true), _.random(height, true));
+      return Point(_.random(width, true), _.random(height, true));
     });
 
     // Calculate the Voronoi diagram.
