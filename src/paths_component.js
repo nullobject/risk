@@ -13,13 +13,17 @@ module.exports = React.createClass({
 
   render: function() {
     var paths = this.props.paths.map(function(path, index) {
-      /* jshint ignore:start */
-      return <path key={index} d={polygon(path)} />;
-      /* jshint ignore:end */
+      return (
+        /* jshint ignore:start */
+        <path key={index} d={polygon(path)} />
+        /* jshint ignore:end */
+      );
     });
 
-    /* jshint ignore:start */
-    return <g className={this.props.className}>{paths}</g>;
-    /* jshint ignore:end */
+    return (
+      /* jshint ignore:start */
+      <g className={this.props.className}>{paths}</g>
+      /* jshint ignore:end */
+    );
   }
 });

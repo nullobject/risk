@@ -2,33 +2,60 @@
 
 'use strict';
 
-var CountriesComponent = require('./countries_component');
-var PathsComponent     = require('./paths_component');
-var PolygonsComponent  = require('./polygons_component');
-var React              = require('react');
+var CountryComponent  = require('./country_component');
+var PathsComponent    = require('./paths_component');
+var PolygonsComponent = require('./polygons_component');
+var React             = require('react');
+var _                 = require('lodash');
 
 module.exports = React.createClass({
   displayName: 'WorldComponent',
 
-  // Selects a given country.
-  selectCountry: function(country) {
-    this.refs.countries.setState({selectedCountry: country});
+  getInitialState: function() {
+    return {
+      selectedCountry: null
+    };
   },
 
-  // Deselects the currently selected country.
-  deselectCountry: function() {
-    this.selectCountry(null);
+  componentWillUpdate: function(nextProps, nextState) {
+    var countries = this.props.world.countries;
+    var selectedCountry = nextState.selectedCountry;
+
+    countries.forEach(function(country) {
+      this.refs[country].setState({
+        selected: country === selectedCountry,
+        nearby: selectedCountry !== null && _.contains(selectedCountry.neighbours, country)
+      });
+    }, this);
   },
 
   render: function() {
+    console.log('WorldComponent#render');
+
     var world = this.props.world;
 
-    /* jshint ignore:start */
-    return <svg width={world.width} height={world.height}>
-      <PolygonsComponent className="hexgrid" polygons={world.hexagons} />
-      <CountriesComponent ref="countries" className="PiYG" countries={world.countries} stream={this.props.stream} />
-      <PathsComponent className="voronoi" paths={world.cells} />
-    </svg>;
-    /* jshint ignore:end */
+    var polygons = world.countries.map(function(country, index) {
+      return (
+        /* jshint ignore:start */
+        <CountryComponent
+          key={country}
+          ref={country}
+          index={index}
+          country={country}
+          stream={this.props.stream}
+        />
+        /* jshint ignore:end */
+      );
+    }, this);
+
+    return (
+      /* jshint ignore:start */
+      <g>
+        <PolygonsComponent className="hexgrid" polygons={world.hexagons} />
+        <g className="countries PiYG">{polygons}</g>
+        <PathsComponent className="voronoi" paths={world.cells} />
+      </g>
+      /* jshint ignore:end */
+    );
   }
 });

@@ -1,10 +1,10 @@
 'use strict';
 
-var Bacon          = require('baconjs').Bacon;
-var React          = require('react');
-var WorldComponent = require('./world_component');
-var _              = require('lodash');
-var builder        = require('./builder');
+var Bacon         = require('baconjs').Bacon;
+var Game          = require('./game');
+var GameComponent = require('./game_component');
+var React         = require('react');
+var _             = require('lodash');
 
 function dispatch(fn) {
   fn();
@@ -21,10 +21,10 @@ function GameController(options) {
     .withStateMachine(null, this.stateTransform.bind(this))
     .onValue(dispatch);
 
-  this.world = builder.buildWorld(options.width, options.height);
+  this.game = new Game(options.width, options.height);
 
-  this.worldComponent = React.renderComponent(
-    WorldComponent({world: this.world, stream: countryStream}),
+  this.gameComponent = React.renderComponent(
+    GameComponent({game: this.game, stream: countryStream}),
     options.el
   );
 }
@@ -54,19 +54,19 @@ GameController.prototype.stateTransform = function(previousCountry, event) {
 
 GameController.prototype.selectCountry = function(country) {
   console.log('select', country);
-  this.worldComponent.selectCountry(country);
+  this.gameComponent.selectCountry(country);
 };
 
 GameController.prototype.deselectCountry = function(country) {
   console.log('deselect', country);
-  this.worldComponent.deselectCountry();
+  this.gameComponent.deselectCountry();
 };
 
 GameController.prototype.attackOrMove = function(source, target) {
   console.log('attackOrMove', source, target);
+  this.gameComponent.deselectCountry();
   // TODO: Figure out if we're moving or attacking.
-  this.world.move(source, target);
-  this.worldComponent.deselectCountry();
+  this.game.world.move(source, target);
 };
 
 GameController.prototype.constructor = GameController;

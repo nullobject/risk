@@ -2,9 +2,7 @@
 
 var _ = require('lodash');
 
-function World(width, height, hexagons, countries, cells) {
-  this.width     = width;
-  this.height    = height;
+function World(hexagons, countries, cells) {
   this.hexagons  = hexagons;
   this.countries = countries;
   this.cells     = cells;
