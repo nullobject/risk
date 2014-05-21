@@ -7,7 +7,9 @@ production:
 lint:
 	@node_modules/.bin/jshint src
 
-test:
+unit:
 	@node_modules/.bin/mocha --reporter spec
+
+test: unit lint
 
 .PHONY: start lint test
