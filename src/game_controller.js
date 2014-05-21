@@ -64,9 +64,9 @@ GameController.prototype.deselectCountry = function(country) {
 
 GameController.prototype.attackOrMove = function(source, target) {
   console.log('attackOrMove', source, target);
+  this.gameComponent.deselectCountry();
   // TODO: Figure out if we're moving or attacking.
   this.game.world.move(source, target);
-  this.gameComponent.deselectCountry();
 };
 
 GameController.prototype.constructor = GameController;
