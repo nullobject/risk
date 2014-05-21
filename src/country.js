@@ -8,4 +8,8 @@ function Country(polygon) {
 
 Country.prototype.constructor = Country;
 
+Country.prototype.toString = function() {
+  return 'country-' + this.id;
+};
+
 module.exports = Country;

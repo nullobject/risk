@@ -2,7 +2,7 @@ var World = require('../src/world');
 var expect = require('chai').expect;
 
 function w(countries) {
-  return new World(null, null, null, countries, null);
+  return new World(null, countries, null);
 }
 
 describe('World', function() {

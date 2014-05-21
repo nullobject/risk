@@ -72,6 +72,10 @@ function calculateCountries(hexagons, diagram) {
     var cell = diagram.cells[id];
     var neighbours = neighbouringCells(cell, diagram);
 
+    // Set the country ID.
+    country.id = id;
+
+    // Set the country neighbours.
     country.neighbours = neighbours.map(function(neighbour) {
       return countries[neighbour.site.voronoiId];
     });
@@ -116,6 +120,6 @@ module.exports = {
     var cells = diagram.cells.map(cellVertices);
 
     // Return a new world.
-    return new World(width, height, hexgrid.hexagons, countries, cells);
+    return new World(hexgrid.hexagons, countries, cells);
   }
 };

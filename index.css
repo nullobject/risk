@@ -21,7 +21,7 @@ svg polygon {
   fill: lightgray;
 }
 
-svg polygon.cell {
+svg polygon.country {
   fill: currentColor;
   fill-opacity: 0.5;
   stroke: currentColor;
@@ -30,11 +30,11 @@ svg polygon.cell {
   pointer-events: all;
 }
 
-svg polygon.cell.selected {
+svg polygon.country.selected {
   color: red;
 }
 
-svg polygon.cell.nearby {
+svg polygon.country.nearby {
   color: green;
   -webkit-animation: pulsate 1s ease-in-out 0s infinite alternate;
 }
