@@ -24,4 +24,17 @@ function Game(width, height) {
 
 Game.prototype.constructor = Game;
 
+// Attacks with the given player's armies from the source country to the target
+// country.
+Game.prototype.attack = function(player, source, target) {
+  console.log('Game#attack');
+};
+
+// Moves the given player's armies from the source country to the target
+// country.
+Game.prototype.move = function(player, source, target) {
+  console.log('Game#move');
+  this.world.move(source, target);
+};
+
 module.exports = Game;

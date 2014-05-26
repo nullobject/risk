@@ -1,25 +1,23 @@
 'use strict';
 
-
-function dispatch(fn) {
 var Bacon                   = require('baconjs').Bacon;
+var CountryStateTransformer = require('./country_state_transformer');
 var Game                    = require('./game');
 var GameComponent           = require('./game_component.jsx');
 var React                   = require('react');
 var _                       = require('lodash');
-  fn();
-}
 
-function state(newState, fn) {
-  return [newState, [new Bacon.Next(function() { return fn; })]];
+// Calls the given function.
+function call(fn) {
+  fn();
 }
 
 function GameController(options) {
   var countryStream = new Bacon.Bus();
 
   countryStream
-    .withStateMachine(null, this.stateTransform.bind(this))
-    .onValue(dispatch);
+    .withStateMachine(null, this.handleEvent.bind(this))
+    .onValue(call);
 
   this.game = new Game(options.width, options.height);
 
@@ -29,44 +27,23 @@ function GameController(options) {
   );
 }
 
-// The state transformation function for the country stream.
-GameController.prototype.stateTransform = function(previousCountry, event) {
-  if (event.hasValue()) {
-    var fn, nextCountry = event.value();
-
-    if (previousCountry && _.contains(previousCountry.neighbours, nextCountry)) {
-      // The user selected one of the nearby countries.
-      fn = this.attackOrMove.bind(this, previousCountry, nextCountry);
-      return state(undefined, fn);
-    } else if (previousCountry === nextCountry) {
-      // The user selected the previously selected country.
-      fn = this.deselectCountry.bind(this, nextCountry);
-      return state(undefined, fn);
-    } else {
-      // The user selected a new country.
-      fn = this.selectCountry.bind(this, nextCountry);
-      return state(nextCountry, fn);
-    }
-  } else {
-    return [previousCountry, [event]];
-  }
-};
+// Mixin the country state transformer.
+_.extend(GameController.prototype, CountryStateTransformer);
 
 GameController.prototype.selectCountry = function(country) {
-  console.log('select', country);
+  console.log('GameController#selectCountry', country);
   this.gameComponent.selectCountry(country);
 };
 
 GameController.prototype.deselectCountry = function(country) {
-  console.log('deselect', country);
+  console.log('GameController#deselectCountry', country);
   this.gameComponent.deselectCountry();
 };
 
-GameController.prototype.attackOrMove = function(source, target) {
-  console.log('attackOrMove', source, target);
+GameController.prototype.move = function(source, target) {
+  console.log('GameController#move', source, target);
   this.gameComponent.deselectCountry();
-  // TODO: Figure out if we're moving or attacking.
-  this.game.world.move(source, target);
+  this.game.move(source, target);
 };
 
 GameController.prototype.constructor = GameController;

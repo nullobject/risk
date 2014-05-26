@@ -10,8 +10,15 @@ function World(hexagons, countries, cells) {
 
 World.prototype.constructor = World;
 
+// Attacks with armies from the source country to the target country.
+World.prototype.attack = function(source, target) {
+  console.log('World#attack');
+};
+
 // Moves armies from the source country to the target country.
 World.prototype.move = function(source, target) {
+  console.log('World#move');
+
   // Assert the source country is in the world.
   if (!_.contains(this.countries, source)) {
     throw 'Source country is not in the world';
@@ -29,11 +36,6 @@ World.prototype.move = function(source, target) {
 
   target.armies = source.armies - 1;
   source.armies = 1;
-};
-
-// Attacks with armies from the source country to the target country.
-World.prototype.attack = function(source, target) {
-  console.log('World#attack');
 };
 
 module.exports = World;
