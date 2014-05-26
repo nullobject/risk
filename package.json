@@ -7,8 +7,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha",
-    "start": "beefy src/index.js"
+    "test": "make test",
+    "start": "make start"
   },
   "repository": {
     "type": "git",
@@ -21,18 +21,21 @@
   },
   "homepage": "https://github.com/nullobject/hexgrid",
   "dependencies": {
-    "baconjs": "*",
-    "lodash": "~2.4.1",
-    "normalize.css": "~3.0.1",
-    "react": "~0.10.0"
+    "baconjs": "^0.7.13",
+    "lodash": "^2.4.1",
+    "normalize.css": "^3.0.1",
+    "react": "^0.10.0"
   },
   "devDependencies": {
-    "beefy": "~1.1.0",
-    "browserify": "~4.1.5",
-    "chai": "~1.9.1",
-    "jshint": "~2.5.0",
-    "mocha": "~1.18.2",
-    "reactify": "~0.13.1",
-    "uglifyify": "~2.1.1"
+    "beefy": "^1.1.0",
+    "browserify": "^4.1.5",
+    "chai": "^1.9.1",
+    "envify": "^1.2.1",
+    "jshint": "^2.5.0",
+    "mocha": "^1.19.0",
+    "react-tools": "^0.10.0",
+    "reactify": "^0.13.1",
+    "sinon": "^1.10.0",
+    "uglifyify": "^2.4.0"
   }
 }
