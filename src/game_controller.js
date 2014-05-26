@@ -3,7 +3,7 @@
 var Bacon                   = require('baconjs').Bacon;
 var CountryStateTransformer = require('./country_state_transformer');
 var Game                    = require('./game');
-var GameComponent           = require('./game_component.jsx');
+var GameComponent           = require('./components/game_component.jsx');
 var React                   = require('react');
 var _                       = require('lodash');
 
