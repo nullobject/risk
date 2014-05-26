@@ -1,0 +1,2 @@
+--compilers jsx:./test/support/jsx
+--reporter spec

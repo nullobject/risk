@@ -8,7 +8,7 @@ lint:
 	@node_modules/.bin/jshint src
 
 unit:
-	@node_modules/.bin/mocha --reporter spec
+	@node_modules/.bin/mocha
 
 test: unit lint
 
