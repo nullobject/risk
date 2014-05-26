@@ -4,6 +4,7 @@ function Country(polygon) {
   this.polygon = polygon;
   this.neighbours = [];
   this.armies = 10;
+  this.player = null;
 }
 
 Country.prototype.constructor = Country;
