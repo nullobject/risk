@@ -23,7 +23,7 @@ svg polygon {
 
 svg polygon.country {
   fill: currentColor;
-  fill-opacity: 0.5;
+  fill-opacity: 0.7;
   stroke: currentColor;
   stroke-opacity: 0.7;
   stroke-width: 3px;
@@ -40,8 +40,8 @@ svg polygon.country.nearby {
 }
 
 @-webkit-keyframes pulsate {
-  0%   { opacity: 0.5; }
+  0%   { opacity: 0.7; }
   100% { opacity: 1.0; }
 }
 
-.PiYG .q0-9{color:rgb(197,27,125)} .PiYG .q1-9{color:rgb(222,119,174)} .PiYG .q2-9{color:rgb(241,182,218)} .PiYG .q3-9{color:rgb(253,224,239)} .PiYG .q4-9{color:rgb(247,247,247)} .PiYG .q5-9{color:rgb(230,245,208)} .PiYG .q6-9{color:rgb(184,225,134)} .PiYG .q7-9{color:rgb(127,188,65)} .PiYG .q8-9{color:rgb(77,146,33)}
+.PRGn .q0-4{fill:rgb(123,50,148)} .PRGn .q1-4{fill:rgb(194,165,207)} .PRGn .q2-4{fill:rgb(166,219,160)} .PRGn .q3-4{fill:rgb(0,136,55)}
