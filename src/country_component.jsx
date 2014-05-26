@@ -22,7 +22,7 @@ module.exports = React.createClass({
   },
 
   classes: function() {
-    var color = 'q' + (this.props.index % 9) + '-9';
+    var color = this.props.country.player ? 'q' + (this.props.country.player.id % 4) + '-4' : '';
 
     var classes = {
       country:  true,
@@ -41,7 +41,7 @@ module.exports = React.createClass({
   },
 
   componentDidUpdate: function() {
-    // FIXME: Manually set SVG class. See https://github.com/facebook/react/issues/1139
+    // FIXME: Manually set SVG class. See https://github.com/facebook/react/pull/1264
     this.getDOMNode().setAttribute('class', cx(this.classes()));
   },
 

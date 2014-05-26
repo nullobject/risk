@@ -1,12 +1,12 @@
 'use strict';
 
-var Bacon         = require('baconjs').Bacon;
-var Game          = require('./game');
-var GameComponent = require('./game_component');
-var React         = require('react');
-var _             = require('lodash');
 
 function dispatch(fn) {
+var Bacon                   = require('baconjs').Bacon;
+var Game                    = require('./game');
+var GameComponent           = require('./game_component.jsx');
+var React                   = require('react');
+var _                       = require('lodash');
   fn();
 }
 

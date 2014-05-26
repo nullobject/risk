@@ -2,9 +2,9 @@
 
 'use strict';
 
-var CountryComponent  = require('./country_component');
-var PathsComponent    = require('./paths_component');
-var PolygonsComponent = require('./polygons_component');
+var CountryComponent  = require('./country_component.jsx');
+var PathsComponent    = require('./paths_component.jsx');
+var PolygonsComponent = require('./polygons_component.jsx');
 var React             = require('react');
 var _                 = require('lodash');
 
@@ -52,7 +52,7 @@ module.exports = React.createClass({
       /* jshint ignore:start */
       <g>
         <PolygonsComponent className="hexgrid" polygons={world.hexagons} />
-        <g className="countries PiYG">{polygons}</g>
+        <g className="countries PRGn">{polygons}</g>
         <PathsComponent className="voronoi" paths={world.cells} />
       </g>
       /* jshint ignore:end */

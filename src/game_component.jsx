@@ -3,7 +3,7 @@
 'use strict';
 
 var React          = require('react');
-var WorldComponent = require('./world_component');
+var WorldComponent = require('./world_component.jsx');
 
 module.exports = React.createClass({
   displayName: 'GameComponent',
