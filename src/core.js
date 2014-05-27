@@ -3,6 +3,7 @@
 var _ = require('lodash');
 
 module.exports = {
+  // Returns the cartesian product of the given arrays.
   cartesianProduct: function() {
     return _.reduce(arguments, function(a, b) {
       return _.flatten(_.map(a, function(x) {

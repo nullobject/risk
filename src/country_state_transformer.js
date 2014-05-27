@@ -1,3 +1,5 @@
+'use strict';
+
 var Bacon = require('baconjs').Bacon;
 var _     = require('lodash');
 
@@ -23,8 +25,9 @@ module.exports = {
   //
   // Returns a tuple containing the country and the player's action.
   //
-  // TODO: We need a reference to the current player to calculate the player's
-  // action.
+  // FIXME: We need a reference to the current player to properly determine the
+  // next action. For example, the player must first choose one of their own
+  // countries before selecting a neighbouring country.
   nextAction: function(previousCountry, nextCountry) {
     var action = null, country = null;
 
