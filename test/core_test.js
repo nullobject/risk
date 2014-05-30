@@ -1,5 +1,6 @@
-var core   = require('../src/core');
-var expect = require('chai').expect;
+'use strict';
+
+var core = require('../src/core');
 
 describe('core', function() {
   describe('#cartesianProduct', function() {

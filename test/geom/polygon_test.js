@@ -1,6 +1,7 @@
-var Point   = require('../src/point');
-var Polygon = require('../src/polygon');
-var expect  = require('chai').expect;
+'use strict';
+
+var Point   = require('../../src/geom/point');
+var Polygon = require('../../src/geom/polygon');
 
 describe('Polygon', function() {
   var polygon = Polygon([

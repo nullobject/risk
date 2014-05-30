@@ -1,2 +1,3 @@
 --compilers jsx:./test/support/jsx
---reporter spec
+--recursive
+--require ./test/support/helper.js

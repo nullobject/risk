@@ -13,13 +13,13 @@ function call(fn) {
 }
 
 function GameController(options) {
+  this.game = new Game(options.width, options.height);
+
   var countryStream = new Bacon.Bus();
 
   countryStream
-    .withStateMachine(null, this.handleEvent.bind(this))
+    .withStateMachine(null, this.handleEvent.bind(this, this.game, this.game.players[0]))
     .onValue(call);
-
-  this.game = new Game(options.width, options.height);
 
   this.gameComponent = React.renderComponent(
     GameComponent({game: this.game, stream: countryStream}),
@@ -35,15 +35,9 @@ GameController.prototype.selectCountry = function(country) {
   this.gameComponent.selectCountry(country);
 };
 
-GameController.prototype.deselectCountry = function(country) {
-  console.log('GameController#deselectCountry', country);
+GameController.prototype.deselectCountry = function() {
+  console.log('GameController#deselectCountry');
   this.gameComponent.deselectCountry();
-};
-
-GameController.prototype.move = function(source, target) {
-  console.log('GameController#move', source, target);
-  this.gameComponent.deselectCountry();
-  this.game.move(source, target);
 };
 
 GameController.prototype.constructor = GameController;

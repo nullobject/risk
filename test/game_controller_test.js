@@ -1,7 +1,7 @@
+'use strict';
+
 var GameController = require('../src/game_controller');
 var React          = require('react');
-var expect         = require('chai').expect;
-var sinon          = require('sinon');
 
 describe('GameController', function() {
   var sandbox, controller;
@@ -31,7 +31,7 @@ describe('GameController', function() {
     it('should call #selectCountry on the component', function() {
       var selectCountry = sandbox.stub(gameComponent, 'selectCountry');
       controller.selectCountry(a);
-      expect(selectCountry.calledWith(a)).to.be.true
+      expect(selectCountry).to.have.been.calledWith(a);
     });
   });
 
@@ -39,19 +39,7 @@ describe('GameController', function() {
     it('should call #deselectCountry on the component', function() {
       var deselectCountry = sandbox.stub(gameComponent, 'deselectCountry');
       controller.deselectCountry(a);
-      expect(deselectCountry.called).to.be.true
-    });
-  });
-
-  describe('#move', function() {
-    it('should call #deselectCountry on the component', function() {
-      var deselectCountry = sandbox.stub(gameComponent, 'deselectCountry'),
-          move            = sandbox.stub(controller.game, 'move');
-
-      controller.move(a, b);
-
-      expect(deselectCountry.called).to.be.true
-      expect(move.calledWith(a, b)).to.be.true
+      expect(deselectCountry).to.have.been.called;
     });
   });
 });

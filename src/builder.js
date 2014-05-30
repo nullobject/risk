@@ -1,9 +1,9 @@
 'use strict';
 
 var Country = require('./country');
-var Hexgrid = require('./hexgrid');
-var Point   = require('./point');
-var Polygon = require('./polygon');
+var Hexgrid = require('./geom/hexgrid');
+var Point   = require('./geom/point');
+var Polygon = require('./geom/polygon');
 var Voronoi = require('../lib/voronoi');
 var World   = require('./world');
 var _       = require('lodash');

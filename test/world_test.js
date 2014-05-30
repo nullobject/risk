@@ -1,54 +1,55 @@
-var World = require('../src/world');
-var expect = require('chai').expect;
+'use strict';
 
-function w(countries) {
+var World = require('../src/world');
+
+function buildWorld(countries) {
   return new World(null, countries, null);
 }
 
 describe('World', function() {
   describe('#move', function() {
-    it('should move armies from the source country to the target country', function() {
-      var source = {armies: 10},
-          target = {armies: 0},
-          world = w([source, target]);
+    it('should move armies from the from country to the to country', function() {
+      var from  = {armies: 10},
+          to    = {armies: 0},
+          world = buildWorld([from, to]);
 
-      world.move(source, target);
+      world.move(from, to);
 
-      expect(source.armies).to.equal(1);
-      expect(target.armies).to.equal(9);
+      expect(from.armies).to.equal(1);
+      expect(to.armies).to.equal(9);
     });
 
-    it('should assert the source country is in the world', function() {
-      var source = {armies: 10},
-          target = {armies: 0},
-          world = w([target]);
+    it('should assert the from country is in the world', function() {
+      var from  = {armies: 10},
+          to    = {armies: 0},
+          world = buildWorld([to]);
 
       expect(function() {
-        world.move(source, target);
-      }).to.throw('Source country is not in the world');
+        world.move(from, to);
+      }).to.throw("The 'from' country is not in the world");
     });
 
-    it('should assert the target country is in the world', function() {
-      var source = {armies: 10},
-          target = {armies: 0},
-          world = w([source]);
+    it('should assert the to country is in the world', function() {
+      var from  = {armies: 10},
+          to    = {armies: 0},
+          world = buildWorld([from]);
 
       expect(function() {
-        world.move(source, target);
-      }).to.throw('Target country is not in the world');
+        world.move(from, to);
+      }).to.throw("The 'to' country is not in the world");
     });
 
-    it('should assert the source country has armies to move', function() {
-      var source = {armies: 1},
-          target = {armies: 10},
-          world = w([source, target]);
+    it('should assert the from country has armies to move', function() {
+      var from  = {armies: 1},
+          to    = {armies: 10},
+          world = buildWorld([from, to]);
 
       expect(function() {
-        world.move(source, target);
-      }).to.throw('Source country does not have enough armies');
+        world.move(from, to);
+      }).to.throw("The 'from' country does not have enough armies");
     });
 
-    it('should assert the source country belongs to the player');
-    it('should assert the target country does not belong to the player');
+    it('should assert the from country belongs to the player');
+    it('should assert the to country does not belong to the player');
   });
 });
