@@ -11,8 +11,8 @@ function dispatch(fn) {
 }
 
 module.exports = {
-  handleEvent: function(game, player, previousCountry, event) {
-    var result  = this.nextAction(game, player, previousCountry, event.value()),
+  handleEvent: function(previousCountry, event) {
+    var result  = this.nextAction(previousCountry, event.value()),
         country = result[0],
         action  = result[1];
 
@@ -20,30 +20,26 @@ module.exports = {
   },
 
   // The state transformation function which determines the player's action
-  // from the countries they select.
+  // from a given tuple containing the current player and a selected country.
   //
-  // Returns a tuple containing the country and the player's action.
-  //
-  // FIXME: We need a reference to the game and player to properly determine
-  // the next action. For example, the player must first choose one of their
-  // own countries before selecting a neighbouring country.
-  nextAction: function(game, player, previousCountry, nextCountry) {
-    var action = null, country = null;
+  // Returns a tuple containing the player's selected country and next action.
+  nextAction: function(previousCountry, value) {
+    var player      = value[0],
+        country     = value[1],
+        nextAction  = null,
+        nextCountry = null;
 
-    if (previousCountry === null && game.canSelect(player, nextCountry)) {
-      action = this.selectCountry.bind(this, nextCountry);
-      country = nextCountry;
-    } else if (previousCountry !== null && previousCountry === nextCountry) {
-      action = this.deselectCountry.bind(this);
-    } else if (previousCountry !== null && game.canMove(player, previousCountry, nextCountry)) {
-      action = function() {
-        this.deselectCountry();
-        game.move(player, previousCountry, nextCountry);
-      }.bind(this);
+    if (previousCountry === null && this.game.canSelect(player, country)) {
+      nextAction  = this.selectCountry.bind(this, country);
+      nextCountry = country;
+    } else if (previousCountry !== null && previousCountry === country) {
+      nextAction = this.deselectCountry.bind(this);
+    } else if (previousCountry !== null && this.game.canMove(player, previousCountry, country)) {
+      nextAction = this.move.bind(this, player, previousCountry, country);
     } else {
-      country = previousCountry;
+      nextCountry = previousCountry;
     }
 
-    return [country, action];
+    return [nextCountry, nextAction];
   }
 };

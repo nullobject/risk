@@ -9,8 +9,7 @@ describe('CountryStateTransformer', function() {
   // Game stub.
   var game = {
     canSelect: function() {},
-    canMove:   function() {},
-    move:      function() {}
+    canMove:   function() {}
   };
 
   // Player stub.
@@ -22,8 +21,10 @@ describe('CountryStateTransformer', function() {
 
   // Mixin target stub.
   var target = {
+    game:            game,
     selectCountry:   function() {},
-    deselectCountry: function() {}
+    deselectCountry: function() {},
+    move:            function() {}
   };
 
   // Mixin the transformer into the target.
@@ -42,7 +43,7 @@ describe('CountryStateTransformer', function() {
       it('should select the country', function() {
         var canSelect     = sandbox.stub(game, 'canSelect').returns(true),
             selectCountry = sandbox.stub(target, 'selectCountry'),
-            result        = target.nextAction(game, player, null, a),
+            result        = target.nextAction(null, [player, a]),
             country       = result[0],
             action        = result[1];
 
@@ -57,7 +58,7 @@ describe('CountryStateTransformer', function() {
     describe('when a country is already selected', function() {
       it('should deselect the country if the same country is selected', function() {
         var deselectCountry = sandbox.stub(target, 'deselectCountry'),
-            result          = target.nextAction(game, player, a, a),
+            result          = target.nextAction(a, [player, a]),
             country         = result[0],
             action          = result[1];
 
@@ -69,9 +70,8 @@ describe('CountryStateTransformer', function() {
 
       it('should move the player if a different country is selected', function() {
         var canMove         = sandbox.stub(game, 'canMove').returns(true),
-            move            = sandbox.stub(game, 'move'),
-            deselectCountry = sandbox.stub(target, 'deselectCountry'),
-            result          = target.nextAction(game, player, a, b),
+            move            = sandbox.stub(target, 'move'),
+            result          = target.nextAction(a, [player, b]),
             country         = result[0],
             action          = result[1];
 
@@ -79,7 +79,6 @@ describe('CountryStateTransformer', function() {
 
         expect(country).to.equal(null)
         expect(canMove).to.have.been.calledWith(player, a, b);
-        expect(deselectCountry).to.have.been.called;
         expect(move).to.have.been.calledWith(player, a, b);
       });
     });

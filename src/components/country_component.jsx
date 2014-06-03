@@ -2,6 +2,7 @@
 
 'use strict';
 
+var Bacon = require('baconjs').Bacon;
 var React = require('react/addons');
 var _     = require('lodash');
 
@@ -10,8 +11,12 @@ var cx = React.addons.classSet;
 module.exports = React.createClass({
   displayName: 'CountryComponent',
 
+  propTypes: {
+    stream: React.PropTypes.instanceOf(Bacon.Observable).isRequired,
+  },
+
   didSelectCountry: function(country) {
-    this.props.stream.push(country);
+    this.props.stream.push({type: 'select-country', country: country});
   },
 
   getInitialState: function() {

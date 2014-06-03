@@ -7,4 +7,8 @@ function Player(id) {
 
 Player.prototype.constructor = Player;
 
+Player.prototype.toString = function() {
+  return 'player-' + this.id;
+};
+
 module.exports = Player;

@@ -2,6 +2,7 @@
 
 'use strict';
 
+var Bacon             = require('baconjs').Bacon;
 var CountryComponent  = require('./country_component.jsx');
 var PathsComponent    = require('./paths_component.jsx');
 var PolygonsComponent = require('./polygons_component.jsx');
@@ -10,6 +11,10 @@ var _                 = require('lodash');
 
 module.exports = React.createClass({
   displayName: 'WorldComponent',
+
+  propTypes: {
+    stream: React.PropTypes.instanceOf(Bacon.Observable).isRequired,
+  },
 
   getInitialState: function() {
     return {
@@ -30,9 +35,9 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    console.log('WorldComponent#render');
-
     var world = this.props.world;
+
+    console.log('WorldComponent#render');
 
     var polygons = world.countries.map(function(country, index) {
       return (

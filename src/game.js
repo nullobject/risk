@@ -13,9 +13,6 @@ function Game(width, height) {
   // Create the players.
   this.players = _.range(4).map(function(id) { return new Player(id); });
 
-  // Start with the first player.
-  this.currentPlayer = this.players[0];
-
   // Build the world.
   this.world = builder.buildWorld(this.width, this.height, this.players);
 }
@@ -35,11 +32,6 @@ Game.prototype.canMove = function(player, from, to) {
 // Moves armies from/to a country for a given player.
 Game.prototype.move = function(player, from, to) {
   console.log('Game#move');
-
-  if (player !== this.currentPlayer) {
-    throw new Error("The player isn't current");
-  }
-
   this.world.move(from, to);
 };
 
