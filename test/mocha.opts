@@ -1,0 +1,3 @@
+--compilers jsx:./test/support/jsx
+--recursive
+--require ./test/support/helper.js

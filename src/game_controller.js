@@ -1,72 +1,67 @@
 'use strict';
 
-var Bacon         = require('baconjs').Bacon;
-var Game          = require('./game');
-var GameComponent = require('./game_component');
-var React         = require('react');
-var _             = require('lodash');
+var Bacon                   = require('baconjs').Bacon;
+var CountryStateTransformer = require('./country_state_transformer');
+var Game                    = require('./game');
+var GameComponent           = require('./components/game_component.jsx');
+var React                   = require('react');
+var _                       = require('lodash');
 
-function dispatch(fn) {
+// Calls the given function.
+function call(fn) {
   fn();
 }
 
-function state(newState, fn) {
-  return [newState, [new Bacon.Next(function() { return fn; })]];
-}
-
 function GameController(options) {
-  var countryStream = new Bacon.Bus();
+  var game = this.game = new Game(options.width, options.height);
 
-  countryStream
-    .withStateMachine(null, this.stateTransform.bind(this))
-    .onValue(dispatch);
+  var stream = new Bacon.Bus();
 
-  this.game = new Game(options.width, options.height);
+  stream.ofType = function(type) {
+    return this.filter(function(event) {
+      return event.type == type;
+    });
+  };
+
+  // The player property cycles through the players on end-turn events.
+  var player = stream.ofType('end-turn').scan(0, function(index, event) {
+    return (index + 1) % game.players.length;
+  }).map(function(index) {
+    return game.players[index];
+  });
+
+  var country = stream.ofType('select-country').map(".country");
+
+  // Combine the player and country properties into a tuple.
+  var playerCountries = Bacon.combineAsArray(player, country);
+
+  playerCountries
+    .withStateMachine(null, this.handleEvent.bind(this))
+    .onValue(call);
 
   this.gameComponent = React.renderComponent(
-    GameComponent({game: this.game, stream: countryStream}),
+    GameComponent({game: this.game, stream: stream}),
     options.el
   );
 }
 
-// The state transformation function for the country stream.
-GameController.prototype.stateTransform = function(previousCountry, event) {
-  if (event.hasValue()) {
-    var fn, nextCountry = event.value();
-
-    if (previousCountry && _.contains(previousCountry.neighbours, nextCountry)) {
-      // The user selected one of the nearby countries.
-      fn = this.attackOrMove.bind(this, previousCountry, nextCountry);
-      return state(undefined, fn);
-    } else if (previousCountry === nextCountry) {
-      // The user selected the previously selected country.
-      fn = this.deselectCountry.bind(this, nextCountry);
-      return state(undefined, fn);
-    } else {
-      // The user selected a new country.
-      fn = this.selectCountry.bind(this, nextCountry);
-      return state(nextCountry, fn);
-    }
-  } else {
-    return [previousCountry, [event]];
-  }
-};
+// Mixin the country state transformer.
+_.extend(GameController.prototype, CountryStateTransformer);
 
 GameController.prototype.selectCountry = function(country) {
-  console.log('select', country);
+  console.log('GameController#selectCountry', country);
   this.gameComponent.selectCountry(country);
 };
 
-GameController.prototype.deselectCountry = function(country) {
-  console.log('deselect', country);
+GameController.prototype.deselectCountry = function() {
+  console.log('GameController#deselectCountry');
   this.gameComponent.deselectCountry();
 };
 
-GameController.prototype.attackOrMove = function(source, target) {
-  console.log('attackOrMove', source, target);
+GameController.prototype.move = function(player, from, to) {
+  console.log('GameController#move');
   this.gameComponent.deselectCountry();
-  // TODO: Figure out if we're moving or attacking.
-  this.game.world.move(source, target);
+  this.game.move(player, from, to);
 };
 
 GameController.prototype.constructor = GameController;

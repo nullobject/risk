@@ -2,6 +2,7 @@
 
 'use strict';
 
+var Bacon = require('baconjs').Bacon;
 var React = require('react/addons');
 var _     = require('lodash');
 
@@ -10,8 +11,12 @@ var cx = React.addons.classSet;
 module.exports = React.createClass({
   displayName: 'CountryComponent',
 
+  propTypes: {
+    stream: React.PropTypes.instanceOf(Bacon.Observable).isRequired,
+  },
+
   didSelectCountry: function(country) {
-    this.props.stream.push(country);
+    this.props.stream.push({type: 'select-country', country: country});
   },
 
   getInitialState: function() {
@@ -22,7 +27,7 @@ module.exports = React.createClass({
   },
 
   classes: function() {
-    var color = 'q' + (this.props.index % 9) + '-9';
+    var color = this.props.country.player ? 'q' + (this.props.country.player.id % 4) + '-4' : '';
 
     var classes = {
       country:  true,
@@ -41,7 +46,7 @@ module.exports = React.createClass({
   },
 
   componentDidUpdate: function() {
-    // FIXME: Manually set SVG class. See https://github.com/facebook/react/issues/1139
+    // FIXME: Manually set SVG class. See https://github.com/facebook/react/pull/1264
     this.getDOMNode().setAttribute('class', cx(this.classes()));
   },
 

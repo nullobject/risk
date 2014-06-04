@@ -1,9 +1,9 @@
 'use strict';
 
 var Country = require('./country');
-var Hexgrid = require('./hexgrid');
-var Point   = require('./point');
-var Polygon = require('./polygon');
+var Hexgrid = require('./geom/hexgrid');
+var Point   = require('./geom/point');
+var Polygon = require('./geom/polygon');
 var Voronoi = require('../lib/voronoi');
 var World   = require('./world');
 var _       = require('lodash');
@@ -92,7 +92,7 @@ function neighbouringCells(cell, diagram) {
 }
 
 module.exports = {
-  buildWorld: function(width, height) {
+  buildWorld: function(width, height, players) {
     // Create a hexgrid.
     var hexgrid = new Hexgrid(width, height, RADIUS);
 
@@ -115,6 +115,11 @@ module.exports = {
 
     // Calculate the countries from the Voronoi diagram.
     var countries = calculateCountries(hexgrid.hexagons, diagram);
+
+    // Assign each player to a random country.
+    _.sample(countries, players.length).forEach(function(country, index) {
+      country.player = players[index];
+    });
 
     // Calculate the Voronoi cells for debugging.
     var cells = diagram.cells.map(cellVertices);
