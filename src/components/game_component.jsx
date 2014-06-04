@@ -5,6 +5,7 @@
 var Bacon          = require('baconjs').Bacon;
 var React          = require('react');
 var WorldComponent = require('./world_component.jsx');
+var core           = require('../core');
 
 module.exports = React.createClass({
   displayName: 'GameComponent',
@@ -31,7 +32,7 @@ module.exports = React.createClass({
     var game  = this.props.game,
         world = game.world;
 
-    console.log('GameComponent#render');
+    core.log('GameComponent#render');
 
     return (
       /* jshint ignore:start */

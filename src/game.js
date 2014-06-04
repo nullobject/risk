@@ -2,6 +2,7 @@
 
 var Player = require('./player');
 var _      = require('lodash');
+var core   = require('./core');
 
 function validateAction(countries, player, from, to) {
   // Assert the from country is in the world.
@@ -57,7 +58,7 @@ Game.prototype.canMove = function(player, from, to) {
 
 // Moves armies from/to a country for a given player.
 Game.prototype.move = function(player, from, to) {
-  console.log('Game#move');
+  core.log('Game#move');
 
   validateAction(this.world.countries, player, from, to);
 

@@ -8,6 +8,7 @@ var PathsComponent    = require('./paths_component.jsx');
 var PolygonsComponent = require('./polygons_component.jsx');
 var React             = require('react');
 var _                 = require('lodash');
+var core              = require('../core');
 
 module.exports = React.createClass({
   displayName: 'WorldComponent',
@@ -37,7 +38,7 @@ module.exports = React.createClass({
   render: function() {
     var world = this.props.world;
 
-    console.log('WorldComponent#render');
+    core.log('WorldComponent#render');
 
     var polygons = world.countries.map(function(country, index) {
       return (

@@ -5,6 +5,7 @@
 var Bacon = require('baconjs').Bacon;
 var React = require('react/addons');
 var _     = require('lodash');
+var core  = require('../core');
 
 var cx = React.addons.classSet;
 
@@ -53,7 +54,7 @@ module.exports = React.createClass({
   render: function() {
     var country = this.props.country;
 
-    console.log('CountryComponent#render (' + country + ')');
+    core.log('CountryComponent#render (' + country + ')');
 
     return (
       /* jshint ignore:start */

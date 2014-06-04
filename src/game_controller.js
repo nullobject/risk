@@ -7,6 +7,7 @@ var GameComponent           = require('./components/game_component.jsx');
 var React                   = require('react');
 var _                       = require('lodash');
 var builder                 = require('./world_builder').build;
+var core                    = require('./core');
 
 // Calls the given function.
 function call(fn) {
@@ -50,17 +51,17 @@ function GameController(options) {
 _.extend(GameController.prototype, CountryStateTransformer);
 
 GameController.prototype.selectCountry = function(country) {
-  console.log('GameController#selectCountry', country);
+  core.log('GameController#selectCountry', country);
   this.gameComponent.selectCountry(country);
 };
 
 GameController.prototype.deselectCountry = function() {
-  console.log('GameController#deselectCountry');
+  core.log('GameController#deselectCountry');
   this.gameComponent.deselectCountry();
 };
 
 GameController.prototype.move = function(player, from, to) {
-  console.log('GameController#move');
+  core.log('GameController#move');
   this.gameComponent.deselectCountry();
   this.game.move(player, from, to);
 };
