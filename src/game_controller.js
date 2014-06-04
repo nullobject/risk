@@ -6,6 +6,7 @@ var Game                    = require('./game');
 var GameComponent           = require('./components/game_component.jsx');
 var React                   = require('react');
 var _                       = require('lodash');
+var builder                 = require('./world_builder').build;
 
 // Calls the given function.
 function call(fn) {
@@ -13,7 +14,7 @@ function call(fn) {
 }
 
 function GameController(options) {
-  var game = this.game = new Game(options.width, options.height);
+  var game = this.game = new Game(options.width, options.height, builder);
 
   var stream = new Bacon.Bus();
 

@@ -1,12 +1,38 @@
 'use strict';
 
-var Player  = require('./player');
-var _       = require('lodash');
-var builder = require('./builder');
+var Player = require('./player');
+var _      = require('lodash');
+
+function validateAction(countries, player, from, to) {
+  // Assert the from country is in the world.
+  if (!_.contains(countries, from)) {
+    throw new Error("The 'from' country is not in the world");
+  }
+
+  // Assert the to country is in the world.
+  if (!_.contains(countries, to)) {
+    throw new Error("The 'to' country is not in the world");
+  }
+
+  // Assert the from country has enough armies.
+  if (from.armies <= 1) {
+    throw new Error("The 'from' country does not have enough armies");
+  }
+
+  // Assert the from country belongs to the player.
+  if (from.player !== player) {
+    throw new Error("The 'from' country does not belong to the player");
+  }
+
+  // Assert the to country does not belong to the player.
+  if (to.player === player) {
+    throw new Error("The 'to' country belongs to the player");
+  }
+}
 
 // The Game class represents the state of the game. A game is played in a world
 // by a number of players.
-function Game(width, height) {
+function Game(width, height, builder) {
   this.width  = width;
   this.height = height;
 
@@ -14,7 +40,7 @@ function Game(width, height) {
   this.players = _.range(4).map(function(id) { return new Player(id); });
 
   // Build the world.
-  this.world = builder.buildWorld(this.width, this.height, this.players);
+  this.world = builder(this.width, this.height, this.players);
 }
 
 Game.prototype.constructor = Game;
@@ -32,7 +58,12 @@ Game.prototype.canMove = function(player, from, to) {
 // Moves armies from/to a country for a given player.
 Game.prototype.move = function(player, from, to) {
   console.log('Game#move');
-  this.world.move(from, to);
+
+  validateAction(this.world.countries, player, from, to);
+
+  to.armies = from.armies - 1;
+  to.player = from.player;
+  from.armies = 1;
 };
 
 module.exports = Game;

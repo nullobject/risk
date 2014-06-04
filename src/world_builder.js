@@ -92,7 +92,7 @@ function neighbouringCells(cell, diagram) {
 }
 
 module.exports = {
-  buildWorld: function(width, height, players) {
+  build: function(width, height, players) {
     // Create a hexgrid.
     var hexgrid = new Hexgrid(width, height, RADIUS);
 
