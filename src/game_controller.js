@@ -15,36 +15,45 @@ function call(fn) {
 }
 
 function GameController(options) {
+  // Create and extend the bus.
+  var bus = _.tap(new Bacon.Bus(), function(bus) {
+    bus.ofType = function(type) {
+      return this.filter(function(event) {
+        return event.type == type;
+      });
+    };
+  });
+
+  // Create the game model.
   var game = this.game = new Game(options.width, options.height, builder);
 
-  var stream = new Bacon.Bus();
+  // Create the game component.
+  this.gameComponent = React.renderComponent(
+    GameComponent({game: this.game, stream: bus}),
+    options.el
+  );
 
-  stream.ofType = function(type) {
-    return this.filter(function(event) {
-      return event.type == type;
-    });
-  };
-
-  // The player property cycles through the players on end-turn events.
-  var player = stream.ofType('end-turn').scan(0, function(index, event) {
+  // The player property handles end-turn events to cycle through the players.
+  var playerProperty = bus.ofType('end-turn').scan(0, function(index, event) {
     return (index + 1) % game.players.length;
   }).map(function(index) {
     return game.players[index];
   });
 
-  var country = stream.ofType('select-country').map(".country");
+  // The country property handles select-country events to provide the selected
+  // country.
+  var countryProperty = bus.ofType('select-country').map('.country');
 
-  // Combine the player and country properties into a tuple.
-  var playerCountries = Bacon.combineAsArray(player, country);
+  // Assign the player property to the game component.
+  playerProperty.assign(this.gameComponent, 'currentPlayer');
 
-  playerCountries
-    .withStateMachine(null, this.handleEvent.bind(this))
+  // The player country property combines the player and country properties
+  // into a tuple.
+  var playerCountryProperty = Bacon.combineAsArray(playerProperty, countryProperty);
+
+  playerCountryProperty
+    .withStateMachine([null, null], this.handleEvent.bind(this))
     .onValue(call);
-
-  this.gameComponent = React.renderComponent(
-    GameComponent({game: this.game, stream: stream}),
-    options.el
-  );
 }
 
 // Mixin the country state transformer.

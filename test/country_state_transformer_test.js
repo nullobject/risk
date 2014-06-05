@@ -43,13 +43,13 @@ describe('CountryStateTransformer', function() {
       it('should select the country', function() {
         var canSelect     = sandbox.stub(game, 'canSelect').returns(true),
             selectCountry = sandbox.stub(target, 'selectCountry'),
-            result        = target.nextAction(null, [player, a]),
-            country       = result[0],
+            result        = target.nextAction([null, null], [player, a]),
+            nextState     = result[0],
             action        = result[1];
 
         action();
 
-        expect(country).to.equal(a)
+        expect(nextState).to.eql([player, a])
         expect(canSelect).to.have.been.calledWith(player, a);
         expect(selectCountry).to.have.been.calledWith(a);
       });
@@ -58,26 +58,26 @@ describe('CountryStateTransformer', function() {
     describe('when a country is already selected', function() {
       it('should deselect the country if the same country is selected', function() {
         var deselectCountry = sandbox.stub(target, 'deselectCountry'),
-            result          = target.nextAction(a, [player, a]),
-            country         = result[0],
+            result          = target.nextAction([null, a], [player, a]),
+            nextState       = result[0],
             action          = result[1];
 
         action();
 
-        expect(country).to.equal(null)
+        expect(nextState).to.eql([player, null])
         expect(deselectCountry).to.have.been.called;
       });
 
       it('should move the player if a different country is selected', function() {
-        var canMove         = sandbox.stub(game, 'canMove').returns(true),
-            move            = sandbox.stub(target, 'move'),
-            result          = target.nextAction(a, [player, b]),
-            country         = result[0],
-            action          = result[1];
+        var canMove   = sandbox.stub(game, 'canMove').returns(true),
+            move      = sandbox.stub(target, 'move'),
+            result    = target.nextAction([null, a], [player, b]),
+            nextState = result[0],
+            action    = result[1];
 
         action();
 
-        expect(country).to.equal(null)
+        expect(nextState).to.eql([player, null])
         expect(canMove).to.have.been.calledWith(player, a, b);
         expect(move).to.have.been.calledWith(player, a, b);
       });

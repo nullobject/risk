@@ -24,13 +24,13 @@ module.exports = React.createClass({
   },
 
   componentWillUpdate: function(nextProps, nextState) {
-    var countries = this.props.world.countries;
-    var selectedCountry = nextState.selectedCountry;
+    var countries       = this.props.world.countries,
+        selectedCountry = nextState.selectedCountry;
 
     countries.forEach(function(country) {
       this.refs[country].setState({
         selected: country === selectedCountry,
-        nearby: selectedCountry !== null && _.contains(selectedCountry.neighbours, country)
+        nearby:   selectedCountry !== null && _.contains(selectedCountry.neighbours, country)
       });
     }, this);
   },

@@ -14,8 +14,20 @@ module.exports = React.createClass({
     stream: React.PropTypes.instanceOf(Bacon.Observable).isRequired,
   },
 
+  getInitialState: function() {
+    return {
+      canEndTurn:     true,
+      selectedPlayer: null
+    };
+  },
+
   didEndTurn: function() {
     this.props.stream.push({type: 'end-turn'});
+  },
+
+  // Sets the current player.
+  currentPlayer: function(player) {
+    this.setState({currentPlayer: player});
   },
 
   // Selects a given country.
@@ -29,8 +41,9 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    var game  = this.props.game,
-        world = game.world;
+    var game          = this.props.game,
+        world         = game.world,
+        currentPlayer = this.state.currentPlayer ? this.state.currentPlayer.toString() : '';
 
     core.log('GameComponent#render');
 
@@ -40,9 +53,10 @@ module.exports = React.createClass({
         <svg width={game.width} height={game.height}>
           <WorldComponent ref="world" world={world} stream={this.props.stream} />
         </svg>
-        <nav>
-          <a href="#" onClick={this.didEndTurn}>End Turn</a>
-        </nav>
+        <div>
+          <span>{currentPlayer}</span>
+          <button type="button" onClick={this.didEndTurn} disabled={!this.state.canEndTurn}>End Turn</button>
+        </div>
       </div>
       /* jshint ignore:end */
     );

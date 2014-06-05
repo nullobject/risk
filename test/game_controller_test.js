@@ -11,10 +11,9 @@ describe('GameController', function() {
 
   // Game component stub.
   var gameComponent = {
+    currentPlayer:   function() {},
     selectCountry:   function() {},
-    deselectCountry: function() {},
-    attack:          function() {},
-    move:            function() {}
+    deselectCountry: function() {}
   };
 
   beforeEach(function() {
