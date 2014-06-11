@@ -12,8 +12,7 @@ describe('GameController', function() {
   // Game component stub.
   var gameComponent = {
     currentPlayer:   function() {},
-    selectCountry:   function() {},
-    deselectCountry: function() {}
+    selectedCountry: function() {}
   };
 
   beforeEach(function() {
@@ -26,19 +25,11 @@ describe('GameController', function() {
     sandbox.restore();
   });
 
-  describe('#selectCountry', function() {
-    it('should call #selectCountry on the component', function() {
-      var selectCountry = sandbox.stub(gameComponent, 'selectCountry');
-      controller.selectCountry(a);
-      expect(selectCountry).to.have.been.calledWith(a);
-    });
-  });
-
-  describe('#deselectCountry', function() {
-    it('should call #deselectCountry on the component', function() {
-      var deselectCountry = sandbox.stub(gameComponent, 'deselectCountry');
-      controller.deselectCountry(a);
-      expect(deselectCountry).to.have.been.called;
+  describe('#selectedCountry', function() {
+    it('should call #selectedCountry on the component', function() {
+      var selectedCountry = sandbox.stub(gameComponent, 'selectedCountry');
+      controller.selectedCountry(a);
+      expect(selectedCountry).to.have.been.calledWith(a);
     });
   });
 });

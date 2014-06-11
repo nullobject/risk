@@ -56,7 +56,8 @@ Game.prototype.canMove = function(player, from, to) {
   return from.hasNeighbour(to);
 };
 
-// Moves armies from/to a country for a given player.
+// Moves armies from/to a country for a given player. Returns true if the
+// action was successful, false otherwise.
 Game.prototype.move = function(player, from, to) {
   core.log('Game#move');
 
@@ -65,6 +66,8 @@ Game.prototype.move = function(player, from, to) {
   to.armies = from.armies - 1;
   to.player = from.player;
   from.armies = 1;
+
+  return true;
 };
 
 module.exports = Game;

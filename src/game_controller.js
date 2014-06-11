@@ -1,17 +1,21 @@
 'use strict';
 
-var Bacon                   = require('baconjs').Bacon;
-var CountryStateTransformer = require('./country_state_transformer');
-var Game                    = require('./game');
-var GameComponent           = require('./components/game_component.jsx');
-var React                   = require('react');
-var _                       = require('lodash');
-var builder                 = require('./world_builder').build;
-var core                    = require('./core');
+var Bacon                = require('baconjs').Bacon;
+var Game                 = require('./game');
+var GameComponent        = require('./components/game_component.jsx');
+var GameStateTransformer = require('./game_state_transformer');
+var React                = require('react');
+var _                    = require('lodash');
+var builder              = require('./world_builder').build;
+var core                 = require('./core');
 
-// Calls the given function.
-function call(fn) {
-  fn();
+// Dispatches an action represented by a tuple to the given target. For
+// example:
+//
+// ['move', player, country-a, country-b]
+function dispatch(action, target) {
+  var fn = target[_.head(action)];
+  fn.apply(target, _.tail(action));
 }
 
 function GameController(options) {
@@ -29,7 +33,7 @@ function GameController(options) {
 
   // Create the game component.
   this.gameComponent = React.renderComponent(
-    GameComponent({game: this.game, stream: bus}),
+    GameComponent({game: game, stream: bus}),
     options.el
   );
 
@@ -44,35 +48,41 @@ function GameController(options) {
   // country.
   var countryProperty = bus.ofType('select-country').map('.country');
 
-  // Assign the player property to the game component.
-  playerProperty.assign(this.gameComponent, 'currentPlayer');
-
   // The player country property combines the player and country properties
   // into a tuple.
   var playerCountryProperty = Bacon.combineAsArray(playerProperty, countryProperty);
 
+  // Apply the game state machine to the country player property and dispatch
+  // the player's actions.
+  //
+  // See https://github.com/baconjs/bacon.js#observable-withstatemachine
   playerCountryProperty
-    .withStateMachine([null, null], this.handleEvent.bind(this))
-    .onValue(call);
+    .withStateMachine([null, null], this.transformState.bind(this))
+    .onValue(_.partialRight(dispatch, this));
 }
 
-// Mixin the country state transformer.
-_.extend(GameController.prototype, CountryStateTransformer);
+// Mixin the state transformer.
+_.extend(GameController.prototype, GameStateTransformer);
 
-GameController.prototype.selectCountry = function(country) {
-  core.log('GameController#selectCountry', country);
-  this.gameComponent.selectCountry(country);
+GameController.prototype.currentPlayer = function(player) {
+  core.log('GameController#currentPlayer', player);
+  this.gameComponent.currentPlayer(player);
 };
 
-GameController.prototype.deselectCountry = function() {
-  core.log('GameController#deselectCountry');
-  this.gameComponent.deselectCountry();
+GameController.prototype.selectedCountry = function(country) {
+  core.log('GameController#selectedCountry', country);
+  this.gameComponent.selectedCountry(country);
+  // TODO: Play sound.
 };
 
 GameController.prototype.move = function(player, from, to) {
   core.log('GameController#move');
-  this.gameComponent.deselectCountry();
-  this.game.move(player, from, to);
+
+  if (this.game.move(player, from, to)) {
+    // TODO: Play sound.
+  } else {
+    // TODO: Play sound.
+  }
 };
 
 GameController.prototype.constructor = GameController;

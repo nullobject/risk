@@ -30,14 +30,9 @@ module.exports = React.createClass({
     this.setState({currentPlayer: player});
   },
 
-  // Selects a given country.
-  selectCountry: function(country) {
+  // Sets the selected country.
+  selectedCountry: function(country) {
     this.refs.world.setState({selectedCountry: country});
-  },
-
-  // Deselects the currently selected country.
-  deselectCountry: function() {
-    this.selectCountry(null);
   },
 
   render: function() {
