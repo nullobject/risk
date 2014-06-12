@@ -46,6 +46,17 @@ function Game(width, height, builder) {
 
 Game.prototype.constructor = Game;
 
+// Returns the total number of armies for a given player.
+Game.prototype.armies = function(player) {
+  return this.world.countries.reduce(function(total, country) {
+    if (country.player === player) {
+      total += country.armies;
+    }
+
+    return total;
+  }, 0);
+};
+
 // Returns true if a given player can select a country, false otherwise.
 Game.prototype.canSelect = function(player, country) {
   return player === country.player && country.armies > 1;

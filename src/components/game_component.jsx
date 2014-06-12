@@ -4,6 +4,7 @@
 
 var Bacon            = require('baconjs').Bacon,
     React            = require('react'),
+    PlayersComponent = require('./players_component.jsx'),
     WorldComponent   = require('./world_component.jsx'),
     core             = require('../core');
 
@@ -45,6 +46,7 @@ module.exports = React.createClass({
     return (
       /* jshint ignore:start */
       <div>
+        <PlayersComponent game={game} />
         <svg width={game.width} height={game.height}>
           <WorldComponent ref="world" stream={this.props.stream} world={world} />
         </svg>
