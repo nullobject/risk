@@ -23,11 +23,11 @@ module.exports = React.createClass({
         <li className={player}>{game.armies(player)}</li>
         /* jshint ignore:end */
       );
-    });
+    }, this);
 
     return (
       /* jshint ignore:start */
-      <ul>{players}</ul>
+      <ul className="players">{players}</ul>
       /* jshint ignore:end */
     );
   }

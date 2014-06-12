@@ -18,15 +18,9 @@ module.exports = React.createClass({
     world:  React.PropTypes.object.isRequired
   },
 
-  getInitialState: function() {
-    return {
-      selectedCountry: null
-    };
-  },
-
   componentWillUpdate: function(nextProps, nextState) {
     var countries       = this.props.world.countries,
-        selectedCountry = nextState.selectedCountry;
+        selectedCountry = nextProps.selectedCountry;
 
     countries.forEach(function(country) {
       this.refs[country].setState({
