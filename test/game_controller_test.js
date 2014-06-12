@@ -1,7 +1,7 @@
 'use strict';
 
-var GameController = require('../src/game_controller');
-var React          = require('react');
+var GameController = require('../src/game_controller'),
+    React          = require('react');
 
 describe('GameController', function() {
   var sandbox, controller;

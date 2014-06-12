@@ -13,6 +13,7 @@ function Country(polygon) {
 
 Country.prototype.constructor = Country;
 
+// Returns true if a given country neighbours this country, false otherwise.
 Country.prototype.hasNeighbour = function(country) {
   return _.contains(this.neighbours, country);
 };

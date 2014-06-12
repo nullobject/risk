@@ -1,7 +1,7 @@
 'use strict';
 
-var GameStateTransformer = require('../src/game_state_transformer');
-var _                    = require('lodash');
+var GameStateTransformer = require('../src/game_state_transformer'),
+    _                    = require('lodash');
 
 describe('GameStateTransformer', function() {
   var sandbox;

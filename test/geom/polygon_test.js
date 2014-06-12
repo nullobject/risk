@@ -1,7 +1,7 @@
 'use strict';
 
-var Point   = require('../../src/geom/point');
-var Polygon = require('../../src/geom/polygon');
+var Point   = require('../../src/geom/point'),
+    Polygon = require('../../src/geom/polygon');
 
 describe('Polygon', function() {
   var polygon = Polygon([

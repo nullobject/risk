@@ -1,13 +1,13 @@
 'use strict';
 
-var Bacon                = require('baconjs').Bacon;
-var Game                 = require('./game');
-var GameComponent        = require('./components/game_component.jsx');
-var GameStateTransformer = require('./game_state_transformer');
-var React                = require('react');
-var _                    = require('lodash');
-var builder              = require('./world_builder').build;
-var core                 = require('./core');
+var Bacon                = require('baconjs').Bacon,
+    Game                 = require('./game'),
+    GameComponent        = require('./components/game_component.jsx'),
+    GameStateTransformer = require('./game_state_transformer'),
+    React                = require('react'),
+    _                    = require('lodash'),
+    builder              = require('./world_builder').build,
+    core                 = require('./core');
 
 // Dispatches an action represented by a tuple to the given target. For
 // example:

@@ -2,19 +2,20 @@
 
 'use strict';
 
-var Bacon             = require('baconjs').Bacon;
-var CountryComponent  = require('./country_component.jsx');
-var PathsComponent    = require('./paths_component.jsx');
-var PolygonsComponent = require('./polygons_component.jsx');
-var React             = require('react');
-var _                 = require('lodash');
-var core              = require('../core');
+var Bacon             = require('baconjs').Bacon,
+    CountryComponent  = require('./country_component.jsx'),
+    PathsComponent    = require('./paths_component.jsx'),
+    PolygonsComponent = require('./polygons_component.jsx'),
+    React             = require('react'),
+    _                 = require('lodash'),
+    core              = require('../core');
 
 module.exports = React.createClass({
   displayName: 'WorldComponent',
 
   propTypes: {
     stream: React.PropTypes.instanceOf(Bacon.Observable).isRequired,
+    world:  React.PropTypes.object.isRequired
   },
 
   getInitialState: function() {

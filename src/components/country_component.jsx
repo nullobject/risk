@@ -2,10 +2,10 @@
 
 'use strict';
 
-var Bacon = require('baconjs').Bacon;
-var React = require('react/addons');
-var _     = require('lodash');
-var core  = require('../core');
+var Bacon = require('baconjs').Bacon,
+    React = require('react/addons'),
+    _     = require('lodash'),
+    core  = require('../core');
 
 var cx = React.addons.classSet;
 

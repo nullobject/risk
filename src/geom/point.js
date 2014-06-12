@@ -1,8 +1,8 @@
 'use strict';
 
 var Point = function() {
-  var point = Object.create(Point.prototype);
-  var a = arguments;
+  var point = Object.create(Point.prototype),
+      a     = arguments;
 
   if (a.length == 1) {
     if (a[0] instanceof Array) {

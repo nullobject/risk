@@ -1,7 +1,7 @@
 'use strict';
 
-var Point   = require('./point');
-var clipper = require('../../lib/clipper');
+var Point   = require('./point'),
+    clipper = require('../../lib/clipper');
 
 var SCALE = 100;
 

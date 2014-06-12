@@ -1,22 +1,23 @@
 'use strict';
 
-var Country = require('./country');
-var Hexgrid = require('./geom/hexgrid');
-var Point   = require('./geom/point');
-var Polygon = require('./geom/polygon');
-var Voronoi = require('../lib/voronoi');
-var World   = require('./world');
-var _       = require('lodash');
+var Country = require('./country'),
+    Hexgrid = require('./geom/hexgrid'),
+    Point   = require('./geom/point'),
+    Polygon = require('./geom/polygon'),
+    Voronoi = require('../lib/voronoi'),
+    World   = require('./world'),
+    _       = require('lodash');
 
-var RADIUS = 8, // Hexgrid radius.
+// Hexgrid radius.
+var RADIUS = 8;
 
-    // The number of "seed" sites to apply to the Voronoi function. More seeds
-    // will result in more countries.
-    SEEDS = 20,
+// The number of "seed" sites to apply to the Voronoi function. More seeds
+// will result in more countries.
+var SEEDS = 20;
 
-    // The number of Lloyd relaxations to apply to the Voronoi cells. More
-    // relaxations will result in countries more uniform in shape and size.
-    RELAXATIONS = 2;
+// The number of Lloyd relaxations to apply to the Voronoi cells. More
+// relaxations will result in countries more uniform in shape and size.
+var RELAXATIONS = 2;
 
 function cellVertices(cell) {
   return cell.halfedges.map(function(halfedge) {

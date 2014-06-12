@@ -2,10 +2,10 @@
 
 'use strict';
 
-var Bacon          = require('baconjs').Bacon;
-var React          = require('react');
-var WorldComponent = require('./world_component.jsx');
-var core           = require('../core');
+var Bacon            = require('baconjs').Bacon,
+    React            = require('react'),
+    WorldComponent   = require('./world_component.jsx'),
+    core             = require('../core');
 
 module.exports = React.createClass({
   displayName: 'GameComponent',
@@ -46,7 +46,7 @@ module.exports = React.createClass({
       /* jshint ignore:start */
       <div>
         <svg width={game.width} height={game.height}>
-          <WorldComponent ref="world" world={world} stream={this.props.stream} />
+          <WorldComponent ref="world" stream={this.props.stream} world={world} />
         </svg>
         <div>
           <span>{currentPlayer}</span>
