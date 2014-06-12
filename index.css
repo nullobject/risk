@@ -44,6 +44,22 @@ svg polygon.country.nearby {
   100% { opacity: 1.0; }
 }
 
+.players {
+  margin: 0;
+  padding: 0.5em 0;
+  text-align: center;
+}
+
+.players li {
+  display: inline-block;
+  margin-right: 1em;
+}
+
+.players li:before {
+  content: "\265e";
+  margin-right: 0.25em;
+}
+
 .player-0 { color: rgb(228,26,28); }
 .player-1 { color: rgb(55,126,184); }
 .player-2 { color: rgb(77,175,74); }
