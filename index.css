@@ -25,7 +25,7 @@ svg polygon.country {
   fill: currentColor;
   fill-opacity: 0.7;
   stroke: currentColor;
-  stroke-opacity: 0.7;
+  stroke-opacity: 0.9;
   stroke-width: 3px;
   pointer-events: all;
 }
@@ -44,4 +44,7 @@ svg polygon.country.nearby {
   100% { opacity: 1.0; }
 }
 
-.PRGn .q0-4{fill:rgb(123,50,148)} .PRGn .q1-4{fill:rgb(194,165,207)} .PRGn .q2-4{fill:rgb(166,219,160)} .PRGn .q3-4{fill:rgb(0,136,55)}
+.player-0 { color: rgb(123,50,148); }
+.player-1 { color: rgb(194,165,207); }
+.player-2 { color: rgb(166,219,160); }
+.player-3 { color: rgb(0,136,55); }

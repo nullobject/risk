@@ -59,7 +59,7 @@ module.exports = React.createClass({
       /* jshint ignore:start */
       <g>
         <PolygonsComponent className="hexgrid" polygons={world.hexagons} />
-        <g className="countries PRGn">{polygons}</g>
+        <g className="countries">{polygons}</g>
         <PathsComponent className="voronoi" paths={world.cells} />
       </g>
       /* jshint ignore:end */

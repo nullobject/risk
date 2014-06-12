@@ -28,7 +28,8 @@ module.exports = React.createClass({
   },
 
   classes: function() {
-    var color = this.props.country.player ? 'q' + (this.props.country.player.id % 4) + '-4' : '';
+    var player = this.props.country.player,
+        color  = player ? player.toString() : '';
 
     var classes = {
       country:  true,
