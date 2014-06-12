@@ -7,6 +7,12 @@ body {
   color: #333;
 }
 
+.container {
+  display: -webkit-flex;
+  -webkit-flex-direction: row;
+  -webkit-justify-content: center;
+}
+
 svg .voronoi {
   fill: none;
   stroke: #1cadcf;
