@@ -44,7 +44,8 @@ svg polygon.country.nearby {
   100% { opacity: 1.0; }
 }
 
-.player-0 { color: rgb(123,50,148); }
-.player-1 { color: rgb(194,165,207); }
-.player-2 { color: rgb(166,219,160); }
-.player-3 { color: rgb(0,136,55); }
+.player-0 { color: rgb(228,26,28); }
+.player-1 { color: rgb(55,126,184); }
+.player-2 { color: rgb(77,175,74); }
+.player-3 { color: rgb(152,78,163); }
+.player-4 { color: rgb(255,127,0); }

@@ -38,7 +38,7 @@ function Game(width, height, builder) {
   this.height = height;
 
   // Create the players.
-  this.players = _.range(4).map(function(id) { return new Player(id); });
+  this.players = _.range(5).map(function(id) { return new Player(id); });
 
   // Build the world.
   this.world = builder(this.width, this.height, this.players);
