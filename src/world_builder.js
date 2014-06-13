@@ -19,6 +19,10 @@ var SEEDS = 20;
 // relaxations will result in countries more uniform in shape and size.
 var RELAXATIONS = 2;
 
+// The number of pixels to offset the country polygons. This allows them to be
+// rendered with fat borders.
+var COUNTRY_POLYGON_OFFSET = -2;
+
 function cellVertices(cell) {
   return cell.halfedges.map(function(halfedge) {
     return Point(halfedge.getStartpoint());
@@ -64,7 +68,7 @@ function calculateCountries(hexagons, diagram) {
     var polygon = Polygon.merge(innerHexagons);
 
     // Create a new country.
-    countries[cell.site.voronoiId] = new Country(polygon.offset(-2.0));
+    countries[cell.site.voronoiId] = new Country(polygon.offset(COUNTRY_POLYGON_OFFSET));
 
     return countries;
   }, {});
