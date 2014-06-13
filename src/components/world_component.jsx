@@ -49,12 +49,14 @@ module.exports = React.createClass({
       );
     }, this);
 
+    var voronoi = this.props.debug ? <PathsComponent className="voronoi" paths={world.cells} /> : '';
+
     return (
       /* jshint ignore:start */
       <g className="world">
         <PolygonsComponent className="hexgrid" polygons={world.hexagons} />
         <g className="countries">{polygons}</g>
-        <PathsComponent className="voronoi" paths={world.cells} />
+        {voronoi}
       </g>
       /* jshint ignore:end */
     );
