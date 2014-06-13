@@ -34,15 +34,15 @@ module.exports = {
         nextCountry     = null,
         output          = [];
 
-    if (previousPlayer && previousPlayer !== player) {
+    if (previousPlayer !== player) {
       output.push(['currentPlayer', player]);
       output.push(['selectedCountry', null]);
-    } else if (!previousCountry && this.game.canSelect(player, country)) {
+    } else if (!previousCountry && country && this.game.canSelect(player, country)) {
       output.push(['selectedCountry', country]);
       nextCountry = country;
-    } else if (previousCountry && previousCountry === country) {
+    } else if (previousCountry && country && previousCountry === country) {
       output.push(['selectedCountry', null]);
-    } else if (previousCountry && this.game.canMove(player, previousCountry, country)) {
+    } else if (previousCountry && country && this.game.canMove(player, previousCountry, country)) {
       output.push(['move', player, previousCountry, country]);
       output.push(['selectedCountry', null]);
     } else {

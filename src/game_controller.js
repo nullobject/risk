@@ -38,15 +38,17 @@ function GameController(options) {
   );
 
   // The player property handles end-turn events to cycle through the players.
-  var playerProperty = bus.ofType('end-turn').scan(0, function(index, event) {
-    return (index + 1) % game.players.length;
-  }).map(function(index) {
-    return game.players[index];
-  });
+  var playerProperty = bus
+    .ofType('end-turn')
+    .scan(0, function(index, event) { return (index + 1) % game.players.length; })
+    .map(function(index) { return game.players[index]; });
 
   // The country property handles select-country events to provide the selected
   // country.
-  var countryProperty = bus.ofType('select-country').map('.country');
+  var countryProperty = bus
+    .ofType('select-country')
+    .map('.country')
+    .startWith(null);
 
   // The player country property combines the player and country properties
   // into a tuple.
