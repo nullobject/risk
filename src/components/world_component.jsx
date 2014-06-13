@@ -18,32 +18,29 @@ module.exports = React.createClass({
     world:  React.PropTypes.object.isRequired
   },
 
-  componentWillUpdate: function(nextProps, nextState) {
-    var countries       = this.props.world.countries,
-        selectedCountry = nextProps.selectedCountry;
-
-    countries.forEach(function(country) {
-      this.refs[country].setState({
-        selected: country === selectedCountry,
-        nearby:   selectedCountry !== null && _.contains(selectedCountry.neighbours, country)
-      });
-    }, this);
+  shouldComponentUpdate: function(nextProps, nextState) {
+    // Don't update the component if the props haven't changed.
+    return !_.isEqual(nextProps, this.props);
   },
 
   render: function() {
-    var world = this.props.world;
+    var world           = this.props.world,
+        selectedCountry = this.props.selectedCountry;
 
     core.log('WorldComponent#render');
 
     var polygons = world.countries.map(function(country, index) {
+      var selected = country === selectedCountry,
+          nearby   = selectedCountry !== null && _.contains(selectedCountry.neighbours, country);
+
       return (
         /* jshint ignore:start */
         <CountryComponent
           key={country}
-          ref={country}
-          index={index}
           country={country}
           stream={this.props.stream}
+          selected={selected}
+          nearby={nearby}
         />
         /* jshint ignore:end */
       );

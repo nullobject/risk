@@ -33,8 +33,8 @@ module.exports = React.createClass({
 
     var classes = {
       country:  true,
-      selected: this.state.selected,
-      nearby:   this.state.nearby
+      selected: this.props.selected,
+      nearby:   this.props.nearby
     };
 
     classes[color] = true;
@@ -43,8 +43,8 @@ module.exports = React.createClass({
   },
 
   shouldComponentUpdate: function(nextProps, nextState) {
-    // Don't update the component if the state hasn't changed.
-    return !_.isEqual(nextState, this.state);
+    // Don't update the component if the props haven't changed.
+    return !_.isEqual(nextProps, this.props);
   },
 
   componentDidUpdate: function() {
