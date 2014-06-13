@@ -20,10 +20,10 @@ module.exports = React.createClass({
     var players = game.players.map(function(player, index) {
       return (
         /* jshint ignore:start */
-        <li className={player}>{game.armies(player)}</li>
+        <li key={index} className={player}>{game.armies(player)}</li>
         /* jshint ignore:end */
       );
-    }, this);
+    });
 
     return (
       /* jshint ignore:start */
