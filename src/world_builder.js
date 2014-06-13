@@ -13,7 +13,7 @@ var RADIUS = 8;
 
 // The number of "seed" sites to apply to the Voronoi function. More seeds
 // will result in more countries.
-var SEEDS = 20;
+var SEEDS = 30;
 
 // The number of Lloyd relaxations to apply to the Voronoi cells. More
 // relaxations will result in countries more uniform in shape and size.
