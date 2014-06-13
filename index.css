@@ -24,14 +24,14 @@ svg .hexgrid {
 }
 
 svg polygon {
-  fill: lightgray;
+  fill: white;
 }
 
 svg polygon.country {
   fill: currentColor;
   fill-opacity: 0.7;
   stroke: currentColor;
-  stroke-opacity: 0.9;
+  stroke-opacity: 1.0;
   stroke-width: 3px;
   pointer-events: all;
 }
