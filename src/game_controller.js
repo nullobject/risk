@@ -19,6 +19,11 @@ function dispatch(action, target) {
 }
 
 function GameController(options) {
+  // Create the game model.
+  this.game = new Game(options.width, options.height, builder);
+
+  var players = this.game.players;
+
   // Create and extend the bus.
   var bus = _.tap(new Bacon.Bus(), function(bus) {
     bus.ofType = function(type) {
@@ -28,20 +33,17 @@ function GameController(options) {
     };
   });
 
-  // Create the game model.
-  var game = this.game = new Game(options.width, options.height, builder);
-
   // Create the game component.
   this.gameComponent = React.renderComponent(
-    GameComponent({game: game, stream: bus}),
+    GameComponent({game: this.game, stream: bus}),
     options.el
   );
 
   // The player property handles end-turn events to cycle through the players.
   var playerProperty = bus
     .ofType('end-turn')
-    .scan(0, function(index, event) { return (index + 1) % game.players.length; })
-    .map(function(index) { return game.players[index]; });
+    .scan(0, function(index, event) { return (index + 1) % players.length; })
+    .map(function(index) { return players[index]; });
 
   // The country property handles select-country events to provide the selected
   // country.

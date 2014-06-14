@@ -38,7 +38,7 @@ describe('GameStateTransformer', function() {
       it('should select the country', function() {
         sandbox.stub(game, 'canSelect').returns(true);
 
-        var result = target.actions([null, null], [player, a]);
+        var result = target.actions([player, null], [player, a]);
 
         expect(result[0]).to.eql([player, a])
         expect(result[1]).to.eql([['selectedCountry', a]]);
@@ -47,7 +47,7 @@ describe('GameStateTransformer', function() {
 
     describe('when a country is already selected', function() {
       it('should deselect the country if the same country is selected', function() {
-        var result = target.actions([null, a], [player, a]);
+        var result = target.actions([player, a], [player, a]);
 
         expect(result[0]).to.eql([player, null])
         expect(result[1]).to.eql([['selectedCountry', null]]);
@@ -56,7 +56,7 @@ describe('GameStateTransformer', function() {
       it('should move the player if a different country is selected', function() {
         sandbox.stub(game, 'canMove').returns(true);
 
-        var result = target.actions([null, a], [player, b]);
+        var result = target.actions([player, a], [player, b]);
 
         expect(result[0]).to.eql([player, null])
         expect(result[1]).to.eql([
