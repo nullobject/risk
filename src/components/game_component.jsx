@@ -2,30 +2,26 @@
 
 'use strict';
 
-var Bacon            = require('baconjs').Bacon,
-    PlayersComponent = require('./players_component.jsx'),
-    React            = require('react'),
-    WorldComponent   = require('./world_component.jsx'),
-    core             = require('../core');
+var Bacon             = require('baconjs').Bacon,
+    ControlsComponent = require('./controls_component.jsx'),
+    PlayersComponent  = require('./players_component.jsx'),
+    React             = require('react'),
+    WorldComponent    = require('./world_component.jsx'),
+    core              = require('../core');
 
 module.exports = React.createClass({
   displayName: 'GameComponent',
 
   propTypes: {
-    stream: React.PropTypes.instanceOf(Bacon.Observable).isRequired,
-    game:   React.PropTypes.object.isRequired
+    game:   React.PropTypes.object.isRequired,
+    stream: React.PropTypes.instanceOf(Bacon.Observable).isRequired
   },
 
   getInitialState: function() {
     return {
-      canEndTurn:      true,
       currentPlayer:   null,
       selectedCountry: null
     };
-  },
-
-  didEndTurn: function() {
-    this.props.stream.push({type: 'end-turn'});
   },
 
   // Sets the current player.
@@ -39,9 +35,8 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    var game            = this.props.game,
-        world           = game.world,
-        currentPlayer   = this.state.currentPlayer ? this.state.currentPlayer.toString() : '';
+    var game  = this.props.game,
+        world = game.world;
 
     core.log('GameComponent#render');
 
@@ -52,10 +47,7 @@ module.exports = React.createClass({
         <svg width={game.width} height={game.height}>
           <WorldComponent selectedCountry={this.state.selectedCountry} stream={this.props.stream} world={world} />
         </svg>
-        <div>
-          <span>{currentPlayer}</span>
-          <button type="button" onClick={this.didEndTurn} disabled={!this.state.canEndTurn}>End Turn</button>
-        </div>
+        <ControlsComponent currentPlayer={this.state.currentPlayer} stream={this.props.stream} />
       </div>
       /* jshint ignore:end */
     );
