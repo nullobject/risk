@@ -14,8 +14,9 @@ module.exports = React.createClass({
   displayName: 'WorldComponent',
 
   propTypes: {
-    stream: React.PropTypes.instanceOf(Bacon.Observable).isRequired,
-    world:  React.PropTypes.object.isRequired
+    selectedCountry: React.PropTypes.object,
+    stream:          React.PropTypes.instanceOf(Bacon.Observable).isRequired,
+    world:           React.PropTypes.object.isRequired
   },
 
   shouldComponentUpdate: function(nextProps, nextState) {
@@ -26,8 +27,6 @@ module.exports = React.createClass({
   render: function() {
     var world           = this.props.world,
         selectedCountry = this.props.selectedCountry;
-
-    core.log('WorldComponent#render');
 
     var polygons = world.countries.map(function(country, index) {
       var selected = country === selectedCountry,
@@ -47,6 +46,8 @@ module.exports = React.createClass({
     }, this);
 
     var voronoi = this.props.debug ? <PathsComponent className="voronoi" paths={world.cells} /> : '';
+
+    core.log('WorldComponent#render');
 
     return (
       /* jshint ignore:start */

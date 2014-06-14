@@ -13,7 +13,10 @@ module.exports = React.createClass({
   displayName: 'CountryComponent',
 
   propTypes: {
-    stream: React.PropTypes.instanceOf(Bacon.Observable).isRequired,
+    country:  React.PropTypes.object.isRequired,
+    nearby:   React.PropTypes.bool.isRequired,
+    selected: React.PropTypes.bool.isRequired,
+    stream:   React.PropTypes.instanceOf(Bacon.Observable).isRequired
   },
 
   didSelectCountry: function(country) {

@@ -11,6 +11,11 @@ function polygon(d) {
 module.exports = React.createClass({
   displayName: 'PathsComponent',
 
+  propTypes: {
+    paths:     React.PropTypes.array.isRequired,
+    className: React.PropTypes.string.isRequired
+  },
+
   render: function() {
     var paths = this.props.paths.map(function(path, index) {
       return (

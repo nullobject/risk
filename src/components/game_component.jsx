@@ -43,7 +43,7 @@ module.exports = React.createClass({
     return (
       /* jshint ignore:start */
       <div className="game">
-        <PlayersComponent game={game} />
+        <PlayersComponent currentPlayer={this.state.currentPlayer} game={game} />
         <svg width={game.width} height={game.height}>
           <WorldComponent selectedCountry={this.state.selectedCountry} stream={this.props.stream} world={world} />
         </svg>
