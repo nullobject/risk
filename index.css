@@ -59,6 +59,11 @@ svg polygon.country.nearby {
 .players li {
   display: inline-block;
   margin-right: 1em;
+  opacity: 0.7;
+}
+
+.players li.selected {
+  opacity: 1.0;
 }
 
 .players li:before {
