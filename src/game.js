@@ -46,6 +46,13 @@ function Game(width, height, builder) {
 
 Game.prototype.constructor = Game;
 
+// Returns the countries occupied by a player.
+Game.prototype.countries = function(player) {
+  return this.world.countries.filter(function(country) {
+    return country.player === player;
+  });
+};
+
 // Returns the total number of armies for a given player.
 Game.prototype.armies = function(player) {
   return this.world.countries.reduce(function(total, country) {
@@ -79,6 +86,17 @@ Game.prototype.move = function(player, from, to) {
   from.armies = 1;
 
   return true;
+};
+
+// Reinforces the armies for a given player. The number of reinforcements
+// granted is equal to the largest number of contiguous countries occupied by
+// the player.
+Game.prototype.reinforce = function(player) {
+  core.log('Game#reinforce');
+
+  this.countries(player).forEach(function(country) {
+    country.armies += 1;
+  });
 };
 
 module.exports = Game;
