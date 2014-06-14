@@ -11,8 +11,7 @@ describe('GameController', function() {
 
   // Game component stub.
   var gameComponent = {
-    currentPlayer:   function() {},
-    selectedCountry: function() {}
+    setState: function() {}
   };
 
   beforeEach(function() {
@@ -27,9 +26,9 @@ describe('GameController', function() {
 
   describe('#selectedCountry', function() {
     it('should call #selectedCountry on the component', function() {
-      var selectedCountry = sandbox.stub(gameComponent, 'selectedCountry');
+      var setState = sandbox.stub(gameComponent, 'setState');
       controller.selectedCountry(a);
-      expect(selectedCountry).to.have.been.calledWith(a);
+      expect(setState).to.have.been.calledWith({selectedCountry: a});
     });
   });
 });

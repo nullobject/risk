@@ -24,16 +24,6 @@ module.exports = React.createClass({
     };
   },
 
-  // Sets the current player.
-  currentPlayer: function(player) {
-    this.setState({currentPlayer: player});
-  },
-
-  // Sets the selected country.
-  selectedCountry: function(country) {
-    this.setState({selectedCountry: country});
-  },
-
   render: function() {
     var game  = this.props.game,
         world = game.world;
