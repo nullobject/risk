@@ -97,7 +97,7 @@ function neighbouringCells(cell, diagram) {
 }
 
 module.exports = {
-  build: function(width, height, players) {
+  build: function(width, height, game) {
     // Create a hexgrid.
     var hexgrid = new Hexgrid(width, height, RADIUS);
 
@@ -122,8 +122,8 @@ module.exports = {
     var countries = calculateCountries(hexgrid.hexagons, diagram);
 
     // Assign each player to a random country.
-    _.sample(countries, players.length).forEach(function(country, index) {
-      country.player = players[index];
+    _.sample(countries, game.players.length).forEach(function(country, index) {
+      country.player = game.players[index];
     });
 
     // Calculate the Voronoi cells for debugging.

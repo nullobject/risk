@@ -41,7 +41,7 @@ function Game(width, height, builder) {
   this.players = _.range(5).map(function(id) { return new Player(id); });
 
   // Build the world.
-  this.world = builder(this.width, this.height, this.players);
+  this.world = builder(this.width, this.height, this);
 }
 
 Game.prototype.constructor = Game;
@@ -55,13 +55,10 @@ Game.prototype.countries = function(player) {
 
 // Returns the total number of armies for a given player.
 Game.prototype.armies = function(player) {
-  return this.world.countries.reduce(function(total, country) {
-    if (country.player === player) {
-      total += country.armies;
-    }
-
-    return total;
-  }, 0);
+  return _(this.countries(player)).chain()
+    .pluck('armies')
+    .reduce(core.sum, 0)
+    .value();
 };
 
 // Returns true if a given player can select a country, false otherwise.
