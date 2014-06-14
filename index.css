@@ -29,25 +29,25 @@ svg polygon {
 
 svg polygon.country {
   fill: currentColor;
-  fill-opacity: 0.7;
+  fill-opacity: 0.6;
   stroke: currentColor;
-  stroke-opacity: 1.0;
+  stroke-opacity: 0.8;
   stroke-width: 3px;
   pointer-events: all;
 }
 
 svg polygon.country.selected {
-  color: red;
+  fill-opacity: 0.8;
+  stroke-opacity: 1.0;
 }
 
 svg polygon.country.nearby {
-  color: green;
-  -webkit-animation: pulsate 1s ease-in-out 0s infinite alternate;
+  -webkit-animation: pulsate 1.0s ease-in-out 0s infinite alternate;
 }
 
 @-webkit-keyframes pulsate {
-  0%   { opacity: 0.7; }
-  100% { opacity: 1.0; }
+  0%   { opacity: 1.0; }
+  100% { opacity: 0.9; }
 }
 
 .players {
