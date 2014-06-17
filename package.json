@@ -27,12 +27,12 @@
     "react": "^0.10.0"
   },
   "devDependencies": {
-    "beefy": "^1.1.0",
-    "browserify": "^4.1.5",
+    "beefy": "^2.0.1",
+    "browserify": "^4.1.10",
     "chai": "^1.9.1",
     "envify": "^1.2.1",
     "jshint": "^2.5.0",
-    "mocha": "^1.19.0",
+    "mocha": "^1.20.1",
     "react-tools": "^0.10.0",
     "reactify": "^0.13.1",
     "sinon": "^1.10.0",
