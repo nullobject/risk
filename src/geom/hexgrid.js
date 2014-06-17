@@ -6,16 +6,19 @@ var Point   = require('./point'),
     core    = require('../core');
 
 var Hexgrid = function(width, height, radius) {
-  var r = radius * Math.cos(core.degreesToRadians(30));
-  var h = radius * Math.sin(core.degreesToRadians(30));
+  var r = radius * Math.cos(core.degreesToRadians(30)),
+      h = radius * Math.sin(core.degreesToRadians(30));
 
   // Calculates the position of a hexagon at a given coordinate.
   function calculatePosition(coordinate) {
-    var width = 2 * r, height = radius + h;
+    var width  = 2 * r,
+        height = radius + h,
+        col    = coordinate[0],
+        row    = coordinate[1];
 
     return Point(
-      (coordinate[0] * width) + ((coordinate[1] % 2) * (width / 2)),
-      coordinate[1] * height
+      (col * width) + ((row % 2) * (width / 2)),
+      row * height
     );
   }
 
@@ -40,8 +43,8 @@ var Hexgrid = function(width, height, radius) {
 
   // Create haxagons for every coordinate.
   this.hexagons = coordinates.map(function(coordinate) {
-    var position = calculatePosition(coordinate, radius);
-    var vertices = calculateVertices(position);
+    var position = calculatePosition(coordinate, radius),
+        vertices = calculateVertices(position);
     return Polygon(vertices);
   });
 };
