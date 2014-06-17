@@ -4,6 +4,7 @@
 
 var Bacon             = require('baconjs').Bacon,
     ControlsComponent = require('./controls_component.jsx'),
+    HexgridComponent  = require('./hexgrid_component.jsx'),
     PlayersComponent  = require('./players_component.jsx'),
     React             = require('react'),
     WorldComponent    = require('./world_component.jsx'),
@@ -35,6 +36,7 @@ module.exports = React.createClass({
       <div className="game">
         <PlayersComponent currentPlayer={this.state.currentPlayer} game={game} />
         <svg width={game.width} height={game.height}>
+          <HexgridComponent width={game.width} height={game.height} hexgrid={world.hexgrid} />
           <WorldComponent selectedCountry={this.state.selectedCountry} stream={this.props.stream} world={world} />
         </svg>
         <ControlsComponent currentPlayer={this.state.currentPlayer} stream={this.props.stream} />
