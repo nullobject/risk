@@ -68,14 +68,21 @@ function GameController(options) {
 // Mixin the state transformer.
 _.extend(GameController.prototype, GameStateTransformer);
 
-GameController.prototype.currentPlayer = function(player) {
-  core.log('GameController#currentPlayer', player);
-  this.gameComponent.currentPlayer(player);
+// Sets the current player.
+GameController.prototype.currentPlayer = function(previousPlayer, player) {
+  core.log('GameController#currentPlayer', previousPlayer, player);
+
+  if (previousPlayer) {
+    this.game.reinforce(previousPlayer);
+  }
+
+  this.gameComponent.setState({currentPlayer: player});
 };
 
+// Sets the selected country.
 GameController.prototype.selectedCountry = function(country) {
   core.log('GameController#selectedCountry', country);
-  this.gameComponent.selectedCountry(country);
+  this.gameComponent.setState({selectedCountry: country});
   // TODO: Play sound.
 };
 

@@ -8,8 +8,8 @@ var Country = require('./country'),
     World   = require('./world'),
     _       = require('lodash');
 
-// Hexgrid radius.
-var RADIUS = 8;
+// Hexgrid cell size.
+var CELL_SIZE = 8;
 
 // The number of "seed" sites to apply to the Voronoi function. More seeds
 // will result in more countries.
@@ -97,9 +97,11 @@ function neighbouringCells(cell, diagram) {
 }
 
 module.exports = {
-  build: function(width, height, players) {
+  build: function(width, height, game) {
     // Create a hexgrid.
-    var hexgrid = new Hexgrid(width, height, RADIUS);
+    var hexgrid  = new Hexgrid(CELL_SIZE),
+        size     = hexgrid.sizeForRect(width, height),
+        hexagons = hexgrid.build(size, [1.0, 0.5]);
 
     // Create a Voronoi tessellation function.
     var voronoi = new Voronoi();
@@ -119,17 +121,17 @@ module.exports = {
     var diagram = calculateDiagram(t, sites, RELAXATIONS);
 
     // Calculate the countries from the Voronoi diagram.
-    var countries = calculateCountries(hexgrid.hexagons, diagram);
+    var countries = calculateCountries(hexagons, diagram);
 
     // Assign each player to a random country.
-    _.sample(countries, players.length).forEach(function(country, index) {
-      country.player = players[index];
+    _.sample(countries, game.players.length).forEach(function(country, index) {
+      country.player = game.players[index];
     });
 
     // Calculate the Voronoi cells for debugging.
     var cells = diagram.cells.map(cellVertices);
 
     // Return a new world.
-    return new World(hexgrid.hexagons, countries, cells);
+    return new World(hexgrid, countries, cells);
   }
 };

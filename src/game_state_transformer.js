@@ -35,7 +35,7 @@ module.exports = {
         output          = [];
 
     if (previousPlayer !== player) {
-      output.push(['currentPlayer', player]);
+      output.push(['currentPlayer', previousPlayer, player]);
       output.push(['selectedCountry', null]);
     } else if (!previousCountry && country && this.game.canSelect(player, country)) {
       output.push(['selectedCountry', country]);

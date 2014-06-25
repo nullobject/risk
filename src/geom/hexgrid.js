@@ -5,45 +5,74 @@ var Point   = require('./point'),
     _       = require('lodash'),
     core    = require('../core');
 
-var Hexgrid = function(width, height, radius) {
-  var r = radius * Math.cos(core.degreesToRadians(30));
-  var h = radius * Math.sin(core.degreesToRadians(30));
+// See: http://www.redblobgames.com/grids/hexagons
+var Hexgrid = function(size) {
+  this.size    = size;
+  this.padding = 0;
 
-  // Calculates the position of a hexagon at a given coordinate.
-  function calculatePosition(coordinate) {
-    var width = 2 * r, height = radius + h;
+  // Precalculate values.
+  this.r = this.size * Math.cos(core.degreesToRadians(30));
+  this.h = this.size * Math.sin(core.degreesToRadians(30));
+  this.d = this.padding / 2 / Math.tan(core.degreesToRadians(30));
 
-    return Point(
-      (coordinate[0] * width) + ((coordinate[1] % 2) * (width / 2)),
-      coordinate[1] * height
-    );
-  }
+  // Calculate the dimensions of a hexagon.
+  this.width  = (2 * this.r) + this.padding;
+  this.height = this.size + this.h + this.d;
+};
 
-  // Calculates the vertices of a hexagon at a given position.
-  function calculateVertices(position) {
-    return [
-      Point(position.x,           position.y + h               ),
-      Point(position.x + r,       position.y                   ),
-      Point(position.x + (2 * r), position.y + h               ),
-      Point(position.x + (2 * r), position.y + h + radius      ),
-      Point(position.x + r,       position.y + (2 * h) + radius),
-      Point(position.x,           position.y + h + radius      )
-    ];
-  }
+Hexgrid.prototype.constructor = Hexgrid;
 
-  // Calculate the number of columns and rows.
-  var cols = Math.floor(width / (2 * r)) - 1,
-      rows = Math.floor(height / (radius + h)) - 1;
+Hexgrid.prototype.build = function(size, offset) {
+  var cols = size[0],
+      rows = size[1];
 
   // Generate the coordinates of the cells in the hexgrid.
   var coordinates = core.cartesianProduct(_.range(cols), _.range(rows));
 
+  // Calculate the origin of the hexgrid.
+  var origin = Point(
+    this.width * offset[0],
+    this.height * offset[1]
+  );
+
   // Create haxagons for every coordinate.
-  this.hexagons = coordinates.map(function(coordinate) {
-    var position = calculatePosition(coordinate, radius);
-    var vertices = calculateVertices(position);
+  return coordinates.map(function(coordinate) {
+    var position = this.calculatePosition(coordinate),
+        vertices = this.calculateVertices(origin.add(position));
+
     return Polygon(vertices);
-  });
+  }, this);
+};
+
+// Returns the number of hexgrid cells which fit in a rect of the given size.
+Hexgrid.prototype.sizeForRect = function(width, height) {
+  var cols = Math.floor(width / (2 * this.r)) - 1,
+      rows = Math.floor(height / (this.size + this.h)) - 1;
+
+  return [cols, rows];
+};
+
+// Calculates the position of a hexagon at a given coordinate.
+Hexgrid.prototype.calculatePosition = function(coordinate) {
+  var col = coordinate[0],
+      row = coordinate[1];
+
+  return Point(
+    (col * this.width) + ((row % 2) * (this.width / 2)),
+    row * this.height
+  );
+};
+
+// Calculates the vertices of a hexagon at a given position.
+Hexgrid.prototype.calculateVertices = function(position) {
+  return [
+    Point(position.x,                position.y + this.h                  ),
+    Point(position.x + this.r,       position.y                           ),
+    Point(position.x + (2 * this.r), position.y + this.h                  ),
+    Point(position.x + (2 * this.r), position.y + this.h + this.size      ),
+    Point(position.x + this.r,       position.y + (2 * this.h) + this.size),
+    Point(position.x,                position.y + this.h + this.size      )
+  ];
 };
 
 module.exports = Hexgrid;
