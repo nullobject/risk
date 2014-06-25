@@ -2,13 +2,12 @@
 
 'use strict';
 
-var Bacon             = require('baconjs').Bacon,
-    CountryComponent  = require('./country_component.jsx'),
-    PathsComponent    = require('./paths_component.jsx'),
-    PolygonsComponent = require('./polygons_component.jsx'),
-    React             = require('react'),
-    _                 = require('lodash'),
-    core              = require('../core');
+var Bacon            = require('baconjs').Bacon,
+    CountryComponent = require('./country_component.jsx'),
+    PathsComponent   = require('./paths_component.jsx'),
+    React            = require('react'),
+    _                = require('lodash'),
+    core             = require('../core');
 
 module.exports = React.createClass({
   displayName: 'WorldComponent',
@@ -28,7 +27,7 @@ module.exports = React.createClass({
     var world           = this.props.world,
         selectedCountry = this.props.selectedCountry;
 
-    var polygons = world.countries.map(function(country, index) {
+    var countries = world.countries.map(function(country, index) {
       var selected = country === selectedCountry,
           nearby   = selectedCountry !== null && _.contains(selectedCountry.neighbours, country);
 
@@ -52,7 +51,7 @@ module.exports = React.createClass({
     return (
       /* jshint ignore:start */
       <g className="world">
-        <g className="countries">{polygons}</g>
+        <g className="countries">{countries}</g>
         {voronoi}
       </g>
       /* jshint ignore:end */
