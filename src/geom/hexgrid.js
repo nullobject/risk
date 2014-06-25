@@ -5,7 +5,9 @@ var Point   = require('./point'),
     _       = require('lodash'),
     core    = require('../core');
 
-// See: http://www.redblobgames.com/grids/hexagons
+// The Hexgrid class builds a hexgrid with cells of a given size.
+//
+// See http://www.redblobgames.com/grids/hexagons
 var Hexgrid = function(size) {
   this.size    = size;
   this.padding = 0;
@@ -22,6 +24,8 @@ var Hexgrid = function(size) {
 
 Hexgrid.prototype.constructor = Hexgrid;
 
+// Returns an array of polygons which represent a hexgrid of a given size (rows
+// & cols).
 Hexgrid.prototype.build = function(size, offset) {
   var cols = size[0],
       rows = size[1];

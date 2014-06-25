@@ -39,14 +39,15 @@ function GameController(options) {
     options.el
   );
 
-  // The player property handles end-turn events to cycle through the players.
+  // The player property handles 'end-turn' events to cycle through the
+  // players.
   var playerProperty = bus
     .ofType('end-turn')
     .scan(0, function(index, event) { return (index + 1) % players.length; })
     .map(function(index) { return players[index]; });
 
-  // The country property handles select-country events to provide the selected
-  // country.
+  // The country property handles 'select-country' events to provide the
+  // selected country.
   var countryProperty = bus
     .ofType('select-country')
     .map('.country')
@@ -82,7 +83,9 @@ GameController.prototype.currentPlayer = function(previousPlayer, player) {
 // Sets the selected country.
 GameController.prototype.selectedCountry = function(country) {
   core.log('GameController#selectedCountry', country);
+
   this.gameComponent.setState({selectedCountry: country});
+
   // TODO: Play sound.
 };
 

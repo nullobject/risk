@@ -21,9 +21,9 @@ module.exports = React.createClass({
     var hexgrid  = this.props.hexgrid,
         hexagons = hexgrid.build([TILE_COLS, TILE_ROWS], [-0.5, -0.5]);
 
-  // Calculate the dimensions of the tile.
-  var width  = hexgrid.width * 2,
-      height = hexgrid.height * 2;
+    // Calculate the dimensions of the tile.
+    var width  = hexgrid.width * 2,
+        height = hexgrid.height * 2;
 
     var polygons = hexagons.map(function(polygon, index) {
       return (
