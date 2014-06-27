@@ -67,6 +67,7 @@ Game.prototype.canSelect = function(player, country) {
 };
 
 // Returns true if a given player can move their armies from/to a country, false otherwise.
+// FIXME: Don't let players move into their own countries.
 Game.prototype.canMove = function(player, from, to) {
   return from.hasNeighbour(to);
 };

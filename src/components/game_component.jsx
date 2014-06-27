@@ -37,7 +37,13 @@ module.exports = React.createClass({
         <PlayersComponent currentPlayer={this.state.currentPlayer} game={game} />
         <svg width={game.width} height={game.height}>
           <HexgridComponent width={game.width} height={game.height} hexgrid={world.hexgrid} />
-          <WorldComponent selectedCountry={this.state.selectedCountry} stream={this.props.stream} world={world} />
+          <WorldComponent
+            currentPlayer={this.state.currentPlayer}
+            selectedCountry={this.state.selectedCountry}
+            stream={this.props.stream}
+            game={game}
+            world={world}
+          />
         </svg>
         <ControlsComponent currentPlayer={this.state.currentPlayer} stream={this.props.stream} />
       </div>
