@@ -50,11 +50,6 @@ module.exports = React.createClass({
     return !_.isEqual(nextProps, this.props);
   },
 
-  componentDidUpdate: function() {
-    // FIXME: Manually set SVG class. See https://github.com/facebook/react/pull/1264
-    this.getDOMNode().setAttribute('class', cx(this.classes()));
-  },
-
   render: function() {
     var country = this.props.country;
 
