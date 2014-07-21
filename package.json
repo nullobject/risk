@@ -24,7 +24,7 @@
     "baconjs": "^0.7.13",
     "lodash": "^2.4.1",
     "normalize.css": "^3.0.1",
-    "react": "^0.10.0"
+    "react": "^0.11.0"
   },
   "devDependencies": {
     "beefy": "^2.0.1",
@@ -33,7 +33,7 @@
     "envify": "^1.2.1",
     "jshint": "^2.5.0",
     "mocha": "^1.20.1",
-    "react-tools": "^0.10.0",
+    "react-tools": "^0.11.0",
     "reactify": "^0.13.1",
     "sinon": "^1.10.0",
     "sinon-chai": "^2.5.0",
