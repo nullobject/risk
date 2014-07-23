@@ -13,8 +13,10 @@ module.exports = React.createClass({
   displayName: 'WorldComponent',
 
   propTypes: {
+    currentPlayer:   React.PropTypes.object,
     selectedCountry: React.PropTypes.object,
     stream:          React.PropTypes.instanceOf(Bacon.Observable).isRequired,
+    game:            React.PropTypes.object.isRequired,
     world:           React.PropTypes.object.isRequired
   },
 
@@ -25,11 +27,13 @@ module.exports = React.createClass({
 
   render: function() {
     var world           = this.props.world,
+        game            = this.props.game,
+        currentPlayer   = this.props.currentPlayer,
         selectedCountry = this.props.selectedCountry;
 
     var countries = world.countries.map(function(country, index) {
       var selected = country === selectedCountry,
-          nearby   = selectedCountry !== null && _.contains(selectedCountry.neighbours, country);
+          nearby   = selectedCountry !== null && game.canMove(currentPlayer, selectedCountry, country);
 
       return (
         /* jshint ignore:start */
