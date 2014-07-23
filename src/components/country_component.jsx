@@ -4,7 +4,6 @@
 
 var Bacon = require('baconjs').Bacon,
     React = require('react/addons'),
-    _     = require('lodash'),
     core  = require('../core');
 
 var cx = React.addons.classSet;
@@ -23,21 +22,14 @@ module.exports = React.createClass({
     this.props.stream.push({type: 'select-country', country: country});
   },
 
-  getInitialState: function() {
-    return {
-      selected: false,
-      nearby:   false
-    };
-  },
-
   classes: function() {
     var player = this.props.country.player,
         color  = player ? player.toString() : '';
 
     var classes = {
       country:  true,
-      selected: this.props.selected,
-      nearby:   this.props.nearby
+      nearby:   this.props.nearby,
+      selected: this.props.selected
     };
 
     classes[color] = true;
@@ -47,7 +39,9 @@ module.exports = React.createClass({
 
   shouldComponentUpdate: function(nextProps, nextState) {
     // Don't update the component if the props haven't changed.
-    return !_.isEqual(nextProps, this.props);
+    return nextProps.country !== this.props.country ||
+           nextProps.nearby != this.props.nearby ||
+           nextProps.selected != this.props.selected;
   },
 
   render: function() {

@@ -6,7 +6,8 @@ var Country = require('./country'),
     Polygon = require('./geom/polygon'),
     Voronoi = require('../lib/voronoi'),
     World   = require('./world'),
-    _       = require('lodash');
+    core    = require('./core'),
+    fn      = require('fn.js');
 
 // Hexgrid cell size.
 var CELL_SIZE = 8;
@@ -23,29 +24,30 @@ var RELAXATIONS = 2;
 // rendered with fat borders.
 var COUNTRY_POLYGON_OFFSET = -2;
 
-function cellVertices(cell) {
+// Returns the vertices for a given cell.
+function verticesForCell(cell) {
   return cell.halfedges.map(function(halfedge) {
     return Point(halfedge.getStartpoint());
   });
 }
 
 // Returns the polygon for a given cell.
-function cellPolygon(cell) {
-  return Polygon(cellVertices(cell));
-}
+var polygonForCell = fn.compose(Polygon, verticesForCell);
 
 // Calculates the Voronoi diagram for a given set of sites using a tessellation
 // function. A number of Lloyd relaxations will also be applied to the
-// resulting diagram. http://en.wikipedia.org/wiki/Lloyd's_algorithm
+// resulting diagram.
+//
+// See http://en.wikipedia.org/wiki/Lloyd's_algorithm
 function calculateDiagram(t, sites, relaxations) {
   // Calculate the initial Voronoi diagram.
   var diagram = t(sites);
 
   // Apply a number of relaxations to the Voronoi diagram.
-  return _.range(relaxations).reduce(function(diagram) {
+  return core.range(relaxations).reduce(function(diagram) {
     // Calculate the new sites from the centroids of the cells.
     var sites = diagram.cells.map(function(cell) {
-      return cellPolygon(cell).centroid();
+      return polygonForCell(cell).centroid();
     });
 
     // Recycle the diagram before computing it again.
@@ -58,34 +60,25 @@ function calculateDiagram(t, sites, relaxations) {
 
 // Merges the given set of hexagons inside the Voronoi cells into countries.
 function calculateCountries(hexagons, diagram) {
-  var countries = diagram.cells.reduce(function(countries, cell) {
+  return diagram.cells.map(function(cell) {
     // Find the hexagons inside the cell.
     var innerHexagons = hexagons.filter(function(hexagon) {
-      return cellPolygon(cell).containsPoint(hexagon.centroid());
+      return polygonForCell(cell).containsPoint(hexagon.centroid());
     });
 
     // Merge the hexagons into a larger polygon.
     var polygon = Polygon.merge(innerHexagons);
 
-    // Create a new country.
-    countries[cell.site.voronoiId] = new Country(polygon.offset(COUNTRY_POLYGON_OFFSET));
-
-    return countries;
-  }, {});
-
-  return _.map(countries, function(country, id) {
-    var cell = diagram.cells[id];
+    // Calculate the neighbouring cells.
     var neighbours = neighbouringCells(cell, diagram);
 
-    // Set the country ID.
-    country.id = id;
-
-    // Set the country neighbours.
-    country.neighbours = neighbours.map(function(neighbour) {
-      return countries[neighbour.site.voronoiId];
+    // Calculate the neighbour IDs.
+    var neighbourIds = neighbours.map(function(neighbour) {
+      return neighbour.site.voronoiId;
     });
 
-    return country;
+    // Return a new country.
+    return new Country(cell.site.voronoiId, neighbourIds, polygon.offset(COUNTRY_POLYGON_OFFSET));
   });
 }
 
@@ -96,42 +89,35 @@ function neighbouringCells(cell, diagram) {
   });
 }
 
-module.exports = {
-  build: function(width, height, game) {
-    // Create a hexgrid.
-    var hexgrid  = new Hexgrid(CELL_SIZE),
-        size     = hexgrid.sizeForRect(width, height),
-        hexagons = hexgrid.build(size, [1.0, 0.5]);
+// Returns a new world with the given width and height.
+module.exports = function(width, height) {
+  var hexgrid  = Hexgrid(CELL_SIZE),
+      size     = hexgrid.sizeForRect(width, height),
+      hexagons = hexgrid.build(size, [1.0, 0.5]);
 
-    // Create a Voronoi tessellation function.
-    var voronoi = new Voronoi();
-    var box = {xl:0, xr:width, yt:0, yb:height};
-    var t = function(points) {
-      var diagram = voronoi.compute(points, box);
-      diagram.recycle = function() { voronoi.recycle(diagram); };
-      return diagram;
-    };
+  // Create a Voronoi tessellation function.
+  var voronoi = new Voronoi();
+  var box = {xl:0, xr:width, yt:0, yb:height};
+  var t = function(points) {
+    var diagram = voronoi.compute(points, box);
+    diagram.recycle = function() { voronoi.recycle(diagram); };
+    return diagram;
+  };
 
-    // Generate a set of random "seed" sites within the clipping region.
-    var sites = _.range(SEEDS).map(function(d) {
-      return Point(_.random(width, true), _.random(height, true));
-    });
+  // Generate a set of random "seed" sites within the clipping region.
+  var sites = core.range(SEEDS).map(function() {
+    return Point(core.randomFloat(0, width), core.randomFloat(0, height));
+  });
 
-    // Calculate the Voronoi diagram.
-    var diagram = calculateDiagram(t, sites, RELAXATIONS);
+  // Calculate the Voronoi diagram.
+  var diagram = calculateDiagram(t, sites, RELAXATIONS);
 
-    // Calculate the countries from the Voronoi diagram.
-    var countries = calculateCountries(hexagons, diagram);
+  // Calculate the countries from the Voronoi diagram.
+  var countries = calculateCountries(hexagons, diagram);
 
-    // Assign each player to a random country.
-    _.sample(countries, game.players.length).forEach(function(country, index) {
-      country.player = game.players[index];
-    });
+  // Calculate the Voronoi cells for debugging.
+  var cells = diagram.cells.map(verticesForCell);
 
-    // Calculate the Voronoi cells for debugging.
-    var cells = diagram.cells.map(cellVertices);
-
-    // Return a new world.
-    return new World(hexgrid, countries, cells);
-  }
+  // Return a new world.
+  return new World(width, height, hexgrid, countries, cells);
 };

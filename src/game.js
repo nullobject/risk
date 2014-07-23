@@ -1,99 +1,121 @@
 'use strict';
 
-var Player = require('./player'),
-    _      = require('lodash'),
-    core   = require('./core');
+var Copyable = require('./copyable'),
+    Player   = require('./player'),
+    core     = require('./core'),
+    fn       = require('fn.js');
 
-function validateAction(countries, player, from, to) {
-  // Assert the from country is in the world.
-  if (!_.contains(countries, from)) {
-    throw new Error("The 'from' country is not in the world");
-  }
+// The number of players in the game.
+var PLAYERS = 5;
 
-  // Assert the to country is in the world.
-  if (!_.contains(countries, to)) {
-    throw new Error("The 'to' country is not in the world");
-  }
+// Returns a new game state.
+function Game(world) {
+  var a = arguments;
 
-  // Assert the from country has enough armies.
-  if (from.armies <= 1) {
-    throw new Error("The 'from' country does not have enough armies");
-  }
+  if (a.length > 0) {
+    // Create the players.
+    var players = core.range(PLAYERS).map(function(id) {
+      return Player(id);
+    });
 
-  // Assert the from country belongs to the player.
-  if (from.player !== player) {
-    throw new Error("The 'from' country does not belong to the player");
-  }
+    // Assign each player to a random country.
+    world = world.assignPlayers(players);
 
-  // Assert the to country does not belong to the player.
-  if (to.player === player) {
-    throw new Error("The 'to' country belongs to the player");
+    this.players         = players;
+    this.world           = world;
+    this.currentPlayer   = null;
+    this.selectedCountry = null;
   }
 }
 
-// The Game class represents the state of the game. A game is played in a world
-// by a number of players.
-function Game(width, height, builder) {
-  this.width  = width;
-  this.height = height;
-
-  // Create the players.
-  this.players = _.range(5).map(function(id) { return new Player(id); });
-
-  // Build the world.
-  this.world = builder(this.width, this.height, this);
-}
+Game.prototype = new Copyable();
 
 Game.prototype.constructor = Game;
 
-// Returns the countries occupied by a player.
-Game.prototype.countries = function(player) {
-  return this.world.countries.filter(function(country) {
-    return country.player === player;
+// Returns the total number of armies for a given player.
+Game.prototype.armiesForPlayer = function(player) {
+  return this.world
+    .countriesOccupiedByPlayer(player)
+    .map(fn.prop('armies'))
+    .reduce(fn.op['+'], 0);
+};
+
+// Returns true if a given player can be set, false otherwise.
+Game.prototype.canSelectPlayer = function(player) {
+  return player !== null && player !== this.currentPlayer;
+};
+
+// Returns true if a given country can be set, false otherwise.
+Game.prototype.canSelectCountry = function(country) {
+  return this.canMoveToCountry(country) || this.canSetCountry(country);
+};
+
+// Returns true if the current player can select a given country, false
+// otherwise.
+Game.prototype.canSetCountry = function(country) {
+  return country !== null && country.player === this.currentPlayer;
+};
+
+// Returns true if the current player can deselect a given country, false
+// otherwise.
+Game.prototype.canUnsetCountry = function(country) {
+  return country !== null &&
+         country.player === this.currentPlayer &&
+         country === this.selectedCountry;
+};
+
+// Returns true if the current player can move to a given country, false
+// otherwise.
+Game.prototype.canMoveToCountry = function(country) {
+  return country !== null &&
+         this.currentPlayer !== null &&
+         country.player !== this.currentPlayer &&
+         this.selectedCountry !== null &&
+         this.selectedCountry.armies > 1 &&
+         this.selectedCountry.hasNeighbour(country);
+};
+
+// Selects a given player and returns a new game state.
+Game.prototype.selectPlayer = function(player) {
+  core.log('Game#selectPlayer');
+
+  if (player === this.currentPlayer) {
+    throw new Error('The player is already selected');
+  }
+
+  var world = this.currentPlayer ? this.world.reinforce(this.currentPlayer) : this.world;
+
+  return this.copy({
+    currentPlayer:   player,
+    selectedCountry: null,
+    world:           world
   });
 };
 
-// Returns the total number of armies for a given player.
-Game.prototype.armies = function(player) {
-  return _(this.countries(player)).chain()
-    .pluck('armies')
-    .reduce(core.sum, 0)
-    .value();
+// Selects a given country and returns a new game state.
+Game.prototype.selectCountry = function(country) {
+  core.log('Game#selectCountry');
+
+  if (this.canMoveToCountry(country))
+    return this.moveToCountry(country);
+  else if (this.canUnsetCountry(country))
+    return this.set('selectedCountry', null);
+  else if (this.canSetCountry(country))
+    return this.set('selectedCountry', country);
+  else
+    return this;
 };
 
-// Returns true if a given player can select a country, false otherwise.
-Game.prototype.canSelect = function(player, country) {
-  return player === country.player && country.armies > 1;
-};
+// Moves armies from the selected country to a given country and returns a
+// new game state.
+Game.prototype.moveToCountry = function(country) {
+  core.log('Game#moveToCountry');
 
-// Returns true if a given player can move their armies from/to a country, false otherwise.
-// FIXME: Don't let players move into their own countries.
-Game.prototype.canMove = function(player, from, to) {
-  return from.hasNeighbour(to);
-};
+  var world = this.world.move(this.currentPlayer, this.selectedCountry, country);
 
-// Moves armies from/to a country for a given player. Returns true if the
-// action was successful, false otherwise.
-Game.prototype.move = function(player, from, to) {
-  core.log('Game#move');
-
-  validateAction(this.world.countries, player, from, to);
-
-  to.player = from.player;
-  to.armies = from.armies - 1;
-  from.armies = 1;
-
-  return true;
-};
-
-// Reinforces the armies for a given player. The number of reinforcements
-// granted is equal to the largest number of contiguous countries occupied by
-// the player.
-Game.prototype.reinforce = function(player) {
-  core.log('Game#reinforce');
-
-  this.countries(player).forEach(function(country) {
-    country.armies += 1;
+  return this.copy({
+    selectedCountry: null,
+    world:           world
   });
 };
 

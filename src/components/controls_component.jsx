@@ -4,7 +4,6 @@
 
 var Bacon = require('baconjs').Bacon,
     React = require('react'),
-    _     = require('lodash'),
     core  = require('../core');
 
 module.exports = React.createClass({
@@ -21,7 +20,7 @@ module.exports = React.createClass({
 
   shouldComponentUpdate: function(nextProps, nextState) {
     // Don't update the component if the props haven't changed.
-    return !_.isEqual(nextProps, this.props);
+    return nextProps.currentPlayer !== this.props.currentPlayer;
   },
 
   render: function() {

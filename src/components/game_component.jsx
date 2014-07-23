@@ -2,51 +2,56 @@
 
 'use strict';
 
-var Bacon             = require('baconjs').Bacon,
-    ControlsComponent = require('./controls_component.jsx'),
-    HexgridComponent  = require('./hexgrid_component.jsx'),
-    PlayersComponent  = require('./players_component.jsx'),
-    React             = require('react'),
-    WorldComponent    = require('./world_component.jsx'),
-    core              = require('../core');
+var Bacon            = require('baconjs').Bacon,
+    CountryComponent = require('./country_component.jsx'),
+    PathsComponent   = require('./paths_component.jsx'),
+    React            = require('react'),
+    core             = require('../core');
 
 module.exports = React.createClass({
   displayName: 'GameComponent',
 
   propTypes: {
+    debug:  React.PropTypes.bool,
     game:   React.PropTypes.object.isRequired,
     stream: React.PropTypes.instanceOf(Bacon.Observable).isRequired
   },
 
-  getInitialState: function() {
-    return {
-      currentPlayer:   null,
-      selectedCountry: null
-    };
+  shouldComponentUpdate: function(nextProps, nextState) {
+    // Don't update the component if the props haven't changed.
+    return nextProps.game !== this.props.game;
   },
 
   render: function() {
-    var game  = this.props.game,
-        world = game.world;
+    var game = this.props.game;
+
+    var countries = game.world.countries.map(function(country) {
+      var nearby   = game.canMoveToCountry(country),
+          selected = country === game.selectedCountry;
+
+      return (
+        /* jshint ignore:start */
+        <CountryComponent
+          key={country}
+          country={country}
+          nearby={nearby}
+          selected={selected}
+          stream={this.props.stream}
+        />
+        /* jshint ignore:end */
+      );
+    }, this).toArray();
+
+    var voronoi = this.props.debug ? <PathsComponent className="voronoi" paths={game.world.cells} /> : '';
 
     core.log('GameComponent#render');
 
     return (
       /* jshint ignore:start */
-      <div className="game">
-        <PlayersComponent currentPlayer={this.state.currentPlayer} game={game} />
-        <svg width={game.width} height={game.height}>
-          <HexgridComponent width={game.width} height={game.height} hexgrid={world.hexgrid} />
-          <WorldComponent
-            currentPlayer={this.state.currentPlayer}
-            selectedCountry={this.state.selectedCountry}
-            stream={this.props.stream}
-            game={game}
-            world={world}
-          />
-        </svg>
-        <ControlsComponent currentPlayer={this.state.currentPlayer} stream={this.props.stream} />
-      </div>
+      <g className="world">
+        <g className="countries">{countries}</g>
+        {voronoi}
+      </g>
       /* jshint ignore:end */
     );
   }

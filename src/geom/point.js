@@ -1,41 +1,43 @@
 'use strict';
 
+// Returns a new point with the given coordinates.
 var Point = function() {
-  var point = Object.create(Point.prototype),
-      a     = arguments;
+  var x, y, a = arguments;
 
   if (a.length == 1) {
     if (a[0] instanceof Array) {
-      point.x = a[0][0];
-      point.y = a[0][1];
+      x = a[0][0];
+      y = a[0][1];
     } else {
-      point.x = a[0].x;
-      point.y = a[0].y;
+      x = a[0].x;
+      y = a[0].y;
     }
   } else if (a.length == 2) {
-    point.x = a[0];
-    point.y = a[1];
+    x = a[0];
+    y = a[1];
   }
 
-  return point;
+  return {
+    x: x,
+    y: y,
+
+    add: function(p) {
+      return Point(this.x + p.x, this.y + p.y);
+    },
+
+    divide: function(n) {
+      return Point(this.x / n, this.y / n);
+    },
+
+    toString: function() {
+      return this.x + ',' + this.y;
+    }
+  };
 };
 
-Point.prototype.constructor = Point;
-
-Point.prototype.add = function(p) {
-  return Point(this.x + p.x, this.y + p.y);
-};
-
-Point.prototype.divide = function(n) {
-  return Point(this.x / n, this.y / n);
-};
-
+// Returns a new point at the origin.
 Point.zero = function() {
   return Point(0, 0);
-};
-
-Point.prototype.toString = function() {
-  return this.x + ',' + this.y;
 };
 
 module.exports = Point;

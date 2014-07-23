@@ -1,21 +1,33 @@
 'use strict';
 
-var _ = require('lodash');
+var Copyable  = require('./copyable'),
+    Immutable = require('immutable'),
+    core      = require('./core');
 
-// The Country class represents a region on the map which can be occupied by a
-// player.
-function Country(polygon) {
-  this.polygon = polygon;
-  this.neighbours = [];
-  this.armies = 2;
-  this.player = null;
+// Returns a new country.
+function Country(id, neighbourIds, polygon) {
+  var a = arguments;
+
+  if (a.length > 0) {
+    this.id           = id;
+    this.neighbourIds = Immutable.Set.from(neighbourIds);
+    this.polygon      = polygon;
+    this.armies       = 2;
+    this.player       = null;
+  }
 }
+
+Country.prototype = new Copyable();
 
 Country.prototype.constructor = Country;
 
 // Returns true if a given country neighbours this country, false otherwise.
 Country.prototype.hasNeighbour = function(country) {
-  return _.contains(this.neighbours, country);
+  return this.neighbourIds.contains(country.id);
+};
+
+Country.prototype.hashCode = function() {
+  return this.id;
 };
 
 Country.prototype.toString = function() {

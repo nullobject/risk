@@ -24,13 +24,18 @@ module.exports = React.createClass({
     return classes;
   },
 
+  shouldComponentUpdate: function(nextProps, nextState) {
+    // Don't update the component if the props haven't changed.
+    return nextProps.currentPlayer !== this.props.currentPlayer;
+  },
+
   render: function() {
     var game = this.props.game;
 
     var players = game.players.map(function(player, index) {
       return (
         /* jshint ignore:start */
-        <li className={cx(this.classes(player))} key={index}>{game.armies(player)}</li>
+        <li className={cx(this.classes(player))} key={index}>{game.armiesForPlayer(player)}</li>
         /* jshint ignore:end */
       );
     }, this);
