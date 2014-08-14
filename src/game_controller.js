@@ -32,7 +32,7 @@ function GameController(options) {
   this.bus = new Bacon.Bus();
   this.bus.ofType = function(type) {
     return this.filter(function(event) {
-      return event.type == type;
+      return event.type === type;
     });
   };
 
