@@ -3,11 +3,11 @@
 'use strict';
 
 var core              = require('../core'),
-    Bacon             = require('baconjs').Bacon,
-    ControlsComponent = require('./controls_component.jsx'),
-    GameComponent     = require('./game_component.jsx'),
-    HexgridComponent  = require('./hexgrid_component.jsx'),
-    PlayersComponent  = require('./players_component.jsx'),
+    Bacon             = require('baconjs'),
+    ControlsComponent = require('./controls_component'),
+    GameComponent     = require('./game_component'),
+    HexgridComponent  = require('./hexgrid_component'),
+    PlayersComponent  = require('./players_component'),
     React             = require('react');
 
 module.exports = React.createClass({

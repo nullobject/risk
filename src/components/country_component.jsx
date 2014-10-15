@@ -3,7 +3,7 @@
 'use strict';
 
 var core  = require('../core'),
-    Bacon = require('baconjs').Bacon,
+    Bacon = require('baconjs'),
     F     = require('fkit'),
     React = require('react/addons');
 

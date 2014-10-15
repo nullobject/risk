@@ -2,42 +2,42 @@
   "name": "hexgrid",
   "version": "0.1.0",
   "description": "A game of risk played on a hex grid.",
+  "homepage": "https://github.com/nullobject/hexgrid",
+  "author": "Josh Bassett <josh.bassett@gmail.com> (http://joshbassett.info)",
+  "license": "MIT",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "make test",
-    "start": "make start"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/nullobject/hexgrid.git"
   },
-  "author": "Josh Bassett",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/nullobject/hexgrid/issues"
   },
-  "homepage": "https://github.com/nullobject/hexgrid",
+  "devDependencies": {
+    "chai": "^1.9.1",
+    "css-loader": "^0.9.0",
+    "jshint": "^2.5.0",
+    "jsx-loader": "^0.11.2",
+    "less": "^1.7.5",
+    "less-loader": "^0.7.7",
+    "mocha": "^1.20.1",
+    "sinon": "^1.10.0",
+    "sinon-chai": "^2.5.0",
+    "style-loader": "^0.8.0",
+    "webpack": "^1.4.7",
+    "webpack-dev-server": "^1.6.5"
+  },
   "dependencies": {
-    "baconjs": "^0.7.13",
-    "fkit": "^0.10.0",
+    "baconjs": "^0.7.23",
+    "fkit": "^0.11.0",
     "immutable": "^2.0.3",
     "normalize.css": "^3.0.1",
     "react": "^0.11.0"
-  },
-  "devDependencies": {
-    "beefy": "^2.0.1",
-    "browserify": "^4.1.10",
-    "chai": "^1.9.1",
-    "envify": "^1.2.1",
-    "jshint": "^2.5.0",
-    "mocha": "^1.20.1",
-    "react-tools": "^0.11.0",
-    "reactify": "^0.13.1",
-    "sinon": "^1.10.0",
-    "sinon-chai": "^2.5.0",
-    "uglifyify": "^2.4.0"
   }
 }

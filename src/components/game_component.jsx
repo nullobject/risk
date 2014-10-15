@@ -3,9 +3,9 @@
 'use strict';
 
 var core             = require('../core'),
-    Bacon            = require('baconjs').Bacon,
-    CountryComponent = require('./country_component.jsx'),
-    PathsComponent   = require('./paths_component.jsx'),
+    Bacon            = require('baconjs'),
+    CountryComponent = require('./country_component'),
+    PathsComponent   = require('./paths_component'),
     React            = require('react');
 
 module.exports = React.createClass({
