@@ -22,7 +22,7 @@
   "homepage": "https://github.com/nullobject/hexgrid",
   "dependencies": {
     "baconjs": "^0.7.13",
-    "fn.js": "^0.8.1",
+    "fkit": "^0.10.0",
     "immutable": "^2.0.3",
     "normalize.css": "^3.0.1",
     "react": "^0.11.0"

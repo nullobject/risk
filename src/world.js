@@ -1,8 +1,10 @@
 'use strict';
 
-var Copyable  = require('./copyable'),
-    Immutable = require('immutable'),
-    core      = require('./core');
+var core      = require('./core'),
+    Copyable  = require('./copyable'),
+    F         = require('fkit'),
+    Immutable = require('immutable');
+
 
 // Returns a new world.
 function World(width, height, hexgrid, countries, cells) {
@@ -31,7 +33,7 @@ World.prototype.countriesOccupiedByPlayer = function(player) {
 // Assigns the given players to random countries and returns a new world
 // state.
 World.prototype.assignPlayers = function(players) {
-  var playerCountries = core.sample(players.length, this.countries.toArray());
+  var playerCountries = F.sample(players.length, this.countries.toArray());
 
   var newPlayerCountries = playerCountries.map(function(country, index) {
     return country.set('player', players[index]);
@@ -67,7 +69,7 @@ World.prototype.reinforce = function(player) {
   var playerCountries = this.countriesOccupiedByPlayer(player);
 
   var newPlayerCountries = playerCountries.map(function(country) {
-    return country.update('armies', core.inc);
+    return country.update('armies', F.inc);
   });
 
   var countries = this.countries.withMutations(function(set) {

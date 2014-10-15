@@ -1,6 +1,7 @@
 'use strict';
 
-var Point   = require('./point'),
+var F       = require('fkit'),
+    Point   = require('./point'),
     Polygon = require('./polygon'),
     core    = require('../core');
 
@@ -59,7 +60,7 @@ module.exports = function(radius) {
           rows = size[1];
 
       // Generate the coordinates of the cells in the hexgrid.
-      var coordinates = core.cartesianProduct(core.range(cols), core.range(rows));
+      var coordinates = F.cartesian(F.range(0, cols), F.range(0, rows));
 
       // Calculate the origin of the hexgrid.
       var origin = Point(

@@ -1,9 +1,9 @@
 'use strict';
 
-var Copyable = require('./copyable'),
-    Player   = require('./player'),
-    core     = require('./core'),
-    fn       = require('fn.js');
+var core     = require('./core'),
+    Copyable = require('./copyable'),
+    F        = require('fkit'),
+    Player   = require('./player');
 
 // The number of players in the game.
 var PLAYERS = 5;
@@ -14,7 +14,7 @@ function Game(world) {
 
   if (a.length > 0) {
     // Create the players.
-    var players = core.range(PLAYERS).map(function(id) {
+    var players = F.range(0, PLAYERS).map(function(id) {
       return Player(id);
     });
 
@@ -34,10 +34,11 @@ Game.prototype.constructor = Game;
 
 // Returns the total number of armies for a given player.
 Game.prototype.armiesForPlayer = function(player) {
-  return this.world
-    .countriesOccupiedByPlayer(player)
-    .map(fn.prop('armies'))
-    .reduce(fn.op['+'], 0);
+  return F.sum(
+    this.world
+      .countriesOccupiedByPlayer(player)
+      .map(F.get('armies'))
+  );
 };
 
 // Returns true if a given player can be set, false otherwise.
