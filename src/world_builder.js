@@ -83,9 +83,7 @@ function calculateCountries(hexagons, diagram) {
 
 // Returns the cells neighbouring a given cell.
 function neighbouringCells(cell, diagram) {
-  return cell.getNeighborIds().map(function(id) {
-    return diagram.cells[id];
-  });
+  return cell.getNeighborIds().map(F.flip(F.get, diagram.cells));
 }
 
 // Returns a new world with the given width and height.

@@ -1,6 +1,7 @@
 'use strict';
 
 var Bacon         = require('baconjs').Bacon,
+    F             = require('fkit'),
     Game          = require('./game'),
     React         = require('react'),
     RootComponent = require('./components/root_component.jsx'),
@@ -31,9 +32,7 @@ function GameController(options) {
   // Create and extend a bus.
   this.bus = new Bacon.Bus();
   this.bus.ofType = function(type) {
-    return this.filter(function(event) {
-      return event.type === type;
-    });
+    return this.filter(F.compose(F.equal(type), F.get('type')));
   };
 
   // The player property handles 'end-turn' events to cycle through the
@@ -41,13 +40,13 @@ function GameController(options) {
   var playerProperty = this.bus
     .ofType('end-turn')
     .scan(0, function(index, event) { return (index + 1) % game.players.length; })
-    .map(function(index) { return game.players[index]; });
+    .map(F.flip(F.get, game.players));
 
   // The country property handles 'select-country' events to provide the
   // selected country.
   var countryProperty = this.bus
     .ofType('select-country')
-    .map('.country')
+    .map(F.get('country'))
     .startWith(null);
 
   // The player country property combines the player and country properties

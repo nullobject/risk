@@ -2,8 +2,8 @@
 
 'use strict';
 
-var React = require('react'),
-    core  = require('../core');
+var core  = require('../core'),
+    React = require('react');
 
 // Tile size.
 var TILE_COLS = 3,

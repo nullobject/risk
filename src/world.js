@@ -22,9 +22,7 @@ World.prototype.constructor = World;
 
 // Returns the countries occupied by a player.
 World.prototype.countriesOccupiedByPlayer = function(player) {
-  return this.countries.filter(function(country) {
-    return country.player === player;
-  });
+  return this.countries.filter(F.compose(F.equal(player), F.get('player')));
 };
 
 // Assigns the given players to random countries and returns a new world
@@ -49,7 +47,7 @@ World.prototype.move = function(player, from, to) {
   core.log('World#move');
 
   var newFrom = F.set('armies', 1, from),
-      newTo   = F.copy(to, {armies: from.armies - 1, player: from.player});
+      newTo   = F.copy(to, {player: from.player, armies: F.dec(from.armies)});
 
   var countries = this.countries.withMutations(function(set) {
     set.subtract([from, to]).union([newFrom, newTo]);
@@ -65,9 +63,7 @@ World.prototype.reinforce = function(player) {
 
   var playerCountries = this.countriesOccupiedByPlayer(player);
 
-  var newPlayerCountries = playerCountries.map(function(country) {
-    return F.update('armies', F.inc, country);
-  });
+  var newPlayerCountries = playerCountries.map(F.update('armies', F.inc));
 
   var countries = this.countries.withMutations(function(set) {
     set.subtract(playerCountries).union(newPlayerCountries);

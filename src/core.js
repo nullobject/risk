@@ -6,8 +6,4 @@ module.exports = {
       console.log(message);
     }
   },
-
-  degreesToRadians: function(degrees) {
-    return degrees * Math.PI / 180;
-  },
 };

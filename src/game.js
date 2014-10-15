@@ -13,9 +13,7 @@ function Game(world) {
 
   if (a.length > 0) {
     // Create the players.
-    var players = F.range(0, PLAYERS).map(function(id) {
-      return Player(id);
-    });
+    var players = F.range(0, PLAYERS).map(Player);
 
     // Assign each player to a random country.
     world = world.assignPlayers(players);
@@ -94,18 +92,19 @@ Game.prototype.selectPlayer = function(player) {
 Game.prototype.selectCountry = function(country) {
   core.log('Game#selectCountry');
 
-  if (this.canMoveToCountry(country))
+  if (this.canMoveToCountry(country)) {
     return this.moveToCountry(country);
-  else if (this.canUnsetCountry(country))
+  } else if (this.canUnsetCountry(country)) {
     return F.set('selectedCountry', null, this);
-  else if (this.canSetCountry(country))
+  } else if (this.canSetCountry(country)) {
     return F.set('selectedCountry', country, this);
-  else
+  } else {
     return this;
+  }
 };
 
-// Moves armies from the selected country to a given country and returns a
-// new game state.
+// Moves armies from the selected country to a given country and returns a new
+// game state.
 Game.prototype.moveToCountry = function(country) {
   core.log('Game#moveToCountry');
 

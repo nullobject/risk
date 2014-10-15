@@ -2,13 +2,13 @@
 
 'use strict';
 
-var Bacon             = require('baconjs').Bacon,
+var core              = require('../core'),
+    Bacon             = require('baconjs').Bacon,
     ControlsComponent = require('./controls_component.jsx'),
     GameComponent     = require('./game_component.jsx'),
     HexgridComponent  = require('./hexgrid_component.jsx'),
     PlayersComponent  = require('./players_component.jsx'),
-    React             = require('react'),
-    core              = require('../core');
+    React             = require('react');
 
 module.exports = React.createClass({
   displayName: 'RootComponent',

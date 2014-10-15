@@ -2,8 +2,9 @@
 
 'use strict';
 
-var React = require('react/addons'),
-    core  = require('../core');
+var core  = require('../core'),
+    F     = require('fkit'),
+    React = require('react/addons');
 
 var cx = React.addons.classSet;
 
@@ -16,12 +17,8 @@ module.exports = React.createClass({
   },
 
   classes: function(player) {
-    var selected = player === this.props.currentPlayer,
-        classes  = {selected: selected};
-
-    classes[player] = true;
-
-    return classes;
+    var selected = player === this.props.currentPlayer;
+    return F.set(player, true, {selected: selected});
   },
 
   shouldComponentUpdate: function(nextProps, nextState) {
