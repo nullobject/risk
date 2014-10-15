@@ -1,7 +1,6 @@
 'use strict';
 
 var core     = require('./core'),
-    Copyable = require('./copyable'),
     F        = require('fkit'),
     Player   = require('./player');
 
@@ -27,8 +26,6 @@ function Game(world) {
     this.selectedCountry = null;
   }
 }
-
-Game.prototype = new Copyable();
 
 Game.prototype.constructor = Game;
 
@@ -86,7 +83,7 @@ Game.prototype.selectPlayer = function(player) {
 
   var world = this.currentPlayer ? this.world.reinforce(this.currentPlayer) : this.world;
 
-  return this.copy({
+  return F.copy(this, {
     currentPlayer:   player,
     selectedCountry: null,
     world:           world
@@ -100,9 +97,9 @@ Game.prototype.selectCountry = function(country) {
   if (this.canMoveToCountry(country))
     return this.moveToCountry(country);
   else if (this.canUnsetCountry(country))
-    return this.set('selectedCountry', null);
+    return F.set('selectedCountry', null, this);
   else if (this.canSetCountry(country))
-    return this.set('selectedCountry', country);
+    return F.set('selectedCountry', country, this);
   else
     return this;
 };
@@ -114,7 +111,7 @@ Game.prototype.moveToCountry = function(country) {
 
   var world = this.world.move(this.currentPlayer, this.selectedCountry, country);
 
-  return this.copy({
+  return F.copy(this, {
     selectedCountry: null,
     world:           world
   });

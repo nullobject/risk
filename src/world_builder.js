@@ -1,7 +1,6 @@
 'use strict';
 
-var core    = require('./core'),
-    Country = require('./country'),
+var Country = require('./country'),
     F       = require('fkit'),
     Hexgrid = require('./geom/hexgrid'),
     Point   = require('./geom/point'),

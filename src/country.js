@@ -1,8 +1,6 @@
 'use strict';
 
-var Copyable  = require('./copyable'),
-    Immutable = require('immutable'),
-    core      = require('./core');
+var Immutable = require('immutable');
 
 // Returns a new country.
 function Country(id, neighbourIds, polygon) {
@@ -16,8 +14,6 @@ function Country(id, neighbourIds, polygon) {
     this.player       = null;
   }
 }
-
-Country.prototype = new Copyable();
 
 Country.prototype.constructor = Country;
 
