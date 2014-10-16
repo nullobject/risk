@@ -4,7 +4,6 @@ var core      = require('./core'),
     F         = require('fkit'),
     Immutable = require('immutable');
 
-
 // Returns a new world.
 function World(width, height, hexgrid, countries, cells) {
   var a = arguments;

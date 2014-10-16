@@ -1,0 +1,85 @@
+* {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+};
+
+body {
+  color: #333;
+}
+
+.container {
+  display: -webkit-flex;
+  -webkit-flex-direction: row;
+  -webkit-justify-content: center;
+}
+
+svg {
+  #tile {
+    stroke: black;
+    stroke-width: 0.25px;
+  }
+
+  .voronoi {
+    fill: none;
+    stroke: #1cadcf;
+  }
+
+  .hexgrid {
+    stroke: gray;
+    stroke-width: 0.25px;
+  }
+
+  polygon {
+    fill: white;
+
+    &.country {
+      fill: currentColor;
+      fill-opacity: 0.6;
+      stroke: currentColor;
+      stroke-opacity: 0.8;
+      stroke-width: 3px;
+      pointer-events: all;
+
+      &.selected {
+        fill-opacity: 0.8;
+        stroke-opacity: 1.0;
+      }
+
+      &.nearby {
+        -webkit-animation: pulsate 1.0s ease-in-out 0s infinite alternate;
+      }
+    }
+  }
+}
+
+.players {
+  margin: 0;
+  padding: 0.5em 0;
+  text-align: center;
+
+  li {
+    display: inline-block;
+    margin-right: 1em;
+    opacity: 0.7;
+
+    &:before {
+      content: "\265e";
+      margin-right: 0.25em;
+    }
+
+    &.selected {
+      opacity: 1.0;
+    }
+  }
+}
+
+.player-0 { color: rgb(228,26,28); }
+.player-1 { color: rgb(55,126,184); }
+.player-2 { color: rgb(77,175,74); }
+.player-3 { color: rgb(152,78,163); }
+.player-4 { color: rgb(255,127,0); }
+
+@-webkit-keyframes pulsate {
+  0%   { opacity: 1.0; }
+  100% { opacity: 0.9; }
+}

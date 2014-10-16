@@ -2,6 +2,8 @@
 
 'use strict';
 
+require('./style.less');
+
 var GameController = require('./game_controller');
 
 new GameController({
