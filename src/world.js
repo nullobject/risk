@@ -9,35 +9,39 @@ function World(width, height, hexgrid, countries, cells) {
   var a = arguments;
 
   if (a.length > 0) {
-    this.width     = width;
-    this.height    = height;
-    this.hexgrid   = hexgrid;
-    this.countries = Immutable.Set.from(countries);
-    this.cells     = cells;
+    this.width        = width;
+    this.height       = height;
+    this.hexgrid      = hexgrid;
+    this.countriesSet = Immutable.Set.from(countries);
+    this.cells        = cells;
   }
 }
 
 World.prototype.constructor = World;
 
+Object.defineProperty(World.prototype, 'countries', {
+  get: function() { return this.countriesSet.toArray(); }
+});
+
 // Returns the countries occupied by a player.
 World.prototype.countriesOccupiedByPlayer = function(player) {
-  return this.countries.filter(F.compose(F.equal(player), F.get('player')));
+  return this.countriesSet.filter(F.compose(F.equal(player), F.get('player')));
 };
 
 // Assigns the given players to random countries and returns a new world
 // state.
 World.prototype.assignPlayers = function(players) {
-  var playerCountries = F.sample(players.length, this.countries.toArray());
+  var playerCountries = F.sample(players.length, this.countries);
 
   var newPlayerCountries = playerCountries.map(function(country, index) {
     return F.set('player', players[index], country);
   });
 
-  var countries = this.countries.withMutations(function(set) {
+  var countriesSet = this.countriesSet.withMutations(function(set) {
     set.subtract(playerCountries).union(newPlayerCountries);
   });
 
-  return F.set('countries', countries, this);
+  return F.set('countriesSet', countriesSet, this);
 };
 
 // Moves a given player's armies between two countries and returns a new
@@ -48,11 +52,11 @@ World.prototype.move = function(player, from, to) {
   var newFrom = F.set('armies', 1, from),
       newTo   = F.copy(to, {player: from.player, armies: F.dec(from.armies)});
 
-  var countries = this.countries.withMutations(function(set) {
+  var countriesSet = this.countriesSet.withMutations(function(set) {
     set.subtract([from, to]).union([newFrom, newTo]);
   });
 
-  return F.set('countries', countries, this);
+  return F.set('countriesSet', countriesSet, this);
 };
 
 // Reinforces the countries occupied by the given player and returns a new
@@ -64,11 +68,11 @@ World.prototype.reinforce = function(player) {
 
   var newPlayerCountries = playerCountries.map(F.update('armies', F.inc));
 
-  var countries = this.countries.withMutations(function(set) {
+  var countriesSet = this.countriesSet.withMutations(function(set) {
     set.subtract(playerCountries).union(newPlayerCountries);
   });
 
-  return F.set('countries', countries, this);
+  return F.set('countriesSet', countriesSet, this);
 };
 
 module.exports = World;

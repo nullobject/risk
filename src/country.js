@@ -7,11 +7,11 @@ function Country(id, neighbourIds, polygon) {
   var a = arguments;
 
   if (a.length > 0) {
-    this.id           = id;
-    this.neighbourIds = Immutable.Set.from(neighbourIds);
-    this.polygon      = polygon;
-    this.armies       = 2;
-    this.player       = null;
+    this.id              = id;
+    this.neighbourIdsSet = Immutable.Set.from(neighbourIds);
+    this.polygon         = polygon;
+    this.armies          = 2;
+    this.player          = null;
   }
 }
 
@@ -19,7 +19,7 @@ Country.prototype.constructor = Country;
 
 // Returns true if a given country neighbours this country, false otherwise.
 Country.prototype.hasNeighbour = function(country) {
-  return this.neighbourIds.contains(country.id);
+  return this.neighbourIdsSet.contains(country.id);
 };
 
 Country.prototype.hashCode = function() {
