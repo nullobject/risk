@@ -22,25 +22,26 @@ module.exports = React.createClass({
     return nextProps.game !== this.props.game;
   },
 
+  renderCountry: function(country, nearby, selected) {
+    return (
+      /* jshint ignore:start */
+      <CountryComponent
+        key={country}
+        country={country}
+        nearby={nearby}
+        selected={selected}
+        stream={this.props.stream}
+      />
+      /* jshint ignore:end */
+    );
+  },
+
   render: function() {
     var game = this.props.game;
 
     var countries = game.world.countries.map(function(country) {
-      var nearby   = game.canMoveToCountry(country),
-          selected = country === game.selectedCountry;
-
-      return (
-        /* jshint ignore:start */
-        <CountryComponent
-          key={country}
-          country={country}
-          nearby={nearby}
-          selected={selected}
-          stream={this.props.stream}
-        />
-        /* jshint ignore:end */
-      );
-    }, this).toArray();
+      return this.renderCountry(country, game.canMoveToCountry(country), game.isCountrySelected(country));
+    }, this);
 
     var voronoi = this.props.debug ? <PathsComponent className="voronoi" paths={game.world.cells} /> : '';
 
