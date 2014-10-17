@@ -31,13 +31,13 @@
     "sinon": "^1.10.0",
     "sinon-chai": "^2.5.0",
     "style-loader": "^0.8.0",
-    "webpack": "^1.4.7",
+    "webpack": "^1.4.8",
     "webpack-dev-server": "^1.6.5"
   },
   "dependencies": {
     "baconjs": "^0.7.23",
     "fkit": "^0.11.0",
-    "immutable": "^2.0.3",
+    "immutable": "^2.3.2",
     "normalize.css": "^3.0.1",
     "react": "^0.11.0"
   }
