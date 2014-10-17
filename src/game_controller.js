@@ -1,11 +1,12 @@
 'use strict';
 
-var Bacon         = require('baconjs'),
-    F             = require('fkit'),
-    Game          = require('./game'),
-    React         = require('react'),
-    RootComponent = require('./components/root_component'),
-    WorldBuilder  = require('./world_builder');
+var Bacon        = require('baconjs'),
+    F            = require('fkit'),
+    Game         = require('./game'),
+    React        = require('react'),
+    WorldBuilder = require('./world_builder');
+
+var RootComponent = require('./components/root_component');
 
 function transformState(game, input) {
   var player  = input[0],

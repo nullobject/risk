@@ -29,7 +29,7 @@ describe('Game', function() {
   });
 
   describe('#moveToCountry', function() {
-    it('should move armies from the from country to the to country', function() {
+    it('should move armies from the selected country to the given country', function() {
       var game = new Game(world);
       game.currentPlayer = player;
       game.selectedCountry = a;
@@ -44,7 +44,7 @@ describe('Game', function() {
       var result = game.moveToCountry(b);
 
       expect(result.selectedCountry).to.be.null;
-      expect(result.world).to.eql(world);
+      expect(result.world).to.equal(world);
       mock.verify();
     });
   });

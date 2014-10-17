@@ -56,19 +56,20 @@ Game.prototype.canSetCountry = function(country) {
 // otherwise.
 Game.prototype.canUnsetCountry = function(country) {
   return country !== null &&
-         country.player === this.currentPlayer &&
-         country === this.selectedCountry;
+    country.player === this.currentPlayer &&
+    country === this.selectedCountry;
 };
 
 // Returns true if the current player can move to a given country, false
 // otherwise.
 Game.prototype.canMoveToCountry = function(country) {
   return country !== null &&
-         this.currentPlayer !== null &&
-         country.player !== this.currentPlayer &&
-         this.selectedCountry !== null &&
-         this.selectedCountry.armies > 1 &&
-         this.selectedCountry.hasNeighbour(country);
+    this.currentPlayer !== null &&
+    country.player !== this.currentPlayer &&
+    this.selectedCountry !== null &&
+    this.selectedCountry.player === this.currentPlayer &&
+    this.selectedCountry.armies > 1 &&
+    this.selectedCountry.hasNeighbour(country);
 };
 
 // Selects a given player and returns a new game state.
