@@ -44,16 +44,41 @@ World.prototype.assignPlayers = function(players) {
   return F.set('countriesSet', countriesSet, this);
 };
 
-// Moves a given player's armies between two countries and returns a new
+// Moves to the `target` country from the `source` country and returns a new
 // world state.
-World.prototype.move = function(player, from, to) {
+World.prototype.move = function(s, t) {
   core.log('World#move');
 
-  var newFrom = F.set('armies', 1, from),
-      newTo   = F.copy(to, {player: from.player, armies: F.dec(from.armies)});
+  var u = F.set('armies', 1, s),
+      v = F.copy(t, {player: s.player, armies: F.dec(s.armies)});
 
   var countriesSet = this.countriesSet.withMutations(function(set) {
-    set.subtract([from, to]).union([newFrom, newTo]);
+    set.subtract([s, t]).union([u, v]);
+  });
+
+  return F.set('countriesSet', countriesSet, this);
+};
+
+// Attacks the `target` country from the `source` country and returns a new
+// world state.
+World.prototype.attack = function(s, t) {
+  core.log('World#attack');
+
+  var a = F.sum(core.rollDice(s.armies)),
+      b = F.sum(core.rollDice(t.armies));
+
+  var u, v;
+
+  if (a > b) {
+    u = F.set('armies', 1, s);
+    v = F.copy(t, {player: s.player, armies: F.dec(s.armies)});
+  } else {
+    u = F.set('armies', 1, s);
+    v = t;
+  }
+
+  var countriesSet = this.countriesSet.withMutations(function(set) {
+    set.subtract([s, t]).union([u, v]);
   });
 
   return F.set('countriesSet', countriesSet, this);

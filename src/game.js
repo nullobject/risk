@@ -104,12 +104,15 @@ Game.prototype.selectCountry = function(country) {
   }
 };
 
-// Moves armies from the selected country to a given country and returns a new
-// game state.
+// Moves to the target country from the selected country and returns a new game
+// state. If the target country is occupied then the invading armies will
+// attack.
 Game.prototype.moveToCountry = function(country) {
   core.log('Game#moveToCountry');
 
-  var world = this.world.move(this.currentPlayer, this.selectedCountry, country);
+  var world = country.player ?
+    this.world.attack(this.selectedCountry, country) :
+    this.world.move(this.selectedCountry, country);
 
   return F.copy(this, {
     selectedCountry: null,
