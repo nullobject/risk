@@ -1,4 +1,5 @@
 var path              = require('path'),
+    DefinePlugin      = require('webpack').DefinePlugin,
     ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
@@ -18,6 +19,10 @@ module.exports = {
     ]
   },
   plugins: [
+    new DefinePlugin({
+      DEVELOPMENT: process.env.NODE_ENV === 'development' || true,
+      PRODUCTION:  process.env.NODE_ENV === 'production' || false
+    }),
     new ExtractTextPlugin('style.css', {allChunks: true})
   ]
 };

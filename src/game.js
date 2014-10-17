@@ -71,10 +71,6 @@ Game.prototype.canMoveToCountry = function(country) {
          this.selectedCountry.hasNeighbour(country);
 };
 
-Game.prototype.isCountrySelected = function(country) {
-  return country === this.selectedCountry;
-};
-
 // Selects a given player and returns a new game state.
 Game.prototype.selectPlayer = function(player) {
   core.log('Game#selectPlayer');

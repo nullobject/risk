@@ -29,20 +29,24 @@ module.exports = React.createClass({
   render: function() {
     var game = this.props.game;
 
-    var players = game.players.map(function(player, index) {
-      return (
-        /* jshint ignore:start */
-        <li className={cx(this.classes(player))} key={index}>{game.armiesForPlayer(player)}</li>
-        /* jshint ignore:end */
-      );
-    }, this);
-
     core.log('PlayersComponent#render');
 
     return (
       /* jshint ignore:start */
-      <ul className="players">{players}</ul>
+      <ul className="players">{this.renderPlayers(game)}</ul>
       /* jshint ignore:end */
     );
-  }
+  },
+
+  renderPlayers: function(game) {
+    return game.players.map(this.renderPlayer(this.classes, game));
+  },
+
+  renderPlayer: F.curry(function(classes, game, player, index) {
+    return (
+      /* jshint ignore:start */
+      <li className={cx(classes(player))} key={index}>{game.armiesForPlayer(player)}</li>
+      /* jshint ignore:end */
+    );
+  }),
 });

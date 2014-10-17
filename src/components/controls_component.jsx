@@ -36,5 +36,5 @@ module.exports = React.createClass({
       </div>
       /* jshint ignore:end */
     );
-  }
+  },
 });
