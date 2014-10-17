@@ -1,9 +1,8 @@
 'use strict';
 
-var Copyable = require('./copyable'),
-    Player   = require('./player'),
-    core     = require('./core'),
-    fn       = require('fn.js');
+var core     = require('./core'),
+    F        = require('fkit'),
+    Player   = require('./player');
 
 // The number of players in the game.
 var PLAYERS = 5;
@@ -14,9 +13,7 @@ function Game(world) {
 
   if (a.length > 0) {
     // Create the players.
-    var players = core.range(PLAYERS).map(function(id) {
-      return Player(id);
-    });
+    var players = F.range(0, PLAYERS).map(Player);
 
     // Assign each player to a random country.
     world = world.assignPlayers(players);
@@ -28,16 +25,15 @@ function Game(world) {
   }
 }
 
-Game.prototype = new Copyable();
-
 Game.prototype.constructor = Game;
 
 // Returns the total number of armies for a given player.
 Game.prototype.armiesForPlayer = function(player) {
-  return this.world
-    .countriesOccupiedByPlayer(player)
-    .map(fn.prop('armies'))
-    .reduce(fn.op['+'], 0);
+  return F.sum(
+    this.world
+      .countriesOccupiedByPlayer(player)
+      .map(F.get('armies'))
+  );
 };
 
 // Returns true if a given player can be set, false otherwise.
@@ -85,7 +81,7 @@ Game.prototype.selectPlayer = function(player) {
 
   var world = this.currentPlayer ? this.world.reinforce(this.currentPlayer) : this.world;
 
-  return this.copy({
+  return F.copy(this, {
     currentPlayer:   player,
     selectedCountry: null,
     world:           world
@@ -96,24 +92,25 @@ Game.prototype.selectPlayer = function(player) {
 Game.prototype.selectCountry = function(country) {
   core.log('Game#selectCountry');
 
-  if (this.canMoveToCountry(country))
+  if (this.canMoveToCountry(country)) {
     return this.moveToCountry(country);
-  else if (this.canUnsetCountry(country))
-    return this.set('selectedCountry', null);
-  else if (this.canSetCountry(country))
-    return this.set('selectedCountry', country);
-  else
+  } else if (this.canUnsetCountry(country)) {
+    return F.set('selectedCountry', null, this);
+  } else if (this.canSetCountry(country)) {
+    return F.set('selectedCountry', country, this);
+  } else {
     return this;
+  }
 };
 
-// Moves armies from the selected country to a given country and returns a
-// new game state.
+// Moves armies from the selected country to a given country and returns a new
+// game state.
 Game.prototype.moveToCountry = function(country) {
   core.log('Game#moveToCountry');
 
   var world = this.world.move(this.currentPlayer, this.selectedCountry, country);
 
-  return this.copy({
+  return F.copy(this, {
     selectedCountry: null,
     world:           world
   });

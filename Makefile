@@ -1,10 +1,10 @@
-.PHONY: start production test list unit
+.PHONY: list production start test unit
 
 start:
-	@node_modules/.bin/beefy src/index.js:bundle.min.js --open -- -r react -t [ envify --NODE_ENV development ] -t reactify
+	@node_modules/.bin/webpack-dev-server --progress --colors
 
 production:
-	@node_modules/.bin/browserify src/index.js -r react --t reactify -g uglifyify -o bundle.min.js
+	@NODE_ENV=production ./node_modules/.bin/webpack --colors --progress -p
 
 test: unit lint
 

@@ -2,8 +2,8 @@
 
 'use strict';
 
-var React = require('react'),
-    core  = require('../core');
+var core  = require('../core'),
+    React = require('react');
 
 // Tile size.
 var TILE_COLS = 3,
@@ -18,20 +18,11 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    var hexgrid  = this.props.hexgrid,
-        hexagons = hexgrid.build([TILE_COLS, TILE_ROWS], [-0.5, -0.5]);
+    var hexgrid  = this.props.hexgrid;
 
     // Calculate the dimensions of the tile.
     var width  = hexgrid.width * 2,
         height = hexgrid.height * 2;
-
-    var polygons = hexagons.map(function(polygon, index) {
-      return (
-        /* jshint ignore:start */
-        <polygon key={index} points={polygon} />
-        /* jshint ignore:end */
-      );
-    });
 
     core.log('HexgridComponent#render');
 
@@ -40,12 +31,25 @@ module.exports = React.createClass({
       <g className={this.props.className}>
         <defs>
           <pattern id="tile" width={width} height={height} patternUnits="userSpaceOnUse">
-            {polygons}
+            {this.renderHexgrid(hexgrid)}
           </pattern>
         </defs>
         <rect width={this.props.width} height={this.props.height} fill="url(#tile)" />
       </g>
       /* jshint ignore:end */
     );
-  }
+  },
+
+  renderHexgrid: function(hexgrid) {
+    var hexagons = hexgrid.build([TILE_COLS, TILE_ROWS], [-0.5, -0.5]);
+    return hexagons.map(this.renderPolygon);
+  },
+
+  renderPolygon: function(polygon, index) {
+    return (
+      /* jshint ignore:start */
+      <polygon key={index} points={polygon} />
+      /* jshint ignore:end */
+    );
+  },
 });

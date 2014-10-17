@@ -2,9 +2,9 @@
 
 'use strict';
 
-var Bacon = require('baconjs').Bacon,
-    React = require('react'),
-    core  = require('../core');
+var core  = require('../core'),
+    Bacon = require('baconjs'),
+    React = require('react');
 
 module.exports = React.createClass({
   displayName: 'ControlsComponent',
@@ -36,5 +36,5 @@ module.exports = React.createClass({
       </div>
       /* jshint ignore:end */
     );
-  }
+  },
 });

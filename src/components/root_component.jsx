@@ -2,13 +2,14 @@
 
 'use strict';
 
-var Bacon             = require('baconjs').Bacon,
-    ControlsComponent = require('./controls_component.jsx'),
-    GameComponent     = require('./game_component.jsx'),
-    HexgridComponent  = require('./hexgrid_component.jsx'),
-    PlayersComponent  = require('./players_component.jsx'),
-    React             = require('react'),
-    core              = require('../core');
+var core  = require('../core'),
+    Bacon = require('baconjs'),
+    React = require('react');
+
+var ControlsComponent = require('./controls_component'),
+    GameComponent     = require('./game_component'),
+    HexgridComponent  = require('./hexgrid_component'),
+    PlayersComponent  = require('./players_component');
 
 module.exports = React.createClass({
   displayName: 'RootComponent',
@@ -24,7 +25,8 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    var game = this.props.game;
+    var stream = this.props.stream,
+        game   = this.props.game;
 
     core.log('RootComponent#render');
 
@@ -34,11 +36,11 @@ module.exports = React.createClass({
         <PlayersComponent currentPlayer={game.currentPlayer} game={game} />
         <svg width={game.world.width} height={game.world.height}>
           <HexgridComponent width={game.world.width} height={game.world.height} hexgrid={game.world.hexgrid} />
-          <GameComponent stream={this.props.stream} game={game} debug={true} />
+          <GameComponent stream={stream} game={game} />
         </svg>
-        <ControlsComponent currentPlayer={game.currentPlayer} stream={this.props.stream} />
+        <ControlsComponent currentPlayer={game.currentPlayer} stream={stream} />
       </div>
       /* jshint ignore:end */
     );
-  }
+  },
 });

@@ -1,8 +1,12 @@
 'use strict';
 
-var Point   = require('./point'),
-    Polygon = require('./polygon'),
-    core    = require('../core');
+var F       = require('fkit'),
+    Point   = require('./point'),
+    Polygon = require('./polygon');
+
+function degreesToRadians(degrees) {
+  return degrees * Math.PI / 180;
+}
 
 // Calculates the position of a hexagon at a given coordinate.
 function calculatePosition(coordinate, width, height) {
@@ -34,19 +38,19 @@ module.exports = function(radius) {
   var padding = 0;
 
   // Precalculate values.
-  var r = radius * Math.cos(core.degreesToRadians(30)),
-      h = radius * Math.sin(core.degreesToRadians(30)),
-      d = padding / 2 / Math.tan(core.degreesToRadians(30));
+  var r = radius * Math.cos(degreesToRadians(30)),
+      h = radius * Math.sin(degreesToRadians(30)),
+      d = padding / 2 / Math.tan(degreesToRadians(30));
 
   // Calculate the dimensions of a hexagon.
   var width  = (2 * r) + padding,
       height = radius + h + d;
 
   // Calculates the vertices of a hexagon at a given coordinate.
-  var hexagonVertices = function(origin, coordinate) {
+  var hexagonVertices = F.curry(function(origin, coordinate) {
     var position = calculatePosition(coordinate, width, height);
     return calculateVertices(origin.add(position), r, h, radius);
-  };
+  });
 
   return {
     width:  width,
@@ -55,22 +59,14 @@ module.exports = function(radius) {
     // Returns an array of polygons which represent a hexgrid of a given size (rows
     // & cols).
     build: function(size, offset) {
-      var cols = size[0],
-          rows = size[1];
-
       // Generate the coordinates of the cells in the hexgrid.
-      var coordinates = core.cartesianProduct(core.range(cols), core.range(rows));
+      var coordinates = F.cartesian(F.range(0, size[0]), F.range(0, size[1]));
 
       // Calculate the origin of the hexgrid.
-      var origin = Point(
-        width * offset[0],
-        height * offset[1]
-      );
+      var origin = Point(width * offset[0], height * offset[1]);
 
       // Create haxagons for every coordinate.
-      return coordinates.map(function(coordinate) {
-        return Polygon(hexagonVertices(origin, coordinate));
-      });
+      return coordinates.map(F.compose(Polygon, hexagonVertices(origin)));
     },
 
     // Returns the number of hexgrid cells which fit in a rect of the given size.

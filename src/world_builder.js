@@ -1,13 +1,12 @@
 'use strict';
 
 var Country = require('./country'),
+    F       = require('fkit'),
     Hexgrid = require('./geom/hexgrid'),
     Point   = require('./geom/point'),
     Polygon = require('./geom/polygon'),
     Voronoi = require('../lib/voronoi'),
-    World   = require('./world'),
-    core    = require('./core'),
-    fn      = require('fn.js');
+    World   = require('./world');
 
 // Hexgrid cell size.
 var CELL_SIZE = 8;
@@ -32,7 +31,7 @@ function verticesForCell(cell) {
 }
 
 // Returns the polygon for a given cell.
-var polygonForCell = fn.compose(Polygon, verticesForCell);
+var polygonForCell = F.compose(Polygon, verticesForCell);
 
 // Calculates the Voronoi diagram for a given set of sites using a tessellation
 // function. A number of Lloyd relaxations will also be applied to the
@@ -44,7 +43,7 @@ function calculateDiagram(t, sites, relaxations) {
   var diagram = t(sites);
 
   // Apply a number of relaxations to the Voronoi diagram.
-  return core.range(relaxations).reduce(function(diagram) {
+  return F.range(0, relaxations).reduce(function(diagram) {
     // Calculate the new sites from the centroids of the cells.
     var sites = diagram.cells.map(function(cell) {
       return polygonForCell(cell).centroid();
@@ -84,9 +83,7 @@ function calculateCountries(hexagons, diagram) {
 
 // Returns the cells neighbouring a given cell.
 function neighbouringCells(cell, diagram) {
-  return cell.getNeighborIds().map(function(id) {
-    return diagram.cells[id];
-  });
+  return cell.getNeighborIds().map(F.flip(F.get, diagram.cells));
 }
 
 // Returns a new world with the given width and height.
@@ -105,8 +102,8 @@ module.exports = function(width, height) {
   };
 
   // Generate a set of random "seed" sites within the clipping region.
-  var sites = core.range(SEEDS).map(function() {
-    return Point(core.randomFloat(0, width), core.randomFloat(0, height));
+  var sites = F.range(0, SEEDS).map(function() {
+    return Point(F.randomFloat(0, width), F.randomFloat(0, height));
   });
 
   // Calculate the Voronoi diagram.

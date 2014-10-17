@@ -1,4 +1,6 @@
 {
+  "expr": true,
   "newcap": false,
-  "node": true
+  "node": true,
+  "predef": ["context", "describe", "it", "expect", "sinon", "beforeEach", "DEVELOPMENT", "PRODUCTION"]
 }
