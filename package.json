@@ -5,10 +5,7 @@
   "homepage": "https://github.com/nullobject/hexgrid",
   "author": "Josh Bassett <josh.bassett@gmail.com> (http://joshbassett.info)",
   "license": "MIT",
-  "main": "index.js",
-  "directories": {
-    "test": "test"
-  },
+  "private": true,
   "scripts": {
     "test": "mocha"
   },
