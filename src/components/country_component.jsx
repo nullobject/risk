@@ -35,7 +35,6 @@ module.exports = React.createClass({
   },
 
   shouldComponentUpdate: function(nextProps, nextState) {
-    // Don't update the component if the props haven't changed.
     return nextProps.country !== this.props.country ||
       nextProps.nearby !== this.props.nearby ||
       nextProps.selected !== this.props.selected;
