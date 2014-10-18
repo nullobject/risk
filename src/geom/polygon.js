@@ -1,7 +1,8 @@
 'use strict';
 
-var Point   = require('./point'),
-    clipper = require('../../lib/clipper');
+var clipper = require('../../lib/clipper'),
+    F       = require('fkit'),
+    Point   = require('./point');
 
 var SCALE = 100;
 
@@ -29,14 +30,20 @@ function toPolygon(path) {
 
 // Returns a new polygon with the given vertices.
 var Polygon = function(vertices) {
+  var centroid;
+
   return {
     vertices: vertices,
 
     // Returns the centroid of the polygon.
     centroid: function() {
-      return this.vertices.reduce(function(sum, vertex) {
-        return sum.add(vertex);
-      }, Point.zero()).divide(this.vertices.length);
+      if (centroid === undefined) {
+        centroid = this.vertices.reduce(function(sum, vertex) {
+          return sum.add(vertex);
+        }, Point.zero()).divide(this.vertices.length);
+      }
+
+      return centroid;
     },
 
     // Returns true if the polygon contains a given point.
@@ -106,5 +113,13 @@ Polygon.merge = function(polygons) {
   // Return a new polygon.
   return toPolygon(solutionPaths[0]);
 };
+
+// Compares the distance of `a` and `b` to polygon `p`.
+Polygon.distanceComparator = F.curry(function(p, a, b) {
+  var da = a.centroid().distance(p.centroid()),
+      db = b.centroid().distance(p.centroid());
+
+  return F.compare(da, db);
+});
 
 module.exports = Polygon;
