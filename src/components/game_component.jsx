@@ -68,6 +68,6 @@ module.exports = React.createClass({
       /* jshint ignore:start */
       <PathsComponent className="voronoi" paths={game.world.cells} />
       /* jshint ignore:end */
-    ) : '';
+    ) : null;
   },
 });

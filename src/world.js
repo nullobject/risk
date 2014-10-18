@@ -4,6 +4,13 @@ var core      = require('./core'),
     F         = require('fkit'),
     Immutable = require('immutable');
 
+// Replaces `as` with `bs` in the set `c`.
+var replace = F.curry(function(as, bs, c) {
+  return c.withMutations(function(set) {
+    set.subtract(as).union(bs);
+  });
+});
+
 // Returns a new world.
 function World(width, height, hexgrid, countries, cells) {
   var a = arguments;
@@ -31,17 +38,16 @@ World.prototype.countriesOccupiedByPlayer = function(player) {
 // Assigns the given players to random countries and returns a new world
 // state.
 World.prototype.assignPlayers = function(players) {
-  var playerCountries = F.sample(players.length, this.countries);
+  var as = F.sample(players.length, this.countries);
 
-  var newPlayerCountries = playerCountries.map(function(country, index) {
-    return F.set('player', players[index], country);
+  var bs = as.map(function(country, index) {
+    return F.copy(country, {
+      player: players[index],
+      armies: 2
+    });
   });
 
-  var countriesSet = this.countriesSet.withMutations(function(set) {
-    set.subtract(playerCountries).union(newPlayerCountries);
-  });
-
-  return F.set('countriesSet', countriesSet, this);
+  return F.update('countriesSet', replace(as, bs), this);
 };
 
 // Moves to the `target` country from the `source` country and returns a new
@@ -52,11 +58,7 @@ World.prototype.move = function(s, t) {
   var u = F.set('armies', 1, s),
       v = F.copy(t, {player: s.player, armies: F.dec(s.armies)});
 
-  var countriesSet = this.countriesSet.withMutations(function(set) {
-    set.subtract([s, t]).union([u, v]);
-  });
-
-  return F.set('countriesSet', countriesSet, this);
+  return F.update('countriesSet', replace([s, t], [u, v]), this);
 };
 
 // Attacks the `target` country from the `source` country and returns a new
@@ -64,24 +66,18 @@ World.prototype.move = function(s, t) {
 World.prototype.attack = function(s, t) {
   core.log('World#attack');
 
-  var a = F.sum(core.rollDice(s.armies)),
-      b = F.sum(core.rollDice(t.armies));
+  var attackDice = core.rollDice(s.armies),
+      defendDice = core.rollDice(t.armies),
+      attack     = F.sum(attackDice),
+      defend     = F.sum(defendDice);
 
-  var u, v;
+  var u = F.set('armies', 1, s);
 
-  if (a > b) {
-    u = F.set('armies', 1, s);
-    v = F.copy(t, {player: s.player, armies: F.dec(s.armies)});
-  } else {
-    u = F.set('armies', 1, s);
-    v = t;
-  }
+  var v = attack > defend ?
+    F.copy(t, {player: s.player, armies: F.dec(s.armies)}) :
+    t;
 
-  var countriesSet = this.countriesSet.withMutations(function(set) {
-    set.subtract([s, t]).union([u, v]);
-  });
-
-  return F.set('countriesSet', countriesSet, this);
+  return F.update('countriesSet', replace([s, t], [u, v]), this);
 };
 
 // Reinforces the countries occupied by the given player and returns a new
@@ -89,15 +85,13 @@ World.prototype.attack = function(s, t) {
 World.prototype.reinforce = function(player) {
   core.log('World#reinforce');
 
-  var playerCountries = this.countriesOccupiedByPlayer(player);
+  var as = this.countriesOccupiedByPlayer(player);
 
-  var newPlayerCountries = playerCountries.map(F.update('armies', F.inc));
-
-  var countriesSet = this.countriesSet.withMutations(function(set) {
-    set.subtract(playerCountries).union(newPlayerCountries);
+  var bs = as.map(function(country) {
+    return country.reinforce();
   });
 
-  return F.set('countriesSet', countriesSet, this);
+  return F.update('countriesSet', replace(as, bs), this);
 };
 
 module.exports = World;
