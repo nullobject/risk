@@ -1,16 +1,18 @@
 'use strict';
 
-var Immutable = require('immutable');
+var F         = require('fkit'),
+    Immutable = require('immutable');
 
 // Returns a new country.
-function Country(id, neighbourIds, polygon) {
+function Country(id, neighbourIds, polygon, slots) {
   var a = arguments;
 
   if (a.length > 0) {
     this.id              = id;
     this.neighbourIdsSet = Immutable.Set.from(neighbourIds);
     this.polygon         = polygon;
-    this.armies          = 2;
+    this.slots           = slots;
+    this.armies          = 0;
     this.player          = null;
   }
 }
@@ -28,6 +30,11 @@ Country.prototype.hashCode = function() {
 
 Country.prototype.toString = function() {
   return 'country-' + this.id;
+};
+
+Country.prototype.reinforce = function() {
+  var armies = F.min(this.slots.length, F.inc(this.armies));
+  return F.set('armies', armies, this);
 };
 
 module.exports = Country;

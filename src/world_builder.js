@@ -57,6 +57,20 @@ function calculateDiagram(t, sites, relaxations) {
   }, diagram);
 }
 
+function calculateSlots(hexagons, polygon) {
+  // Sort hexagons by distance to the polygon centroid.
+  hexagons.sort(Polygon.distanceComparator(polygon));
+
+  var centreHexagon = F.head(hexagons);
+
+  // Sort hexagons by distance to the centre polygon.
+  hexagons.sort(Polygon.distanceComparator(centreHexagon));
+
+  return F.take(7, hexagons).map(function(p) {
+    return p.offset(COUNTRY_POLYGON_OFFSET);
+  });
+}
+
 // Merges the given set of hexagons inside the Voronoi cells into countries.
 function calculateCountries(hexagons, diagram) {
   return diagram.cells.map(function(cell) {
@@ -76,14 +90,28 @@ function calculateCountries(hexagons, diagram) {
       return neighbour.site.voronoiId;
     });
 
+    // Calculate the slots for the country.
+    var slots = calculateSlots(innerHexagons, polygon);
+
     // Return a new country.
-    return new Country(cell.site.voronoiId, neighbourIds, polygon.offset(COUNTRY_POLYGON_OFFSET));
+    return new Country(cell.site.voronoiId, neighbourIds, polygon.offset(COUNTRY_POLYGON_OFFSET), slots);
   });
 }
 
 // Returns the cells neighbouring a given cell.
 function neighbouringCells(cell, diagram) {
   return cell.getNeighborIds().map(F.flip(F.get, diagram.cells));
+}
+
+function tessellationFunction(width, height) {
+  var voronoi = new Voronoi(),
+      box     = {xl:0, xr:width, yt:0, yb:height};
+
+  return function(points) {
+    var diagram = voronoi.compute(points, box);
+    diagram.recycle = function() { voronoi.recycle(diagram); };
+    return diagram;
+  };
 }
 
 // Returns a new world with the given width and height.
@@ -93,13 +121,7 @@ module.exports = function(width, height) {
       hexagons = hexgrid.build(size, [1.0, 0.5]);
 
   // Create a Voronoi tessellation function.
-  var voronoi = new Voronoi();
-  var box = {xl:0, xr:width, yt:0, yb:height};
-  var t = function(points) {
-    var diagram = voronoi.compute(points, box);
-    diagram.recycle = function() { voronoi.recycle(diagram); };
-    return diagram;
-  };
+  var t = tessellationFunction(width, height);
 
   // Generate a set of random "seed" sites within the clipping region.
   var sites = F.range(0, SEEDS).map(function() {

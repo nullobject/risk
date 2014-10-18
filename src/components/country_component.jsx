@@ -35,10 +35,9 @@ module.exports = React.createClass({
   },
 
   shouldComponentUpdate: function(nextProps, nextState) {
-    // Don't update the component if the props haven't changed.
     return nextProps.country !== this.props.country ||
-           nextProps.nearby !== this.props.nearby ||
-           nextProps.selected !== this.props.selected;
+      nextProps.nearby !== this.props.nearby ||
+      nextProps.selected !== this.props.selected;
   },
 
   render: function() {
@@ -48,12 +47,32 @@ module.exports = React.createClass({
 
     return (
       /* jshint ignore:start */
-      <polygon
-        className={cx(this.classes())}
-        points={country.polygon}
-        onClick={this.didSelectCountry.bind(this, country)}
-      />
+      <g>
+        <polygon
+          className={cx(this.classes())}
+          points={country.polygon}
+          onClick={this.didSelectCountry.bind(this, country)}
+        />
+        {this.renderSlots(country)}
+      </g>
       /* jshint ignore:end */
     );
   },
+
+  renderSlots: function(country) {
+    return country.slots.map(this.renderSlot(country));
+  },
+
+  renderSlot: F.curry(function(country, polygon, index) {
+    var classes = {
+      selected: index < country.armies,
+      slot:     true
+    };
+
+    return (
+      /* jshint ignore:start */
+      <polygon className={cx(classes)} key={index} points={polygon} />
+      /* jshint ignore:end */
+    );
+  }),
 });

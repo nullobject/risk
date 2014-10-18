@@ -22,8 +22,8 @@ module.exports = React.createClass({
   },
 
   shouldComponentUpdate: function(nextProps, nextState) {
-    // Don't update the component if the props haven't changed.
-    return nextProps.currentPlayer !== this.props.currentPlayer;
+    return nextProps.currentPlayer !== this.props.currentPlayer ||
+      nextProps.game.world !== this.props.game.world;
   },
 
   render: function() {

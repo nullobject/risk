@@ -22,7 +22,6 @@ module.exports = React.createClass({
   },
 
   shouldComponentUpdate: function(nextProps, nextState) {
-    // Don't update the component if the props haven't changed.
     return nextProps.game !== this.props.game;
   },
 
@@ -68,6 +67,6 @@ module.exports = React.createClass({
       /* jshint ignore:start */
       <PathsComponent className="voronoi" paths={game.world.cells} />
       /* jshint ignore:end */
-    ) : '';
+    ) : null;
   },
 });
