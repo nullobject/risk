@@ -32,9 +32,9 @@ Country.prototype.toString = function() {
   return 'country-' + this.id;
 };
 
-Country.prototype.reinforce = function() {
-  var armies = F.min(this.slots.length, F.inc(this.armies));
-  return F.set('armies', armies, this);
+Country.prototype.reinforce = function(n) {
+  var f = F.compose(F.min(this.slots.length), F.add(n));
+  return F.update('armies', f, this);
 };
 
 module.exports = Country;

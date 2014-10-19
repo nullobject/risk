@@ -40,7 +40,7 @@ function GameController(options) {
   // players.
   var playerProperty = this.bus
     .ofType('end-turn')
-    .scan(0, function(index, event) { return (index + 1) % game.players.length; })
+    .scan(0, function(index, _) { return (index + 1) % game.players.length; })
     .map(F.flip(F.get, game.players));
 
   // The country property handles 'select-country' events to provide the

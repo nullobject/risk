@@ -19,9 +19,12 @@ var SEEDS = 30;
 // relaxations will result in countries more uniform in shape and size.
 var RELAXATIONS = 2;
 
-// The number of pixels to offset the country polygons. This allows them to be
+// The number of pixels to inset the country polygons. This allows them to be
 // rendered with fat borders.
-var COUNTRY_POLYGON_OFFSET = -2;
+var COUNTRY_POLYGON_INSET = 2;
+
+// The number of pixels to inset the slot polygons.
+var SLOT_POLYGON_INSET = 2;
 
 // Returns the vertices for a given cell.
 function verticesForCell(cell) {
@@ -57,18 +60,14 @@ function calculateDiagram(t, sites, relaxations) {
   }, diagram);
 }
 
-function calculateSlots(hexagons, polygon) {
-  // Sort hexagons by distance to the polygon centroid.
-  hexagons.sort(Polygon.distanceComparator(polygon));
+function calculateSlots(n, hexagons, polygon) {
+  // Calculate the hexagon in the centre of the polygon.
+  var centreHexagon = F.head(F.sortBy(Polygon.distanceComparator(polygon), hexagons));
 
-  var centreHexagon = F.head(hexagons);
+  // Calculate the `n` hexagons in centre of the polygon.
+  var centreHexagons = F.take(n, F.sortBy(Polygon.distanceComparator(centreHexagon), hexagons));
 
-  // Sort hexagons by distance to the centre polygon.
-  hexagons.sort(Polygon.distanceComparator(centreHexagon));
-
-  return F.take(7, hexagons).map(function(p) {
-    return p.offset(COUNTRY_POLYGON_OFFSET);
-  });
+  return centreHexagons.map(F.applyProp('offset', -SLOT_POLYGON_INSET));
 }
 
 // Merges the given set of hexagons inside the Voronoi cells into countries.
@@ -91,10 +90,15 @@ function calculateCountries(hexagons, diagram) {
     });
 
     // Calculate the slots for the country.
-    var slots = calculateSlots(innerHexagons, polygon);
+    var slots = calculateSlots(7, innerHexagons, polygon);
 
     // Return a new country.
-    return new Country(cell.site.voronoiId, neighbourIds, polygon.offset(COUNTRY_POLYGON_OFFSET), slots);
+    return new Country(
+      cell.site.voronoiId,
+      neighbourIds,
+      polygon.offset(-COUNTRY_POLYGON_INSET),
+      slots
+    );
   });
 }
 
@@ -105,7 +109,7 @@ function neighbouringCells(cell, diagram) {
 
 function tessellationFunction(width, height) {
   var voronoi = new Voronoi(),
-      box     = {xl:0, xr:width, yt:0, yb:height};
+      box = {xl:0, xr:width, yt:0, yb:height};
 
   return function(points) {
     var diagram = voronoi.compute(points, box);
@@ -137,6 +141,5 @@ module.exports = function(width, height) {
   // Calculate the Voronoi cells for debugging.
   var cells = diagram.cells.map(verticesForCell);
 
-  // Return a new world.
   return new World(width, height, hexgrid, countries, cells);
 };

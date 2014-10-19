@@ -85,11 +85,8 @@ World.prototype.attack = function(s, t) {
 World.prototype.reinforce = function(player) {
   core.log('World#reinforce');
 
-  var as = this.countriesOccupiedByPlayer(player);
-
-  var bs = as.map(function(country) {
-    return country.reinforce();
-  });
+  var as = this.countriesOccupiedByPlayer(player),
+      bs = as.map(F.applyProp('reinforce', 1));
 
   return F.update('countriesSet', replace(as, bs), this);
 };

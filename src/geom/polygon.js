@@ -21,7 +21,7 @@ function toPath(polygon) {
 function toPolygon(path) {
   clipper.JS.ScaleDownPath(path, SCALE);
 
-  var vertices = path.map(function toPoint(vertex) {
+  var vertices = path.map(function(vertex) {
     return Point(vertex.X, vertex.Y);
   });
 
@@ -30,12 +30,13 @@ function toPolygon(path) {
 
 // Returns a new polygon with the given vertices.
 var Polygon = function(vertices) {
+  // Cache the centroid.
   var centroid;
 
   return {
     vertices: vertices,
 
-    // Returns the centroid of the polygon.
+    // Calculates the centroid of the polygon.
     centroid: function() {
       if (centroid === undefined) {
         centroid = this.vertices.reduce(function(sum, vertex) {
@@ -60,9 +61,7 @@ var Polygon = function(vertices) {
 
         var intersect = ((yi > point.y) != (yj > point.y)) && (point.x < (xj - xi) * (point.y - yi) / (yj - yi) + xi);
 
-        if (intersect) {
-          inside = !inside;
-        }
+        if (intersect) { inside = !inside; }
       }
 
       return inside;
@@ -114,7 +113,7 @@ Polygon.merge = function(polygons) {
   return toPolygon(solutionPaths[0]);
 };
 
-// Compares the distance of `a` and `b` to polygon `p`.
+// Compares the distance of `a` and `b` to the polygon `p`.
 Polygon.distanceComparator = F.curry(function(p, a, b) {
   var da = a.centroid().distance(p.centroid()),
       db = b.centroid().distance(p.centroid());
