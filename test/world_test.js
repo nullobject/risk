@@ -18,25 +18,29 @@ function comparator(a) {
   return F.compose(F.eq(a.id), F.get('id'));
 }
 
+var find = F.variadic(function(as, bs) {
+  return bs.map(function(b) { return F.find(comparator(b), as); });
+});
+
+function move(world, s, t) {
+  var result = world.move(s, t);
+  return find(result.countries, s, t);
+}
+
 function attack(world, s, t) {
   var result = world.attack(s, t);
-
-  var u = F.find(comparator(s), result.countries),
-      v = F.find(comparator(t), result.countries);
-
-  return [u, v];
+  return find(result.countries, s, t);
 }
 
 describe('World', function() {
-  var sandbox, world;
+  var sandbox, world, u, v;
 
   // Player stubs.
-  var a = {},
-      b = {};
+  var a = {}, b = {};
 
   // Country stubs.
-  var s = {id: 1, player: a, armies: 4},
-      t = {id: 2, player: b, armies: 2};
+  var s = {id: 1, player: a, armies: 4, slots: F.array(4)},
+      t = {id: 2, player: b, armies: 2, slots: F.array(2)};
 
   beforeEach(function() {
     sandbox = sinon.sandbox.create();
@@ -48,22 +52,25 @@ describe('World', function() {
   });
 
   describe('#move', function() {
-    it('should move to the target country', function() {
-      var result = attack(world, s, t),
-          u      = result[0],
-          v      = result[1];
+    beforeEach(function() {
+      var result = move(world, s, t);
 
+      u = result[0];
+      v = result[1];
+    });
+
+    it('should move to the target country', function() {
       expect(u.player).to.equal(a);
       expect(v.player).to.equal(a);
+    });
 
-      expect(u.armies).to.equal(1);
-      expect(v.armies).to.equal(3);
+    it('should distribute the armies', function() {
+      expect(u.armies).to.equal(2);
+      expect(v.armies).to.equal(2);
     });
   });
 
   describe('#attack', function() {
-    var u, v;
-
     context('when the attacker rolls higher than the defender', function() {
       beforeEach(function() {
         stubRollDice(sandbox, [3, 4], [1, 2]);
@@ -80,14 +87,12 @@ describe('World', function() {
       });
 
       it('should distribute the armies', function() {
-        expect(u.armies).to.equal(1);
-        expect(v.armies).to.equal(3);
+        expect(u.armies).to.equal(2);
+        expect(v.armies).to.equal(2);
       });
     });
 
-    context('when the attacker rolls lower than the defender', function() {
-      var u, v;
-
+    context('when the defender rolls higher than the attacker', function() {
       beforeEach(function() {
         stubRollDice(sandbox, [1, 2], [3, 4]);
 
@@ -104,7 +109,7 @@ describe('World', function() {
 
       it('should update the armies', function() {
         expect(u.armies).to.equal(1);
-        expect(v.armies).to.equal(2);
+        expect(v.armies).to.equal(1);
       });
     });
   });

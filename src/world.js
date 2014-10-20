@@ -4,13 +4,6 @@ var core      = require('./core'),
     F         = require('fkit'),
     Immutable = require('immutable');
 
-// Replaces `as` with `bs` in the set `c`.
-var replace = F.curry(function(as, bs, c) {
-  return c.withMutations(function(set) {
-    set.subtract(as).union(bs);
-  });
-});
-
 // Returns a new world.
 function World(width, height, hexgrid, countries, cells) {
   var a = arguments;
@@ -47,7 +40,7 @@ World.prototype.assignPlayers = function(players) {
     });
   });
 
-  return F.update('countriesSet', replace(as, bs), this);
+  return F.update('countriesSet', core.replace(as, bs), this);
 };
 
 // Moves to the `target` country from the `source` country and returns a new
@@ -55,10 +48,11 @@ World.prototype.assignPlayers = function(players) {
 World.prototype.move = function(s, t) {
   core.log('World#move');
 
-  var u = F.set('armies', 1, s),
-      v = F.copy(t, {player: s.player, armies: F.dec(s.armies)});
+  var n = F.min(s.armies - 1, t.slots.length),
+      u = F.set('armies', s.armies - n, s),
+      v = F.copy(t, {armies: n, player: s.player});
 
-  return F.update('countriesSet', replace([s, t], [u, v]), this);
+  return F.update('countriesSet', core.replace([s, t], [u, v]), this);
 };
 
 // Attacks the `target` country from the `source` country and returns a new
@@ -71,14 +65,25 @@ World.prototype.attack = function(s, t) {
       attack     = F.sum(attackDice),
       defend     = F.sum(defendDice);
 
-  var u = F.set('armies', 1, s);
+  var u, v;
 
-  var v = attack > defend ?
-    F.copy(t, {player: s.player, armies: F.dec(s.armies)}) :
-    t;
+  if (attack > defend) {
+    var n = F.min(s.armies - 1, t.slots.length);
+    u = F.set('armies', s.armies - n, s);
+    v = F.copy(t, {armies: n, player: s.player});
+  } else {
+    u = F.set('armies', 1, s);
+    v = F.set('armies', 1, t);
+  }
 
-  return F.update('countriesSet', replace([s, t], [u, v]), this);
+  return F.update('countriesSet', core.replace([s, t], [u, v]), this);
 };
+
+// Distributes `n` armies to the list of `countries`.
+// TODO: If some countries have no slots available then distribute the armies.
+function distributeArmies(n, countries) {
+  return countries.map(F.applyMethod('reinforce', 1));
+}
 
 // Reinforces the countries occupied by the given player and returns a new
 // world state.
@@ -86,9 +91,9 @@ World.prototype.reinforce = function(player) {
   core.log('World#reinforce');
 
   var as = this.countriesOccupiedByPlayer(player),
-      bs = as.map(F.applyProp('reinforce', 1));
+      bs = distributeArmies(as.length, as);
 
-  return F.update('countriesSet', replace(as, bs), this);
+  return F.update('countriesSet', core.replace(as, bs), this);
 };
 
 module.exports = World;

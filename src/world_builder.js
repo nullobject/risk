@@ -26,6 +26,9 @@ var COUNTRY_POLYGON_INSET = 2;
 // The number of pixels to inset the slot polygons.
 var SLOT_POLYGON_INSET = 2;
 
+// The minimum number of slots a country can have.
+var MIN_SLOTS = 5;
+
 // Returns the vertices for a given cell.
 function verticesForCell(cell) {
   return cell.halfedges.map(function(halfedge) {
@@ -60,14 +63,23 @@ function calculateDiagram(t, sites, relaxations) {
   }, diagram);
 }
 
-function calculateSlots(n, hexagons, polygon) {
+// Returns the cells neighbouring a given cell.
+function neighbouringCells(cell, diagram) {
+  var cellWithId = F.flip(F.get, diagram.cells);
+  return cell.getNeighborIds().map(cellWithId);
+}
+
+function calculateSlots(hexagons, polygon) {
+  // Calculate the number of slots in the country.
+  var n = F.max(MIN_SLOTS, Math.sqrt(hexagons.length));
+
   // Calculate the hexagon in the centre of the polygon.
   var centreHexagon = F.head(F.sortBy(Polygon.distanceComparator(polygon), hexagons));
 
   // Calculate the `n` hexagons in centre of the polygon.
   var centreHexagons = F.take(n, F.sortBy(Polygon.distanceComparator(centreHexagon), hexagons));
 
-  return centreHexagons.map(F.applyProp('offset', -SLOT_POLYGON_INSET));
+  return centreHexagons.map(F.applyMethod('offset', -SLOT_POLYGON_INSET));
 }
 
 // Merges the given set of hexagons inside the Voronoi cells into countries.
@@ -90,7 +102,7 @@ function calculateCountries(hexagons, diagram) {
     });
 
     // Calculate the slots for the country.
-    var slots = calculateSlots(7, innerHexagons, polygon);
+    var slots = calculateSlots(innerHexagons, polygon);
 
     // Return a new country.
     return new Country(
@@ -100,11 +112,6 @@ function calculateCountries(hexagons, diagram) {
       slots
     );
   });
-}
-
-// Returns the cells neighbouring a given cell.
-function neighbouringCells(cell, diagram) {
-  return cell.getNeighborIds().map(F.flip(F.get, diagram.cells));
 }
 
 function tessellationFunction(width, height) {

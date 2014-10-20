@@ -1,7 +1,7 @@
 .PHONY: list production start test unit
 
 start:
-	@node_modules/.bin/webpack-dev-server --progress --colors
+	@node_modules/.bin/webpack-dev-server --colors -d
 
 production:
 	@NODE_ENV=production ./node_modules/.bin/webpack --colors --progress -p

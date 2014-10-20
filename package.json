@@ -24,7 +24,7 @@
     "jsx-loader": "^0.11.2",
     "less": "^1.7.5",
     "less-loader": "^0.7.7",
-    "mocha": "^1.20.1",
+    "mocha": "^2.0.1",
     "rewire": "^2.1.0",
     "sinon": "^1.10.0",
     "sinon-chai": "^2.5.0",
@@ -34,8 +34,8 @@
   },
   "dependencies": {
     "baconjs": "^0.7.23",
-    "fkit": "^0.13.0",
-    "immutable": "^2.3.2",
+    "fkit": "^0.14.0",
+    "immutable": "^2.6.1",
     "normalize.css": "^3.0.1",
     "react": "^0.11.0"
   }
