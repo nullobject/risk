@@ -33,18 +33,19 @@ function attack(world, s, t) {
 }
 
 describe('World', function() {
-  var sandbox, world, u, v;
+  var sandbox, world, x, y;
 
   // Player stubs.
   var a = {}, b = {};
 
   // Country stubs.
   var s = {id: 1, player: a, armies: 4, slots: F.array(4)},
-      t = {id: 2, player: b, armies: 2, slots: F.array(2)};
+      t = {id: 2, player: b, armies: 2, slots: F.array(2)},
+      u = {id: 3, player: a, armies: 1, slots: F.array(2)};
 
   beforeEach(function() {
     sandbox = sinon.sandbox.create();
-    world = new World(800, 600, {}, [s, t], []);
+    world = new World(800, 600, {}, [s, t, u], []);
   });
 
   afterEach(function() {
@@ -55,18 +56,18 @@ describe('World', function() {
     beforeEach(function() {
       var result = move(world, s, t);
 
-      u = result[0];
-      v = result[1];
+      x = result[0];
+      y = result[1];
     });
 
     it('should move to the target country', function() {
-      expect(u.player).to.equal(a);
-      expect(v.player).to.equal(a);
+      expect(x.player).to.equal(a);
+      expect(y.player).to.equal(a);
     });
 
     it('should distribute the armies', function() {
-      expect(u.armies).to.equal(2);
-      expect(v.armies).to.equal(2);
+      expect(x.armies).to.equal(2);
+      expect(y.armies).to.equal(2);
     });
   });
 
@@ -77,18 +78,18 @@ describe('World', function() {
 
         var result = attack(world, s, t);
 
-        u = result[0];
-        v = result[1];
+        x = result[0];
+        y = result[1];
       });
 
       it('should move the attacker to target country', function() {
-        expect(u.player).to.equal(a);
-        expect(v.player).to.equal(a);
+        expect(x.player).to.equal(a);
+        expect(y.player).to.equal(a);
       });
 
       it('should distribute the armies', function() {
-        expect(u.armies).to.equal(2);
-        expect(v.armies).to.equal(2);
+        expect(x.armies).to.equal(2);
+        expect(y.armies).to.equal(2);
       });
     });
 
@@ -98,19 +99,31 @@ describe('World', function() {
 
         var result = attack(world, s, t);
 
-        u = result[0];
-        v = result[1];
+        x = result[0];
+        y = result[1];
       });
 
       it('should not move the attacker', function() {
-        expect(u.player).to.equal(a);
-        expect(v.player).to.equal(b);
+        expect(x.player).to.equal(a);
+        expect(y.player).to.equal(b);
       });
 
       it('should update the armies', function() {
-        expect(u.armies).to.equal(1);
-        expect(v.armies).to.equal(1);
+        expect(x.armies).to.equal(1);
+        expect(y.armies).to.equal(1);
       });
+    });
+  });
+
+  describe('#reinforce', function() {
+    it('should reinforce the countries', function() {
+      s.reinforce = sandbox.spy();
+      u.reinforce = sandbox.spy();
+
+      var result = world.reinforce(a);
+
+      expect(s.reinforce.calledWith(1)).to.be.true;
+      expect(u.reinforce.calledWith(1)).to.be.true;
     });
   });
 });
