@@ -7,7 +7,9 @@ var core     = require('./core'),
 // The number of players in the game.
 var PLAYERS = 5;
 
-// Returns a new game state.
+/*
+ * Returns a new game state.
+ */
 function Game(world) {
   var a = arguments;
 
@@ -27,7 +29,9 @@ function Game(world) {
 
 Game.prototype.constructor = Game;
 
-// Returns the total number of armies for a given player.
+/*
+ * Returns the total number of armies for a given player.
+ */
 Game.prototype.armiesForPlayer = function(player) {
   return F.sum(
     this.world
@@ -36,32 +40,42 @@ Game.prototype.armiesForPlayer = function(player) {
   );
 };
 
-// Returns true if a given player can be set, false otherwise.
+/*
+ * Returns true if a given player can be set, false otherwise.
+ */
 Game.prototype.canSelectPlayer = function(player) {
   return player !== null && player !== this.currentPlayer;
 };
 
-// Returns true if a given country can be set, false otherwise.
+/*
+ * Returns true if a given country can be set, false otherwise.
+ */
 Game.prototype.canSelectCountry = function(country) {
   return this.canMoveToCountry(country) || this.canSetCountry(country);
 };
 
-// Returns true if the current player can select a given country, false
-// otherwise.
+/*
+ * Returns true if the current player can select a given country, false
+ * otherwise.
+ */
 Game.prototype.canSetCountry = function(country) {
   return country !== null && country.player === this.currentPlayer;
 };
 
-// Returns true if the current player can deselect a given country, false
-// otherwise.
+/*
+ * Returns true if the current player can deselect a given country, false
+ * otherwise.
+ */
 Game.prototype.canUnsetCountry = function(country) {
   return country !== null &&
     country.player === this.currentPlayer &&
     country === this.selectedCountry;
 };
 
-// Returns true if the current player can move to a given country, false
-// otherwise.
+/*
+ * Returns true if the current player can move to a given country, false
+ * otherwise.
+ */
 Game.prototype.canMoveToCountry = function(country) {
   return country !== null &&
     this.currentPlayer !== null &&
@@ -72,7 +86,9 @@ Game.prototype.canMoveToCountry = function(country) {
     this.selectedCountry.hasNeighbour(country);
 };
 
-// Selects a given player and returns a new game state.
+/*
+ * Selects a given player and returns a new game state.
+ */
 Game.prototype.selectPlayer = function(player) {
   core.log('Game#selectPlayer');
 
@@ -91,7 +107,9 @@ Game.prototype.selectPlayer = function(player) {
   });
 };
 
-// Selects a given country and returns a new game state.
+/*
+ * Selects a given country and returns a new game state.
+ */
 Game.prototype.selectCountry = function(country) {
   core.log('Game#selectCountry');
 
@@ -106,9 +124,11 @@ Game.prototype.selectCountry = function(country) {
   }
 };
 
-// Moves to the target country from the selected country and returns a new game
-// state. If the target country is occupied then the invading armies will
-// attack.
+/*
+ * Moves to the target country from the selected country and returns a new game
+ * state. If the target country is occupied then the invading armies will
+ * attack.
+ */
 Game.prototype.moveToCountry = function(country) {
   core.log('Game#moveToCountry');
 

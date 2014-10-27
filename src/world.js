@@ -4,7 +4,11 @@ var core      = require('./core'),
     F         = require('fkit'),
     Immutable = require('immutable');
 
-// Returns a new world.
+var reverseSort = F.compose(F.reverse, F.sort);
+
+/*
+ * Returns a new world.
+ */
 function World(width, height, hexgrid, countries, cells) {
   var a = arguments;
 
@@ -56,8 +60,10 @@ World.prototype.assignPlayers = function(players) {
 World.prototype.move = function(s, t) {
   core.log('World#move');
 
-  var n = F.min(s.armies - 1, t.slots.length),
-      u = F.set('armies', s.armies - n, s),
+  // Calculate the number of armies to move.
+  var n = F.min(s.armies - 1, t.slots.length);
+
+  var u = F.set('armies', s.armies - n, s),
       v = F.copy(t, {armies: n, player: s.player});
 
   return F.update('countriesSet', core.replace([s, t], [u, v]), this);
@@ -69,20 +75,31 @@ World.prototype.move = function(s, t) {
 World.prototype.attack = function(s, t) {
   core.log('World#attack');
 
-  var attackDice = core.rollDice(s.armies),
-      defendDice = core.rollDice(t.armies),
-      attack     = F.sum(attackDice),
-      defend     = F.sum(defendDice);
+  // Roll the dice!
+  var attackerDice = core.rollDice(s.armies),
+      defenderDice = core.rollDice(t.armies);
+
+  // Calculate the number of defender dice with a value greater than or equal
+  // to the corresponding attacker dice.
+  var comparisons = F
+    .zip(reverseSort(attackerDice), reverseSort(defenderDice))
+    .map(F.uncurry(F.gte));
+
+  // Calculate the casualties.
+  var attackerCasualties = comparisons.filter(F.id).length,
+      defenderCasualties = comparisons.filter(F.not).length;
+
+  // Calculate the number of armies to move.
+  var movers = F.min(s.armies - 1, t.slots.length);
 
   var u, v;
 
-  if (attack > defend) {
-    var n = F.min(s.armies - 1, t.slots.length);
-    u = F.set('armies', s.armies - n, s);
-    v = F.copy(t, {armies: n, player: s.player});
+  if (F.sum(attackerDice) > F.sum(defenderDice)) {
+    u = F.set('armies', s.armies - movers, s);
+    v = F.copy(t, {armies: F.max(movers - attackerCasualties, 1), player: s.player});
   } else {
-    u = F.set('armies', 1, s);
-    v = F.set('armies', 1, t);
+    u = F.set('armies', F.max(s.armies - attackerCasualties, 1), s);
+    v = F.set('armies', t.armies - defenderCasualties, t);
   }
 
   return F.update('countriesSet', core.replace([s, t], [u, v]), this);

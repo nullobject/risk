@@ -83,7 +83,7 @@ describe('World', function() {
   describe('#attack', function() {
     context('when the attacker rolls higher than the defender', function() {
       beforeEach(function() {
-        stubRollDice(sandbox, [3, 4], [1, 2]);
+        stubRollDice(sandbox, [3, 2], [3, 1]);
 
         var result = attack(world, p1, q1);
 
@@ -96,15 +96,15 @@ describe('World', function() {
         expect(y.player).to.equal(p);
       });
 
-      it('should distribute the armies', function() {
+      it('should update the armies', function() {
         expect(x.armies).to.equal(2);
-        expect(y.armies).to.equal(2);
+        expect(y.armies).to.equal(1);
       });
     });
 
     context('when the defender rolls higher than the attacker', function() {
       beforeEach(function() {
-        stubRollDice(sandbox, [1, 2], [3, 4]);
+        stubRollDice(sandbox, [4, 1], [3, 2]);
 
         var result = attack(world, p1, q1);
 
@@ -118,7 +118,7 @@ describe('World', function() {
       });
 
       it('should update the armies', function() {
-        expect(x.armies).to.equal(1);
+        expect(x.armies).to.equal(3);
         expect(y.armies).to.equal(1);
       });
     });
