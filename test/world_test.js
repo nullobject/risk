@@ -1,51 +1,75 @@
 'use strict';
 
-var rewire = require('rewire');
+var rewire  = require('rewire'),
+    Country = require('../src/country'),
+    F       = require('fkit'),
+    World   = rewire('../src/world');
 
-var F     = require('fkit'),
-    World = rewire('../src/world');
+var core = World.__get__('core');
 
 // Stub each call to the `rollDice` function with the return values in the
 // list of `xss`.
 var stubRollDice = F.variadic(function(sandbox, xss) {
-  var core = World.__get__('core'),
-      stub = sandbox.stub(core, 'rollDice');
-
+  var stub = sandbox.stub(core, 'rollDice');
   xss.map(function(xs, i) { stub.onCall(i).returns(xs); });
 });
 
-function comparator(a) {
-  return F.compose(F.eq(a.id), F.get('id'));
+function find(as, bs) {
+  return bs.map(function(q) {
+    return F.find(comparator(q), as);
+  });
+
+  function comparator(p) {
+    return F.compose(F.eq(p.id), F.get('id'));
+  }
 }
 
-var find = F.variadic(function(as, bs) {
-  return bs.map(function(b) { return F.find(comparator(b), as); });
-});
-
-function move(world, s, t) {
-  var result = world.move(s, t);
-  return find(result.countries, s, t);
+function move(world, a, b) {
+  var result = world.move(a, b);
+  return find(result.countries, [a, b]);
 }
 
-function attack(world, s, t) {
-  var result = world.attack(s, t);
-  return find(result.countries, s, t);
+function attack(world, a, b) {
+  var result = world.attack(a, b);
+  return find(result.countries, [a, b]);
+}
+
+function reinforce(world, a, b, c) {
+  var result = world.reinforce([a, b, c]);
+  return find(result.countries, [a, b, c]);
+}
+
+function buildCountry(id, player, armies, slots) {
+  var country = new Country();
+
+  country.id     = id;
+  country.player = player;
+  country.armies = armies;
+  country.slots  = F.array(slots);
+
+  return country;
+}
+
+function buildWorld(countries) {
+  return new World(800, 600, {}, countries, []);
 }
 
 describe('World', function() {
-  var sandbox, world, x, y;
+  var sandbox, x, y, z;
 
   // Player stubs.
-  var a = {}, b = {};
+  var p = {}, q = {};
 
   // Country stubs.
-  var s = {id: 1, player: a, armies: 4, slots: F.array(4)},
-      t = {id: 2, player: b, armies: 2, slots: F.array(2)},
-      u = {id: 3, player: a, armies: 1, slots: F.array(2)};
+  var p1 = buildCountry(1, p, 4, 4),
+      p2 = buildCountry(2, p, 2, 3),
+      p3 = buildCountry(3, p, 1, 2),
+      q1 = buildCountry(4, q, 2, 2);
+
+  var world = buildWorld([p1, p2, p3, q1]);
 
   beforeEach(function() {
     sandbox = sinon.sandbox.create();
-    world = new World(800, 600, {}, [s, t, u], []);
   });
 
   afterEach(function() {
@@ -54,15 +78,15 @@ describe('World', function() {
 
   describe('#move', function() {
     beforeEach(function() {
-      var result = move(world, s, t);
+      var result = move(world, p1, q1);
 
       x = result[0];
       y = result[1];
     });
 
     it('should move to the target country', function() {
-      expect(x.player).to.equal(a);
-      expect(y.player).to.equal(a);
+      expect(x.player).to.equal(p);
+      expect(y.player).to.equal(p);
     });
 
     it('should distribute the armies', function() {
@@ -76,15 +100,15 @@ describe('World', function() {
       beforeEach(function() {
         stubRollDice(sandbox, [3, 4], [1, 2]);
 
-        var result = attack(world, s, t);
+        var result = attack(world, p1, q1);
 
         x = result[0];
         y = result[1];
       });
 
       it('should move the attacker to target country', function() {
-        expect(x.player).to.equal(a);
-        expect(y.player).to.equal(a);
+        expect(x.player).to.equal(p);
+        expect(y.player).to.equal(p);
       });
 
       it('should distribute the armies', function() {
@@ -97,15 +121,15 @@ describe('World', function() {
       beforeEach(function() {
         stubRollDice(sandbox, [1, 2], [3, 4]);
 
-        var result = attack(world, s, t);
+        var result = attack(world, p1, q1);
 
         x = result[0];
         y = result[1];
       });
 
       it('should not move the attacker', function() {
-        expect(x.player).to.equal(a);
-        expect(y.player).to.equal(b);
+        expect(x.player).to.equal(p);
+        expect(y.player).to.equal(q);
       });
 
       it('should update the armies', function() {
@@ -117,13 +141,17 @@ describe('World', function() {
 
   describe('#reinforce', function() {
     it('should reinforce the countries', function() {
-      s.reinforce = sandbox.spy();
-      u.reinforce = sandbox.spy();
+      sandbox.stub(core, 'distribute').returns([0, 1, 2]);
 
-      var result = world.reinforce(a);
+      var result = reinforce(world, p1, p2, p3);
 
-      expect(s.reinforce.calledWith(1)).to.be.true;
-      expect(u.reinforce.calledWith(1)).to.be.true;
+      x = result[0];
+      y = result[1];
+      z = result[2];
+
+      expect(x.armies).to.equal(4);
+      expect(y.armies).to.equal(3);
+      expect(z.armies).to.equal(2);
     });
   });
 });

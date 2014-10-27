@@ -23,13 +23,19 @@ Object.defineProperty(World.prototype, 'countries', {
   get: function() { return this.countriesSet.toArray(); }
 });
 
-// Returns the countries occupied by a player.
+/*
+ * Returns the countries occupied by a player.
+ */
 World.prototype.countriesOccupiedByPlayer = function(player) {
-  return this.countriesSet.filter(F.compose(F.equal(player), F.get('player')));
+  return this.countriesSet.filter(occupiedByPlayer(player)).toArray();
+
+  // Returns true if the country is occupied by the given player, false otherwise.
+  function occupiedByPlayer(player) { return F.compose(F.equal(player), F.get('player')); }
 };
 
-// Assigns the given players to random countries and returns a new world
-// state.
+/*
+ * Assigns the given players to random countries and returns a new world state.
+ */
 World.prototype.assignPlayers = function(players) {
   var as = F.sample(players.length, this.countries);
 
@@ -43,8 +49,9 @@ World.prototype.assignPlayers = function(players) {
   return F.update('countriesSet', core.replace(as, bs), this);
 };
 
-// Moves to the `target` country from the `source` country and returns a new
-// world state.
+/*
+ * Moves to the country `t` from the country `s` and returns a new world state.
+ */
 World.prototype.move = function(s, t) {
   core.log('World#move');
 
@@ -55,8 +62,9 @@ World.prototype.move = function(s, t) {
   return F.update('countriesSet', core.replace([s, t], [u, v]), this);
 };
 
-// Attacks the `target` country from the `source` country and returns a new
-// world state.
+/*
+ * Attacks the country `t` from the country `s` and returns a new world state.
+ */
 World.prototype.attack = function(s, t) {
   core.log('World#attack');
 
@@ -79,21 +87,24 @@ World.prototype.attack = function(s, t) {
   return F.update('countriesSet', core.replace([s, t], [u, v]), this);
 };
 
-// Distributes `n` armies to the list of `countries`.
-// TODO: If some countries have no slots available then distribute the armies.
-function distributeArmies(n, countries) {
-  return countries.map(F.applyMethod('reinforce', 1));
-}
-
-// Reinforces the countries occupied by the given player and returns a new
-// world state.
-World.prototype.reinforce = function(player) {
+/*
+ * Reinforces the countries in the list of `as` and returns a new world state.
+ */
+World.prototype.reinforce = function(as) {
   core.log('World#reinforce');
 
-  var as = this.countriesOccupiedByPlayer(player),
-      bs = distributeArmies(as.length, as);
+  // Calculate the availability list.
+  var bs = as.map(F.get('availableSlots'));
 
-  return F.update('countriesSet', core.replace(as, bs), this);
+  // Calculate the distribution list.
+  var cs = core.distribute(bs.length, bs);
+
+  // Distribute the armies.
+  var ds = F
+    .zip(cs, as)
+    .map(F.uncurry(F.applyMethod('reinforce')));
+
+  return F.update('countriesSet', core.replace(as, ds), this);
 };
 
 module.exports = World;

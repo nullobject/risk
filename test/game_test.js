@@ -9,8 +9,7 @@ describe('Game', function() {
   var player = {};
 
   // Country stubs.
-  var source = {},
-      target = {};
+  var source = {}, target = {};
 
   // World stub.
   var world = {

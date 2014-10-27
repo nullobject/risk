@@ -19,6 +19,10 @@ function Country(id, neighbourIds, polygon, slots) {
 
 Country.prototype.constructor = Country;
 
+Object.defineProperty(Country.prototype, 'availableSlots', {
+  get: function() { return this.slots.length - this.armies; }
+});
+
 // Returns true if a given country neighbours this country, false otherwise.
 Country.prototype.hasNeighbour = function(country) {
   return this.neighbourIdsSet.contains(country.id);
@@ -33,8 +37,12 @@ Country.prototype.toString = function() {
 };
 
 Country.prototype.reinforce = function(n) {
-  var f = F.compose(F.min(this.slots.length), F.add(n));
-  return F.update('armies', f, this);
+  if (n <= 0) {
+    return this;
+  } else {
+    var f = F.compose(F.min(this.slots.length), F.add(n));
+    return F.update('armies', f, this);
+  }
 };
 
 module.exports = Country;

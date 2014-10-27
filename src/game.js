@@ -80,7 +80,9 @@ Game.prototype.selectPlayer = function(player) {
     throw new Error('The player is already selected');
   }
 
-  var world = this.currentPlayer ? this.world.reinforce(this.currentPlayer) : this.world;
+  var world = this.currentPlayer ?
+    this.world.reinforce(this.world.countriesOccupiedByPlayer(this.currentPlayer)) :
+    this.world;
 
   return F.copy(this, {
     currentPlayer:   player,
