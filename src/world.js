@@ -9,18 +9,19 @@ function World(width, height, hexgrid, countries, cells) {
   var a = arguments;
 
   if (a.length > 0) {
-    this.width        = width;
-    this.height       = height;
-    this.hexgrid      = hexgrid;
-    this.countriesSet = Immutable.Set.from(countries);
-    this.cells        = cells;
+    this.width     = width;
+    this.height    = height;
+    this.hexgrid   = hexgrid;
+    this.countries = countries;
+    this.cells     = cells;
   }
 }
 
 World.prototype.constructor = World;
 
 Object.defineProperty(World.prototype, 'countries', {
-  get: function() { return this.countriesSet.toArray(); }
+  get: function() { return this.countriesSet.toArray(); },
+  set: function(as) { this.countriesSet = Immutable.Set.from(as); }
 });
 
 /*

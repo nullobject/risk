@@ -1,7 +1,7 @@
 'use strict';
 
 var rewire  = require('rewire'),
-    Country = require('../src/country'),
+    factory = require('./support/factory'),
     F       = require('fkit'),
     World   = rewire('../src/world');
 
@@ -39,21 +39,6 @@ function reinforce(world, a, b, c) {
   return find(result.countries, [a, b, c]);
 }
 
-function buildCountry(id, player, armies, slots) {
-  var country = new Country();
-
-  country.id     = id;
-  country.player = player;
-  country.armies = armies;
-  country.slots  = F.array(slots);
-
-  return country;
-}
-
-function buildWorld(countries) {
-  return new World(800, 600, {}, countries, []);
-}
-
 describe('World', function() {
   var sandbox, x, y, z;
 
@@ -61,12 +46,12 @@ describe('World', function() {
   var p = {}, q = {};
 
   // Country stubs.
-  var p1 = buildCountry(1, p, 4, 4),
-      p2 = buildCountry(2, p, 2, 3),
-      p3 = buildCountry(3, p, 1, 2),
-      q1 = buildCountry(4, q, 2, 2);
+  var p1 = factory.buildCountry(1, p, [], 4, 4),
+      p2 = factory.buildCountry(2, p, [], 2, 3),
+      p3 = factory.buildCountry(3, p, [], 1, 2),
+      q1 = factory.buildCountry(4, q, [], 2, 2);
 
-  var world = buildWorld([p1, p2, p3, q1]);
+  var world = factory.buildWorld([p1, p2, p3, q1]);
 
   beforeEach(function() {
     sandbox = sinon.sandbox.create();
