@@ -23,7 +23,7 @@ Country.prototype.constructor = Country;
 
 Object.defineProperty(Country.prototype, 'neighbourIds', {
   get: function() { return this.neighbourIdsSet.toArray(); },
-  set: function(as) { this.neighbourIdsSet = Immutable.Set.from(as); }
+  set: function(as) { this.neighbourIdsSet = Immutable.Set(as); }
 });
 
 Object.defineProperty(Country.prototype, 'availableSlots', {

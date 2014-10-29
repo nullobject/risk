@@ -21,7 +21,7 @@
     "css-loader": "^0.9.0",
     "extract-text-webpack-plugin": "^0.3.1",
     "jshint": "^2.5.0",
-    "jsx-loader": "^0.11.2",
+    "jsx-loader": "^0.12.0",
     "less": "^1.7.5",
     "less-loader": "^0.7.7",
     "mocha": "^2.0.1",
@@ -34,9 +34,9 @@
   },
   "dependencies": {
     "baconjs": "^0.7.23",
-    "fkit": "^0.14.0",
-    "immutable": "^2.6.1",
+    "fkit": "^0.15.0",
+    "immutable": "^3.0.1",
     "normalize.css": "^3.0.1",
-    "react": "^0.11.0"
+    "react": "^0.12.0"
   }
 }
