@@ -11,7 +11,7 @@ describe('core', function() {
           u = {id: 1, name: 'u'},
           v = {id: 2, name: 'v'};
 
-      var set = Immutable.Set.from([s, t]);
+      var set = Immutable.Set([s, t]);
 
       expect(core.replace([s, t], [u, v], set).toArray()).to.eql([u, v]);
     });

@@ -25,7 +25,7 @@ World.prototype.constructor = World;
 
 Object.defineProperty(World.prototype, 'countries', {
   get: function() { return this.countriesSet.toArray(); },
-  set: function(as) { this.countriesSet = Immutable.Set.from(as); }
+  set: function(as) { this.countriesSet = Immutable.Set(as); }
 });
 
 /*

@@ -6,7 +6,7 @@ var Bacon        = require('baconjs'),
     React        = require('react'),
     WorldBuilder = require('./world_builder');
 
-var RootComponent = require('./components/root_component');
+var RootComponent = React.createFactory(require('./components/root_component'));
 
 function transformState(game, input) {
   var player  = input[0],
@@ -63,7 +63,7 @@ function GameController(options) {
 
 // Renders a given game state.
 GameController.prototype.render = function(game) {
-  React.renderComponent(
+  React.render(
     RootComponent({game: game, stream: this.bus}),
     this.options.el
   );
