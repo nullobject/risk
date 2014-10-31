@@ -4,7 +4,9 @@ var core     = require('./core'),
     F        = require('fkit'),
     Player   = require('./player');
 
-// The number of players in the game.
+/*
+ * The number of players in the game.
+ */
 var PLAYERS = 5;
 
 /*

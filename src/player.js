@@ -1,6 +1,8 @@
 'use strict';
 
-// Returns a new player.
+/*
+ * Returns a new player.
+ */
 module.exports = function(id) {
   return {
     id: id,
