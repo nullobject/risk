@@ -10,7 +10,7 @@ var core     = require('./core'),
 var PLAYERS = 5;
 
 /**
- * Returns a new game state.
+ * Creates a new game state.
  */
 function Game(world) {
   var a = arguments;
@@ -22,14 +22,22 @@ function Game(world) {
     // Assign each player to a random country.
     world = world.assignPlayers(players);
 
-    this.players         = players;
     this.world           = world;
-    this.currentPlayer   = null;
+    this.players         = players;
+    this.currentPlayer   = players[0];
     this.selectedCountry = null;
   }
 }
 
 Game.prototype.constructor = Game;
+
+Object.defineProperty(Game.prototype, 'alivePlayers', {
+  get: function() {
+    return this.players.filter(function(player) {
+      return this.world.countriesOccupiedByPlayer(player).length > 0;
+    }, this);
+  }
+});
 
 /**
  * Returns the total number of armies for a given player.
@@ -40,20 +48,6 @@ Game.prototype.armiesForPlayer = function(player) {
       .countriesOccupiedByPlayer(player)
       .map(F.get('armies'))
   );
-};
-
-/**
- * Returns true if a given player can be selected, false otherwise.
- */
-Game.prototype.canSelectPlayer = function(player) {
-  return player !== null && player !== this.currentPlayer;
-};
-
-/**
- * Returns true if a given country can be selected, false otherwise.
- */
-Game.prototype.canSelectCountry = function(country) {
-  return this.canMoveToCountry(country) || this.canSetCountry(country);
 };
 
 /**
@@ -86,6 +80,21 @@ Game.prototype.canMoveToCountry = function(country) {
     this.selectedCountry.player === this.currentPlayer &&
     this.selectedCountry.armies > 1 &&
     this.selectedCountry.hasNeighbour(country);
+};
+
+/**
+ * Ends the turn for the current player.
+ *
+ * @returns A new game state.
+ */
+Game.prototype.endTurn = function() {
+  core.log('Game#endTurn');
+
+  // Find the index of the current and next players.
+  var i = F.elemIndex(this.currentPlayer, this.alivePlayers),
+      j = (i + 1) % this.alivePlayers.length;
+
+  return this.selectPlayer(this.alivePlayers[j]);
 };
 
 /**

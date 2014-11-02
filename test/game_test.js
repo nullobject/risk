@@ -13,15 +13,17 @@ describe('Game', function() {
 
   // World stub.
   var world = {
-    countries:     [source, target],
-    assignPlayers: function() {},
-    move:          function() {},
-    attack:        function() {}
+    countries:                 [source, target],
+    assignPlayers:             function() {},
+    countriesOccupiedByPlayer: function() {},
+    move:                      function() {},
+    attack:                    function() {}
   };
 
   beforeEach(function() {
     sandbox = sinon.sandbox.create();
     sandbox.stub(world, 'assignPlayers').returns(world);
+    sandbox.stub(world, 'countriesOccupiedByPlayer').returns(1);
     game = new Game(world);
   });
 
