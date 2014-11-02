@@ -8,6 +8,10 @@ var Bacon        = require('baconjs'),
 
 var RootComponent = React.createFactory(require('./components/root_component'));
 
+var ofType = function(stream, type) {
+  return stream.filter(F.compose(F.equal(type), F.get('type')));
+};
+
 function transformState(game, input) {
   var player  = input[0],
       country = input[1];
@@ -25,28 +29,23 @@ function GameController(options) {
   this.options = options;
 
   // Create a world.
-  var world = WorldBuilder(options.width, options.height);
+  var world = WorldBuilder.build(options.width, options.height);
 
   // Create a game state.
   var game = new Game(world);
 
   // Create and extend a bus.
   this.bus = new Bacon.Bus();
-  this.bus.ofType = function(type) {
-    return this.filter(F.compose(F.equal(type), F.get('type')));
-  };
 
   // The player property handles 'end-turn' events to cycle through the
   // players.
-  var playerProperty = this.bus
-    .ofType('end-turn')
+  var playerProperty = ofType(this.bus, 'end-turn')
     .scan(0, function(index, _) { return (index + 1) % game.players.length; })
-    .map(F.flip(F.get)(game.players));
+    .map(F.flip(F.get, game.players));
 
   // The country property handles 'select-country' events to provide the
   // selected country.
-  var countryProperty = this.bus
-    .ofType('select-country')
+  var countryProperty = ofType(this.bus, 'select-country')
     .map(F.get('country'))
     .startWith(null);
 

@@ -4,12 +4,12 @@ var core     = require('./core'),
     F        = require('fkit'),
     Player   = require('./player');
 
-/*
+/**
  * The number of players in the game.
  */
 var PLAYERS = 5;
 
-/*
+/**
  * Returns a new game state.
  */
 function Game(world) {
@@ -31,7 +31,7 @@ function Game(world) {
 
 Game.prototype.constructor = Game;
 
-/*
+/**
  * Returns the total number of armies for a given player.
  */
 Game.prototype.armiesForPlayer = function(player) {
@@ -42,21 +42,21 @@ Game.prototype.armiesForPlayer = function(player) {
   );
 };
 
-/*
- * Returns true if a given player can be set, false otherwise.
+/**
+ * Returns true if a given player can be selected, false otherwise.
  */
 Game.prototype.canSelectPlayer = function(player) {
   return player !== null && player !== this.currentPlayer;
 };
 
-/*
- * Returns true if a given country can be set, false otherwise.
+/**
+ * Returns true if a given country can be selected, false otherwise.
  */
 Game.prototype.canSelectCountry = function(country) {
   return this.canMoveToCountry(country) || this.canSetCountry(country);
 };
 
-/*
+/**
  * Returns true if the current player can select a given country, false
  * otherwise.
  */
@@ -64,7 +64,7 @@ Game.prototype.canSetCountry = function(country) {
   return country !== null && country.player === this.currentPlayer;
 };
 
-/*
+/**
  * Returns true if the current player can deselect a given country, false
  * otherwise.
  */
@@ -74,7 +74,7 @@ Game.prototype.canUnsetCountry = function(country) {
     country === this.selectedCountry;
 };
 
-/*
+/**
  * Returns true if the current player can move to a given country, false
  * otherwise.
  */
@@ -88,7 +88,7 @@ Game.prototype.canMoveToCountry = function(country) {
     this.selectedCountry.hasNeighbour(country);
 };
 
-/*
+/**
  * Selects a given player and returns a new game state.
  */
 Game.prototype.selectPlayer = function(player) {
@@ -109,7 +109,7 @@ Game.prototype.selectPlayer = function(player) {
   });
 };
 
-/*
+/**
  * Selects a given country and returns a new game state.
  */
 Game.prototype.selectCountry = function(country) {
@@ -126,7 +126,7 @@ Game.prototype.selectCountry = function(country) {
   }
 };
 
-/*
+/**
  * Moves to the target country from the selected country and returns a new game
  * state. If the target country is occupied then the invading armies will
  * attack.

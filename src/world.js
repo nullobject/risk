@@ -6,7 +6,7 @@ var core      = require('./core'),
 
 var reverseSort = F.compose(F.reverse, F.sort);
 
-/*
+/**
  * Returns a new world.
  */
 function World(width, height, hexgrid, countries, cells) {
@@ -28,7 +28,7 @@ Object.defineProperty(World.prototype, 'countries', {
   set: function(as) { this.countriesSet = Immutable.Set(as); }
 });
 
-/*
+/**
  * Returns the countries occupied by a player.
  */
 World.prototype.countriesOccupiedByPlayer = function(player) {
@@ -38,7 +38,7 @@ World.prototype.countriesOccupiedByPlayer = function(player) {
   function occupiedByPlayer(player) { return F.compose(F.equal(player), F.get('player')); }
 };
 
-/*
+/**
  * Assigns the given players to random countries and returns a new world state.
  */
 World.prototype.assignPlayers = function(players) {
@@ -54,7 +54,7 @@ World.prototype.assignPlayers = function(players) {
   return F.update('countriesSet', core.replace(as, bs), this);
 };
 
-/*
+/**
  * Moves to the country `t` from the country `s` and returns a new world state.
  */
 World.prototype.move = function(s, t) {
@@ -69,7 +69,7 @@ World.prototype.move = function(s, t) {
   return F.update('countriesSet', core.replace([s, t], [u, v]), this);
 };
 
-/*
+/**
  * Attacks the country `t` from the country `s` and returns a new world state.
  */
 World.prototype.attack = function(s, t) {
@@ -105,7 +105,7 @@ World.prototype.attack = function(s, t) {
   return F.update('countriesSet', core.replace([s, t], [u, v]), this);
 };
 
-/*
+/**
  * Reinforces the countries in the list of `as` and returns a new world state.
  */
 World.prototype.reinforce = function(as) {

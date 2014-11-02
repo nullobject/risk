@@ -9,14 +9,14 @@ module.exports = {
     }
   },
 
-  /*
+  /**
    * Rolls `n` dice and returns the sum of their values.
    */
   rollDice: function(n) {
     return F.array(n).map(function() { return F.randomInt(1, 6); });
   },
 
-  /*
+  /**
    * Replaces `as` with `bs` in the set `c`.
    */
   replace: F.curry(function(as, bs, c) {
@@ -25,7 +25,7 @@ module.exports = {
     });
   }),
 
-  /*
+  /**
    * Distributes `n` units round-robin using the availability list of `as`.
    */
   distribute: function(n, as) {

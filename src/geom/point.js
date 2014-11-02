@@ -1,6 +1,6 @@
 'use strict';
 
-/*
+/**
  * Returns a new point with the given coordinates.
  */
 var Point = function() {
@@ -44,7 +44,7 @@ var Point = function() {
   };
 };
 
-/*
+/**
  * Returns a new point at the origin.
  */
 Point.zero = function() {

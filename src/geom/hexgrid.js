@@ -8,7 +8,7 @@ function degreesToRadians(degrees) {
   return degrees * Math.PI / 180;
 }
 
-/*
+/**
  * Calculates the position of a hexagon at a given coordinate.
  */
 function calculatePosition(coordinate, width, height) {
@@ -21,7 +21,7 @@ function calculatePosition(coordinate, width, height) {
   );
 }
 
-/*
+/**
  * Calculates the vertices of a hexagon at a given position.
  */
 function calculateVertices(position, r, h, radius) {
@@ -35,7 +35,7 @@ function calculateVertices(position, r, h, radius) {
   ];
 }
 
-/*
+/**
  * Returns a new hexgrid with cells of a given radius.
  *
  * See http://www.redblobgames.com/grids/hexagons
@@ -62,7 +62,7 @@ module.exports = function(radius) {
     width:  width,
     height: height,
 
-    /*
+    /**
      * Returns an array of polygons which represent a hexgrid of a given size
      * (rows & cols).
      */
@@ -77,7 +77,7 @@ module.exports = function(radius) {
       return coordinates.map(F.compose(Polygon, hexagonVertices(origin)));
     },
 
-    /*
+    /**
      * Returns the number of hexgrid cells which fit in a rect of the given
      * size.
      */

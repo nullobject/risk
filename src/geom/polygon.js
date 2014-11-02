@@ -6,7 +6,7 @@ var clipper = require('../../lib/clipper'),
 
 var SCALE = 100;
 
-/*
+/**
  * Converts a given polygon to a clipper path.
  */
 function toPath(polygon) {
@@ -19,7 +19,7 @@ function toPath(polygon) {
   return path;
 }
 
-/*
+/**
  * Converts a given clipper path to a polygon.
  */
 function toPolygon(path) {
@@ -32,7 +32,7 @@ function toPolygon(path) {
   return Polygon(vertices);
 }
 
-/*
+/**
  * Returns a new polygon with the given vertices.
  */
 var Polygon = function(vertices) {
@@ -42,7 +42,7 @@ var Polygon = function(vertices) {
   return {
     vertices: vertices,
 
-    /*
+    /**
      * Calculates the centroid of the polygon.
      */
     centroid: function() {
@@ -55,7 +55,7 @@ var Polygon = function(vertices) {
       return centroid;
     },
 
-    /*
+    /**
      * Returns true if the polygon contains a given point.
      *
      * See http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
@@ -77,7 +77,7 @@ var Polygon = function(vertices) {
       return inside;
     },
 
-    /*
+    /**
      * Returns a new polygon which is offset from this polygon by a given delta.
      *
      * See http://jsclipper.sourceforge.net/6.1.3.2/
@@ -105,7 +105,7 @@ var Polygon = function(vertices) {
   };
 };
 
-/*
+/**
  * Merges the given polygons into a new polygon.
  *
  * See http://jsclipper.sourceforge.net/6.1.3.2/
@@ -127,7 +127,7 @@ Polygon.merge = function(polygons) {
   return toPolygon(solutionPaths[0]);
 };
 
-/*
+/**
  * Compares the distance of `a` and `b` to the polygon `p`.
  */
 Polygon.distanceComparator = F.curry(function(p, a, b) {
