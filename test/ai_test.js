@@ -10,8 +10,6 @@ describe('AI', function() {
   });
 
   describe('#nextMove', function() {
-    it('should calculate the next move', function() {
-      expect(ai.nextMove()).to.have.property('type', 'end-turn');
-    });
+    it('should calculate the next move');
   });
 });
