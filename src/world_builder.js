@@ -1,6 +1,7 @@
 'use strict';
 
-var Country = require('./country'),
+var core    = require('./core'),
+    Country = require('./country'),
     F       = require('fkit'),
     Hexgrid = require('./geom/hexgrid'),
     Point   = require('./geom/point'),
@@ -17,7 +18,7 @@ var CELL_SIZE = 8;
  * The number of "seed" sites to apply to the Voronoi function. More seeds will
  * result in more countries.
  */
-var SEEDS = 30;
+var SEEDS = 48;
 
 /**
  * The number of Lloyd relaxations to apply to the Voronoi cells. More
@@ -39,7 +40,12 @@ var SLOT_POLYGON_INSET = 2;
 /**
  * The minimum number of slots a country can have.
  */
-var MIN_SLOTS = 5;
+var MIN_SLOTS = 7;
+
+/**
+ * The maximum number of slots a country can have.
+ */
+var MAX_SLOTS = 9;
 
 /**
  * The minimum country size.
@@ -101,7 +107,7 @@ function neighbouringCells(cell, diagram) {
 
 function calculateSlots(hexagons, polygon) {
   // Calculate the number of slots in the country.
-  var n = F.max(MIN_SLOTS, Math.sqrt(hexagons.length));
+  var n = core.clamp(Math.sqrt(hexagons.length), MIN_SLOTS, MAX_SLOTS);
 
   // Calculate the hexagon in the centre of the polygon.
   var centreHexagon = F.head(F.sortBy(Polygon.distanceComparator(polygon), hexagons));
