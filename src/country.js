@@ -3,7 +3,7 @@
 var F         = require('fkit'),
     Immutable = require('immutable');
 
-/*
+/**
  * Returns a new country.
  */
 function Country(id, neighbourIds, polygon, slots) {
@@ -30,7 +30,7 @@ Object.defineProperty(Country.prototype, 'availableSlots', {
   get: function() { return this.slots.length - this.armies; }
 });
 
-/*
+/**
  * Returns true if a given country neighbours this country, false otherwise.
  */
 Country.prototype.hasNeighbour = function(country) {

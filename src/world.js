@@ -6,8 +6,8 @@ var core      = require('./core'),
 
 var reverseSort = F.compose(F.reverse, F.sort);
 
-/*
- * Returns a new world.
+/**
+ * Creates a new world.
  */
 function World(width, height, hexgrid, countries, cells) {
   var a = arguments;
@@ -28,17 +28,24 @@ Object.defineProperty(World.prototype, 'countries', {
   set: function(as) { this.countriesSet = Immutable.Set(as); }
 });
 
-/*
+/**
  * Returns the countries occupied by a player.
  */
 World.prototype.countriesOccupiedByPlayer = function(player) {
-  return this.countriesSet.filter(occupiedByPlayer(player)).toArray();
+  return this.countries.filter(occupiedByPlayer(player));
 
   // Returns true if the country is occupied by the given player, false otherwise.
   function occupiedByPlayer(player) { return F.compose(F.equal(player), F.get('player')); }
 };
 
-/*
+/**
+ * Returns the countries neighbouring a country.
+ */
+World.prototype.countriesNeighbouring = function(a) {
+  return this.countries.filter(function(b) { return a.hasNeighbour(b); });
+};
+
+/**
  * Assigns the given players to random countries and returns a new world state.
  */
 World.prototype.assignPlayers = function(players) {
@@ -54,7 +61,7 @@ World.prototype.assignPlayers = function(players) {
   return F.update('countriesSet', core.replace(as, bs), this);
 };
 
-/*
+/**
  * Moves to the country `t` from the country `s` and returns a new world state.
  */
 World.prototype.move = function(s, t) {
@@ -69,7 +76,7 @@ World.prototype.move = function(s, t) {
   return F.update('countriesSet', core.replace([s, t], [u, v]), this);
 };
 
-/*
+/**
  * Attacks the country `t` from the country `s` and returns a new world state.
  */
 World.prototype.attack = function(s, t) {
@@ -78,6 +85,9 @@ World.prototype.attack = function(s, t) {
   // Roll the dice!
   var attackerDice = core.rollDice(s.armies),
       defenderDice = core.rollDice(t.armies);
+
+  core.log('attacker: ' + attackerDice);
+  core.log('defender: ' + defenderDice);
 
   // Calculate the number of defender dice with a value greater than or equal
   // to the corresponding attacker dice.
@@ -99,13 +109,13 @@ World.prototype.attack = function(s, t) {
     v = F.copy(t, {armies: F.max(movers - attackerCasualties, 1), player: s.player});
   } else {
     u = F.set('armies', F.max(s.armies - attackerCasualties, 1), s);
-    v = F.set('armies', t.armies - defenderCasualties, t);
+    v = F.set('armies', F.max(t.armies - defenderCasualties, 1), t);
   }
 
   return F.update('countriesSet', core.replace([s, t], [u, v]), this);
 };
 
-/*
+/**
  * Reinforces the countries in the list of `as` and returns a new world state.
  */
 World.prototype.reinforce = function(as) {

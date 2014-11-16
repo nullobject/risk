@@ -1,73 +1,112 @@
 'use strict';
 
-var Bacon        = require('baconjs'),
+var AI           = require('./ai'),
+    Bacon        = require('baconjs'),
     F            = require('fkit'),
     Game         = require('./game'),
+    Player       = require('./player'),
     React        = require('react'),
     WorldBuilder = require('./world_builder');
 
 var RootComponent = React.createFactory(require('./components/root_component'));
 
-function transformState(game, input) {
-  var player  = input[0],
-      country = input[1];
+/**
+ * The number of milliseconds between clock ticks.
+ */
+var CLOCK_INTERVAL = 100;
 
-  if (game.canSelectPlayer(player)) {
-    game = game.selectPlayer(player);
-  } else if (game.canSelectCountry(country)) {
-    game = game.selectCountry(country);
+/**
+ * The number of players in the game.
+ */
+var PLAYERS = 5;
+
+/**
+ * The number of human players in the game.
+ */
+var HUMANS = 1;
+
+function transformGameState(game, event) {
+  switch (event.type) {
+    case 'end-turn':
+      return game.endTurn();
+    case 'select-country':
+      return game.selectCountry(event.country);
+    default:
+      return game;
   }
-
-  return game;
 }
 
 function GameController(options) {
-  this.options = options;
+  // Create the players.
+  var players = F.range(0, PLAYERS).map(Player);
 
-  // Create a world.
-  var world = WorldBuilder(options.width, options.height);
+  // Create the world.
+  var world = WorldBuilder.build(options.width, options.height);
 
-  // Create a game state.
-  var game = new Game(world);
+  // Create the game state.
+  var game = new Game(players, world);
 
-  // Create and extend a bus.
-  this.bus = new Bacon.Bus();
-  this.bus.ofType = function(type) {
-    return this.filter(F.compose(F.equal(type), F.get('type')));
-  };
+  // Create the input bus.
+  var inputBus = new Bacon.Bus();
 
-  // The player property handles 'end-turn' events to cycle through the
-  // players.
-  var playerProperty = this.bus
-    .ofType('end-turn')
-    .scan(0, function(index, _) { return (index + 1) % game.players.length; })
-    .map(F.flip(F.get, game.players));
+  // Create the main app bus.
+  var mainBus = new Bacon.Bus();
 
-  // The country property handles 'select-country' events to provide the
-  // selected country.
-  var countryProperty = this.bus
-    .ofType('select-country')
-    .map(F.get('country'))
-    .startWith(null);
+  // Create the clock tick stream.
+  var clock = Bacon.interval(CLOCK_INTERVAL, CLOCK_INTERVAL);
 
-  // The player country property combines the player and country properties
-  // into a tuple.
-  var playerCountryProperty = Bacon.combineAsArray(playerProperty, countryProperty);
+  // The game property scans the game state transformer function over events on
+  // the main bus.
+  var gameProperty = mainBus.scan(game, transformGameState);
 
-  // Apply the game state transformer to the country player property and render
-  // the resulting game state.
-  playerCountryProperty
-    .scan(game, transformState)
-    .onValue(this.render.bind(this));
+  // Map player IDs to AI streams.
+  var aiStream = Bacon.mergeAll(F.drop(HUMANS, game.players).map(playerAI));
+
+  // Plug the input bus into the main bus.
+  mainBus.plug(inputBus);
+
+  // Plug the AI stream into the main bus.
+  mainBus.plug(aiStream);
+
+  // Render the UI whenever the game property changes.
+  gameProperty.onValue(function(game) {
+    React.render(
+      RootComponent({game: game, stream: inputBus}),
+      options.el
+    );
+  });
+
+  /*
+   * The player AI stream emits the moves calculated for a player.
+   */
+  function playerAI(player) {
+    var worldProperty = gameProperty.map('.world');
+
+    return worldProperty
+      .sampledBy(playerClock(player))
+      .withStateMachine(new AI(), function(ai, event) {
+        if (event.hasValue()) {
+          var world  = event.value(),
+              result = ai.nextMove(world, player),
+              ai_    = result[0],
+              events = result[1].map(function(move) { return new Bacon.Next(move); });
+
+          return [ai_, events];
+        } else {
+          return [ai, [event]];
+        }
+      });
+  }
+
+  /*
+   * Returns a clock stream which emits tick events only when the player is
+   * current.
+   */
+  function playerClock(player) {
+    var currentPlayerProperty = gameProperty.map('.currentPlayer');
+    return clock.map(currentPlayerProperty).filter(F.equal(player));
+  }
 }
-
-// Renders a given game state.
-GameController.prototype.render = function(game) {
-  React.render(
-    RootComponent({game: game, stream: this.bus}),
-    this.options.el
-  );
-};
 
 GameController.prototype.constructor = GameController;
 

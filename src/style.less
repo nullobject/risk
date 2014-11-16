@@ -4,7 +4,8 @@
 };
 
 body {
-  color: #333;
+  background-color: #333;
+  color: #666;
 }
 
 .container {
@@ -24,14 +25,13 @@ svg {
     stroke: #1cadcf;
   }
 
-  .hexgrid {
-    stroke: gray;
+  .hexgrid polygon {
+    fill: #333;
+    stroke: #111;
     stroke-width: 0.25px;
   }
 
-  polygon {
-    fill: white;
-
+  .world polygon {
     &.country {
       fill: currentColor;
       fill-opacity: 0.6;
@@ -61,6 +61,13 @@ svg {
       &.selected {
         color: white;
       }
+    }
+  }
+
+  .game-over {
+    rect {
+      fill: black;
+      fill-opacity: 0.6;
     }
   }
 }

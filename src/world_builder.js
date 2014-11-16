@@ -8,42 +8,60 @@ var Country = require('./country'),
     Voronoi = require('../lib/voronoi'),
     World   = require('./world');
 
-// Hexgrid cell size.
+/**
+ * Hexgrid cell size.
+ */
 var CELL_SIZE = 8;
 
-// The number of "seed" sites to apply to the Voronoi function. More seeds
-// will result in more countries.
+/**
+ * The number of "seed" sites to apply to the Voronoi function. More seeds will
+ * result in more countries.
+ */
 var SEEDS = 30;
 
-// The number of Lloyd relaxations to apply to the Voronoi cells. More
-// relaxations will result in countries more uniform in shape and size.
+/**
+ * The number of Lloyd relaxations to apply to the Voronoi cells. More
+ * relaxations will result in countries more uniform in shape and size.
+ */
 var RELAXATIONS = 2;
 
-// The number of pixels to inset the country polygons. This allows them to be
-// rendered with fat borders.
+/**
+ * The number of pixels to inset the country polygons. This allows them to be
+ * rendered with fat borders.
+ */
 var COUNTRY_POLYGON_INSET = 2;
 
-// The number of pixels to inset the slot polygons.
+/**
+ * The number of pixels to inset the slot polygons.
+ */
 var SLOT_POLYGON_INSET = 2;
 
-// The minimum number of slots a country can have.
+/**
+ * The minimum number of slots a country can have.
+ */
 var MIN_SLOTS = 5;
 
-// Returns the vertices for a given cell.
+/**
+ * Returns the vertices for a given cell.
+ */
 function verticesForCell(cell) {
   return cell.halfedges.map(function(halfedge) {
     return Point(halfedge.getStartpoint());
   });
 }
 
-// Returns the polygon for a given cell.
+/**
+ * Returns the polygon for a given cell.
+ */
 var polygonForCell = F.compose(Polygon, verticesForCell);
 
-// Calculates the Voronoi diagram for a given set of sites using a tessellation
-// function. A number of Lloyd relaxations will also be applied to the
-// resulting diagram.
-//
-// See http://en.wikipedia.org/wiki/Lloyd's_algorithm
+/**
+ * Calculates the Voronoi diagram for a given set of sites using a tessellation
+ * function. A number of Lloyd relaxations will also be applied to the
+ * resulting diagram.
+ *
+ * See http://en.wikipedia.org/wiki/Lloyd's_algorithm
+ */
 function calculateDiagram(t, sites, relaxations) {
   // Calculate the initial Voronoi diagram.
   var diagram = t(sites);
@@ -63,7 +81,9 @@ function calculateDiagram(t, sites, relaxations) {
   }, diagram);
 }
 
-// Returns the cells neighbouring a given cell.
+/**
+ * Returns the cells neighbouring a given cell.
+ */
 function neighbouringCells(cell, diagram) {
   var cellWithId = F.flip(F.get, diagram.cells);
   return cell.getNeighborIds().map(cellWithId);
@@ -82,7 +102,9 @@ function calculateSlots(hexagons, polygon) {
   return centreHexagons.map(F.applyMethod('offset', -SLOT_POLYGON_INSET));
 }
 
-// Merges the given set of hexagons inside the Voronoi cells into countries.
+/**
+ * Merges the given set of hexagons inside the Voronoi cells into countries.
+ */
 function calculateCountries(hexagons, diagram) {
   return diagram.cells.map(function(cell) {
     // Find the hexagons inside the cell.
@@ -114,6 +136,9 @@ function calculateCountries(hexagons, diagram) {
   });
 }
 
+/**
+ * Returns a Voronoi tessellation function for the given width and height.
+ */
 function tessellationFunction(width, height) {
   var voronoi = new Voronoi(),
       box = {xl:0, xr:width, yt:0, yb:height};
@@ -125,8 +150,10 @@ function tessellationFunction(width, height) {
   };
 }
 
-// Returns a new world with the given width and height.
-module.exports = function(width, height) {
+/**
+ * Builds a new world with the given width and height.
+ */
+exports.build = function(width, height) {
   var hexgrid  = Hexgrid(CELL_SIZE),
       size     = hexgrid.sizeForRect(width, height),
       hexagons = hexgrid.build(size, [1.0, 0.5]);

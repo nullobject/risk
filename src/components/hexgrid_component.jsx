@@ -26,7 +26,7 @@ module.exports = React.createClass({
 
     return (
       /* jshint ignore:start */
-      <g className={this.props.className}>
+      <g className="hexgrid">
         <defs>
           <pattern id="tile" width={width} height={height} patternUnits="userSpaceOnUse">
             {this.renderHexgrid(hexgrid)}

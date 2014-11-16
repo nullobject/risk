@@ -8,7 +8,9 @@ function degreesToRadians(degrees) {
   return degrees * Math.PI / 180;
 }
 
-// Calculates the position of a hexagon at a given coordinate.
+/**
+ * Calculates the position of a hexagon at a given coordinate.
+ */
 function calculatePosition(coordinate, width, height) {
   var col = coordinate[0],
       row = coordinate[1];
@@ -19,7 +21,9 @@ function calculatePosition(coordinate, width, height) {
   );
 }
 
-// Calculates the vertices of a hexagon at a given position.
+/**
+ * Calculates the vertices of a hexagon at a given position.
+ */
 function calculateVertices(position, r, h, radius) {
   return [
     Point(position.x,           position.y + h               ),
@@ -31,9 +35,11 @@ function calculateVertices(position, r, h, radius) {
   ];
 }
 
-// Returns a new hexgrid with cells of a given radius.
-//
-// See http://www.redblobgames.com/grids/hexagons
+/**
+ * Returns a new hexgrid with cells of a given radius.
+ *
+ * See http://www.redblobgames.com/grids/hexagons
+ */
 module.exports = function(radius) {
   var padding = 0;
 
@@ -56,8 +62,10 @@ module.exports = function(radius) {
     width:  width,
     height: height,
 
-    // Returns an array of polygons which represent a hexgrid of a given size (rows
-    // & cols).
+    /**
+     * Returns an array of polygons which represent a hexgrid of a given size
+     * (rows & cols).
+     */
     build: function(size, offset) {
       // Generate the coordinates of the cells in the hexgrid.
       var coordinates = F.cartesian(F.range(0, size[0]), F.range(0, size[1]));
@@ -69,7 +77,10 @@ module.exports = function(radius) {
       return coordinates.map(F.compose(Polygon, hexagonVertices(origin)));
     },
 
-    // Returns the number of hexgrid cells which fit in a rect of the given size.
+    /**
+     * Returns the number of hexgrid cells which fit in a rect of the given
+     * size.
+     */
     sizeForRect: function(width, height) {
       var cols = Math.floor(width / (2 * r)) - 1,
           rows = Math.floor(height / (radius + h)) - 1;

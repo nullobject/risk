@@ -61,7 +61,7 @@ module.exports = React.createClass({
   }),
 
   renderCells: function(game) {
-    return DEVELOPMENT ? (
+    return DEBUG ? (
       /* jshint ignore:start */
       <PathsComponent className="voronoi" paths={game.world.cells} />
       /* jshint ignore:end */
