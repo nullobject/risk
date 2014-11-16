@@ -10,6 +10,13 @@ module.exports = {
   },
 
   /**
+   * Clamps the number `n` between `a` and `b`.
+   */
+  clamp: function(n, a, b) {
+    return Math.min(b, Math.max(a, n))
+  },
+
+  /**
    * Rolls `n` dice and returns the sum of their values.
    */
   rollDice: function(n) {

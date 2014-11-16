@@ -4,6 +4,15 @@ var core      = require('../src/core'),
     Immutable = require('immutable');
 
 describe('core', function() {
+  describe('.clamp', function() {
+    it('should clamp a value', function() {
+      expect(core.clamp(0, 1, 2)).to.eql(1);
+      expect(core.clamp(1, 1, 2)).to.eql(1);
+      expect(core.clamp(2, 1, 2)).to.eql(2);
+      expect(core.clamp(3, 1, 2)).to.eql(2);
+    });
+  });
+
   describe('.replace', function() {
     it('should move to the target country', function() {
       var s = {id: 1, name: 's'},
