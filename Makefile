@@ -1,4 +1,4 @@
-.PHONY: clean list production start test unit
+.PHONY: clean lint production start test unit
 
 start: node_modules
 	@node_modules/.bin/webpack-dev-server --colors -d
