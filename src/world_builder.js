@@ -167,10 +167,31 @@ function tessellationFunction(width, height) {
   };
 }
 
+
+/**
+ * Prunes the countries that are too small/big.
+ */
+function pruneCountriesBySize(countries) {
+  return countries.filter(function(country) {
+    return country.size >= MIN_COUNTRY_SIZE && country.size <= MAX_COUNTRY_SIZE;
+  });
+}
+
+/**
+ * Prunes the neighbours that have been culled.
+ */
+function pruneCulledNeighbours(countries) {
+  var countryIds = countries.map(F.get('id'));
+
+  return countries.map(function(country) {
+    var neighbourIds = country.neighbourIds.filter(F.flip(F.elem, countryIds));
+
+    return F.copy(country, {neighbourIds: neighbourIds});
+  });
+}
+
 /**
  * Builds a new world with the given width and height.
- *
- * TODO: Prune islands.
  */
 exports.build = function(width, height) {
   var hexgrid  = Hexgrid(CELL_SIZE),
@@ -189,9 +210,15 @@ exports.build = function(width, height) {
   var diagram = calculateDiagram(t, sites, RELAXATIONS);
 
   // Calculate the countries from the Voronoi diagram.
-  var countries = calculateCountries(hexagons, diagram).filter(function(country) {
-    return country.size >= MIN_COUNTRY_SIZE && country.size <= MAX_COUNTRY_SIZE;
-  });
+  var countries = calculateCountries(hexagons, diagram);
+
+  // Prune the countries that are too small/big.
+  countries = pruneCountriesBySize(countries);
+
+  // TODO: Find islands using depth-first search and choose the largest island.
+
+  // Prune the neighbours that have been culled.
+  countries = pruneCulledNeighbours(countries);
 
   // Calculate the Voronoi cells for debugging.
   var cells = diagram.cells.map(verticesForCell);
