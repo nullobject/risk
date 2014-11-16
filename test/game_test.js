@@ -24,7 +24,7 @@ describe('Game', function() {
     sandbox = sinon.sandbox.create();
     sandbox.stub(world, 'assignPlayers').returns(world);
     sandbox.stub(world, 'countriesOccupiedByPlayer').returns(1);
-    game = new Game(world);
+    game = new Game([player], world);
   });
 
   afterEach(function() {

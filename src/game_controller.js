@@ -4,12 +4,26 @@ var AI           = require('./ai'),
     Bacon        = require('baconjs'),
     F            = require('fkit'),
     Game         = require('./game'),
+    Player       = require('./player'),
     React        = require('react'),
     WorldBuilder = require('./world_builder');
 
 var RootComponent = React.createFactory(require('./components/root_component'));
 
+/**
+ * The number of milliseconds between clock ticks.
+ */
 var CLOCK_INTERVAL = 100;
+
+/**
+ * The number of players in the game.
+ */
+var PLAYERS = 5;
+
+/**
+ * The number of human players in the game.
+ */
+var HUMANS = 1;
 
 function transformGameState(game, event) {
   switch (event.type) {
@@ -23,11 +37,14 @@ function transformGameState(game, event) {
 }
 
 function GameController(options) {
-  // Create a world.
+  // Create the players.
+  var players = F.range(0, PLAYERS).map(Player);
+
+  // Create the world.
   var world = WorldBuilder.build(options.width, options.height);
 
-  // Create a game state.
-  var game = new Game(world);
+  // Create the game state.
+  var game = new Game(players, world);
 
   // Create the input bus.
   var inputBus = new Bacon.Bus();
@@ -43,7 +60,7 @@ function GameController(options) {
   var gameProperty = mainBus.scan(game, transformGameState);
 
   // Map player IDs to AI streams.
-  var aiStream = Bacon.mergeAll(game.players.map(playerAI));
+  var aiStream = Bacon.mergeAll(F.drop(HUMANS, game.players).map(playerAI));
 
   // Plug the input bus into the main bus.
   mainBus.plug(inputBus);

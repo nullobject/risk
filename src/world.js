@@ -86,6 +86,9 @@ World.prototype.attack = function(s, t) {
   var attackerDice = core.rollDice(s.armies),
       defenderDice = core.rollDice(t.armies);
 
+  core.log('attacker: ' + attackerDice);
+  core.log('defender: ' + defenderDice);
+
   // Calculate the number of defender dice with a value greater than or equal
   // to the corresponding attacker dice.
   var comparisons = F

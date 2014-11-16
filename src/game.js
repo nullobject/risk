@@ -1,30 +1,21 @@
 'use strict';
 
-var core     = require('./core'),
-    F        = require('fkit'),
-    Player   = require('./player');
-
-/**
- * The number of players in the game.
- */
-var PLAYERS = 5;
+var core = require('./core'),
+    F    = require('fkit');
 
 /**
  * Creates a new game state.
  */
-function Game(world) {
+function Game(players, world) {
   var a = arguments;
 
   if (a.length > 0) {
-    // Create the players.
-    var players = F.range(0, PLAYERS).map(Player);
-
     // Assign each player to a random country.
     world = world.assignPlayers(players);
 
     this.world           = world;
     this.players         = players;
-    this.currentPlayer   = players[0];
+    this.currentPlayer   = F.head(players);
     this.selectedCountry = null;
   }
 }
