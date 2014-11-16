@@ -34,10 +34,21 @@ module.exports = React.createClass({
         <svg width={game.world.width} height={game.world.height}>
           <HexgridComponent width={game.world.width} height={game.world.height} hexgrid={game.world.hexgrid} />
           <GameComponent stream={stream} game={game} />
+          {this.renderGameOver(game)}
         </svg>
         <ControlsComponent currentPlayer={game.currentPlayer} stream={stream} />
       </div>
       /* jshint ignore:end */
     );
+  },
+
+  renderGameOver: function(game) {
+    return game.over ? (
+      /* jshint ignore:start */
+      <g className="game-over">
+        <rect width="100%" height="100%" />
+      </g>
+      /* jshint ignore:end */
+    ) : null;
   },
 });

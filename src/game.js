@@ -17,6 +17,7 @@ function Game(players, world) {
     this.players         = players;
     this.currentPlayer   = F.head(players);
     this.selectedCountry = null;
+    this.over            = false;
   }
 }
 
@@ -140,7 +141,8 @@ Game.prototype.moveToCountry = function(country) {
 
   return F.copy(this, {
     selectedCountry: null,
-    world:           world
+    world:           world,
+    over:            this.alivePlayers.length === 1
   });
 };
 
