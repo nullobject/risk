@@ -42,6 +42,16 @@ var SLOT_POLYGON_INSET = 2;
 var MIN_SLOTS = 5;
 
 /**
+ * The minimum country size.
+ */
+var MIN_COUNTRY_SIZE = 64;
+
+/**
+ * The maximum country size.
+ */
+var MAX_COUNTRY_SIZE = 128;
+
+/**
  * Returns the vertices for a given cell.
  */
 function verticesForCell(cell) {
@@ -104,36 +114,44 @@ function calculateSlots(hexagons, polygon) {
 
 /**
  * Merges the given set of hexagons inside the Voronoi cells into countries.
+ *
+ * TODO: Prune orphaned countries.
  */
 function calculateCountries(hexagons, diagram) {
-  return diagram.cells.map(function(cell) {
-    // Find the hexagons inside the cell.
-    var innerHexagons = hexagons.filter(function(hexagon) {
-      return polygonForCell(cell).containsPoint(hexagon.centroid());
-    });
+  return diagram.cells
+    .map(function(cell) {
+      // Find the hexagons inside the cell.
+      var innerHexagons = hexagons.filter(function(hexagon) {
+        return polygonForCell(cell).containsPoint(hexagon.centroid());
+      });
 
-    // Merge the hexagons into a larger polygon.
-    var polygon = Polygon.merge(innerHexagons);
+      if (innerHexagons.length < MIN_COUNTRY_SIZE || innerHexagons.length > MAX_COUNTRY_SIZE) {
+        return null;
+      }
 
-    // Calculate the neighbouring cells.
-    var neighbours = neighbouringCells(cell, diagram);
+      // Merge the hexagons into a larger polygon.
+      var polygon = Polygon.merge(innerHexagons);
 
-    // Calculate the neighbour IDs.
-    var neighbourIds = neighbours.map(function(neighbour) {
-      return neighbour.site.voronoiId;
-    });
+      // Calculate the neighbouring cells.
+      var neighbours = neighbouringCells(cell, diagram);
 
-    // Calculate the slots for the country.
-    var slots = calculateSlots(innerHexagons, polygon);
+      // Calculate the neighbour IDs.
+      var neighbourIds = neighbours.map(function(neighbour) {
+        return neighbour.site.voronoiId;
+      });
 
-    // Return a new country.
-    return new Country(
-      cell.site.voronoiId,
-      neighbourIds,
-      polygon.offset(-COUNTRY_POLYGON_INSET),
-      slots
-    );
-  });
+      // Calculate the slots for the country.
+      var slots = calculateSlots(innerHexagons, polygon);
+
+      // Return a new country.
+      return new Country(
+        cell.site.voronoiId,
+        neighbourIds,
+        polygon.offset(-COUNTRY_POLYGON_INSET),
+        slots
+      );
+    })
+    .filter(F.notEqual(null));
 }
 
 /**
