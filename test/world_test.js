@@ -83,7 +83,7 @@ describe('World', function() {
   describe('#attack', function() {
     context('when the attacker rolls higher than the defender', function() {
       beforeEach(function() {
-        stubRollDice(sandbox, [4, 3, 2, 1], [4, 3]);
+        stubRollDice(sandbox, [6, 4, 2, 1], [6, 5]);
 
         var result = attack(world, p1, q1);
 
@@ -102,9 +102,9 @@ describe('World', function() {
       });
     });
 
-    context('when the defender rolls equal to the attacker', function() {
+    context('when the attacker rolls equal to the defender', function() {
       beforeEach(function() {
-        stubRollDice(sandbox, [5, 1, 1, 1], [4, 4]);
+        stubRollDice(sandbox, [5, 1, 1, 1], [6, 4]);
 
         var result = attack(world, p1, q1);
 
@@ -118,8 +118,29 @@ describe('World', function() {
       });
 
       it('should update the armies', function() {
-        expect(x.armies).to.equal(3);
-        expect(y.armies).to.equal(1);
+        expect(x.armies).to.equal(2);
+        expect(y.armies).to.equal(2);
+      });
+    });
+
+    context('when the attacker rolls lower than the defender', function() {
+      beforeEach(function() {
+        stubRollDice(sandbox, [5, 2, 1, 1], [6, 4]);
+
+        var result = attack(world, p1, q1);
+
+        x = result[0];
+        y = result[1];
+      });
+
+      it('should not move the attacker', function() {
+        expect(x.player).to.equal(p);
+        expect(y.player).to.equal(q);
+      });
+
+      it('should update the armies', function() {
+        expect(x.armies).to.equal(2);
+        expect(y.armies).to.equal(2);
       });
     });
   });
