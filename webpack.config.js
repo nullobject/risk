@@ -20,8 +20,9 @@ module.exports = {
   },
   plugins: [
     new DefinePlugin({
+      DEBUG:       process.env.NODE_ENV === 'debug'       || false,
       DEVELOPMENT: process.env.NODE_ENV === 'development' || true,
-      PRODUCTION:  process.env.NODE_ENV === 'production' || false
+      PRODUCTION:  process.env.NODE_ENV === 'production'  || false
     }),
     new ExtractTextPlugin('style.css', {allChunks: true})
   ]
