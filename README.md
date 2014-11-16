@@ -25,6 +25,9 @@ Run the development server:
 > make start
 ```
 
+Open `http://localhost:8080/webpack-dev-server/` in your browser. Any changes
+to the app will be live reloaded.
+
 ### Build
 
 Build the app:

@@ -1,15 +1,21 @@
-.PHONY: list production start test unit
+.PHONY: clean list production start test unit
 
-start:
+start: node_modules
 	@node_modules/.bin/webpack-dev-server --colors -d
 
-production:
+production: node_modules
 	@NODE_ENV=production node_modules/.bin/webpack --colors --progress -p
 
 test: unit lint
 
-lint:
-	@node_modules/.bin/jshint src
+clean:
+	@rm -rf doc node_modules
+
+node_modules:
+	@npm install
 
 unit:
 	@node_modules/.bin/mocha
+
+lint:
+	@node_modules/.bin/jshint src
