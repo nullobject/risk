@@ -6,11 +6,12 @@ var F         = require('fkit'),
 /**
  * Returns a new country.
  */
-function Country(id, neighbourIds, polygon, slots) {
+function Country(id, size, neighbourIds, polygon, slots) {
   var a = arguments;
 
   if (a.length > 0) {
     this.id           = id;
+    this.size         = size;
     this.neighbourIds = neighbourIds;
     this.polygon      = polygon;
     this.slots        = slots;

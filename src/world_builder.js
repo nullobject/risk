@@ -120,44 +120,37 @@ function calculateSlots(hexagons, polygon) {
 
 /**
  * Merges the given set of hexagons inside the Voronoi cells into countries.
- *
- * TODO: Prune orphaned countries.
  */
 function calculateCountries(hexagons, diagram) {
-  return diagram.cells
-    .map(function(cell) {
-      // Find the hexagons inside the cell.
-      var innerHexagons = hexagons.filter(function(hexagon) {
-        return polygonForCell(cell).containsPoint(hexagon.centroid());
-      });
+  return diagram.cells.map(function(cell) {
+    // Find the hexagons inside the cell.
+    var innerHexagons = hexagons.filter(function(hexagon) {
+      return polygonForCell(cell).containsPoint(hexagon.centroid());
+    });
 
-      if (innerHexagons.length < MIN_COUNTRY_SIZE || innerHexagons.length > MAX_COUNTRY_SIZE) {
-        return null;
-      }
+    // Merge the hexagons into a larger polygon.
+    var polygon = Polygon.merge(innerHexagons);
 
-      // Merge the hexagons into a larger polygon.
-      var polygon = Polygon.merge(innerHexagons);
+    // Calculate the neighbouring cells.
+    var neighbours = neighbouringCells(cell, diagram);
 
-      // Calculate the neighbouring cells.
-      var neighbours = neighbouringCells(cell, diagram);
+    // Calculate the neighbour IDs.
+    var neighbourIds = neighbours.map(function(neighbour) {
+      return neighbour.site.voronoiId;
+    });
 
-      // Calculate the neighbour IDs.
-      var neighbourIds = neighbours.map(function(neighbour) {
-        return neighbour.site.voronoiId;
-      });
+    // Calculate the slots for the country.
+    var slots = calculateSlots(innerHexagons, polygon);
 
-      // Calculate the slots for the country.
-      var slots = calculateSlots(innerHexagons, polygon);
-
-      // Return a new country.
-      return new Country(
-        cell.site.voronoiId,
-        neighbourIds,
-        polygon.offset(-COUNTRY_POLYGON_INSET),
-        slots
-      );
-    })
-    .filter(F.notEqual(null));
+    // Return a new country.
+    return new Country(
+      cell.site.voronoiId,
+      innerHexagons.length,
+      neighbourIds,
+      polygon.offset(-COUNTRY_POLYGON_INSET),
+      slots
+    );
+  });
 }
 
 /**
@@ -176,6 +169,8 @@ function tessellationFunction(width, height) {
 
 /**
  * Builds a new world with the given width and height.
+ *
+ * TODO: Prune islands.
  */
 exports.build = function(width, height) {
   var hexgrid  = Hexgrid(CELL_SIZE),
@@ -194,7 +189,9 @@ exports.build = function(width, height) {
   var diagram = calculateDiagram(t, sites, RELAXATIONS);
 
   // Calculate the countries from the Voronoi diagram.
-  var countries = calculateCountries(hexagons, diagram);
+  var countries = calculateCountries(hexagons, diagram).filter(function(country) {
+    return country.size >= MIN_COUNTRY_SIZE && country.size <= MAX_COUNTRY_SIZE;
+  });
 
   // Calculate the Voronoi cells for debugging.
   var cells = diagram.cells.map(verticesForCell);
