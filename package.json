@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "baconjs": "^0.7.23",
-    "fkit": "^0.15.0",
+    "fkit": "^0.16.0",
     "immutable": "^3.1.0",
     "normalize.css": "^3.0.1",
     "react": "^0.12.0"

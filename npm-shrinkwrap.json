@@ -4,41 +4,41 @@
   "dependencies": {
     "baconjs": {
       "version": "0.7.33",
-      "from": "baconjs@>=0.7.23 <0.8.0",
+      "from": "https://registry.npmjs.org/baconjs/-/baconjs-0.7.33.tgz",
       "resolved": "https://registry.npmjs.org/baconjs/-/baconjs-0.7.33.tgz"
     },
     "fkit": {
-      "version": "0.15.0",
-      "from": "fkit@>=0.15.0 <0.16.0"
+      "version": "0.16.1",
+      "from": "fkit@0.16.1"
     },
     "immutable": {
       "version": "3.1.0",
-      "from": "immutable@>=3.1.0 <4.0.0",
+      "from": "https://registry.npmjs.org/immutable/-/immutable-3.1.0.tgz",
       "resolved": "https://registry.npmjs.org/immutable/-/immutable-3.1.0.tgz"
     },
     "normalize.css": {
       "version": "3.0.2",
-      "from": "normalize.css@>=3.0.1 <4.0.0",
+      "from": "https://registry.npmjs.org/normalize.css/-/normalize.css-3.0.2.tgz",
       "resolved": "https://registry.npmjs.org/normalize.css/-/normalize.css-3.0.2.tgz"
     },
     "react": {
       "version": "0.12.0",
-      "from": "react@>=0.12.0 <0.13.0",
+      "from": "https://registry.npmjs.org/react/-/react-0.12.0.tgz",
       "resolved": "https://registry.npmjs.org/react/-/react-0.12.0.tgz",
       "dependencies": {
         "envify": {
           "version": "3.2.0",
-          "from": "envify@>=3.0.0 <4.0.0",
+          "from": "https://registry.npmjs.org/envify/-/envify-3.2.0.tgz",
           "resolved": "https://registry.npmjs.org/envify/-/envify-3.2.0.tgz",
           "dependencies": {
             "through": {
               "version": "2.3.6",
-              "from": "through@>=2.3.4 <2.4.0",
+              "from": "https://registry.npmjs.org/through/-/through-2.3.6.tgz",
               "resolved": "https://registry.npmjs.org/through/-/through-2.3.6.tgz"
             },
             "jstransform": {
               "version": "7.0.0",
-              "from": "jstransform@>=7.0.0 <8.0.0",
+              "from": "jstransform@7.0.0",
               "resolved": "https://registry.npmjs.org/jstransform/-/jstransform-7.0.0.tgz",
               "dependencies": {
                 "base62": {
