@@ -1,6 +1,7 @@
 'use strict';
 
-var F = require('fkit');
+var F         = require('fkit'),
+    Immutable = require('immutable');
 
 module.exports = {
   log: function(message) {
@@ -70,5 +71,21 @@ module.exports = {
 
       return ds;
     }
+  },
+
+  /**
+   * Returns a map from IDs to objects for the list of `as`.
+   */
+  idMap: function(as) {
+    return as.reduce(function(map, a) {
+      return map.set(a.id, a);
+    }, Immutable.Map());
+  },
+
+  /**
+   * Returns true if `n` is between `a` and `b`, false otherwise.
+   */
+  between: function(n, a, b) {
+    return n >= a && n <= b;
   },
 };

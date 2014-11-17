@@ -55,4 +55,16 @@ Country.prototype.reinforce = function(n) {
   }
 };
 
+/**
+ * Recalculates the neighbours using the list of `countries`.
+ */
+Country.prototype.recalculateNeighbours = function(countries) {
+  var countryIds = countries.map(F.get('id'));
+
+  // Filter neighbours which are in the list of country IDs.
+  var neighbourIds = this.neighbourIds.filter(F.flip(F.elem, countryIds));
+
+  return F.copy(this, {neighbourIds: neighbourIds});
+};
+
 module.exports = Country;
