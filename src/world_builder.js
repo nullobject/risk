@@ -1,13 +1,14 @@
 'use strict';
 
-var core    = require('./core'),
-    Country = require('./country'),
-    F       = require('fkit'),
-    Hexgrid = require('./geom/hexgrid'),
-    Point   = require('./geom/point'),
-    Polygon = require('./geom/polygon'),
-    Voronoi = require('../lib/voronoi'),
-    World   = require('./world');
+var core      = require('./core'),
+    Country   = require('./country'),
+    F         = require('fkit'),
+    Hexgrid   = require('./geom/hexgrid'),
+    Immutable = require('immutable'),
+    Point     = require('./geom/point'),
+    Polygon   = require('./geom/polygon'),
+    Voronoi   = require('../lib/voronoi'),
+    World     = require('./world');
 
 /**
  * Hexgrid cell size.
@@ -167,26 +168,87 @@ function tessellationFunction(width, height) {
   };
 }
 
-
 /**
  * Prunes the countries that are too small/big.
  */
 function pruneCountriesBySize(countries) {
-  return countries.filter(function(country) {
+  return recalculateNeighbours(countries.filter(function(country) {
     return country.size >= MIN_COUNTRY_SIZE && country.size <= MAX_COUNTRY_SIZE;
-  });
+  }));
 }
 
 /**
- * Prunes the neighbours that have been culled.
+ * Recalculates the neighbours for the countries. Countries may have been
+ * pruned.
  */
-function pruneCulledNeighbours(countries) {
+function recalculateNeighbours(countries) {
   var countryIds = countries.map(F.get('id'));
 
   return countries.map(function(country) {
     var neighbourIds = country.neighbourIds.filter(F.flip(F.elem, countryIds));
 
     return F.copy(country, {neighbourIds: neighbourIds});
+  });
+}
+
+
+/**
+ * Performs a depth-first traversal of the `countries` from the `start` node.
+ */
+function dfs(start, countriesMap) {
+  var visited = Immutable.Set();
+
+  return dfs_(start, visited);
+
+  function dfs_(country, visited) {
+    var neighbours = country.neighbourIds.map(function(id) {
+      return countriesMap.get(id);
+    });
+
+    visited = visited.add(country);
+
+    neighbours.map(function(neighbour) {
+      if (!visited.contains(neighbour)) {
+        visited = dfs_(neighbour, visited);
+      }
+    });
+
+    return visited;
+  }
+}
+
+/**
+ * Calculates the connected islands of countries using a depth-first search.
+ */
+function calculateIslands(countries) {
+  var countriesSet = Immutable.Set(countries),
+      islandsSet   = Immutable.Set();
+
+  var countriesMap = countries.reduce(function(map, country) {
+    return map.set(country.id, country);
+  }, Immutable.Map());
+
+  return calculateIslands_(countriesSet, islandsSet);
+
+  function calculateIslands_(remainingCountriesSet, islandsSet) {
+    // Subtract the island countries from the remaining countries.
+    remainingCountriesSet = remainingCountriesSet.subtract(islandsSet.flatten(true));
+
+    if (remainingCountriesSet.size > 0) {
+      var island = dfs(remainingCountriesSet.first(), countriesMap);
+      islandsSet = calculateIslands_(remainingCountriesSet, islandsSet.add(island));
+    }
+
+    return islandsSet;
+  }
+}
+
+/**
+ * Calculates the largest island.
+ */
+function calculateLargestIsland(countries) {
+  return calculateIslands(countries).max(function(a, b) {
+    return a.size > b.size;
   });
 }
 
@@ -215,13 +277,11 @@ exports.build = function(width, height) {
   // Prune the countries that are too small/big.
   countries = pruneCountriesBySize(countries);
 
-  // TODO: Find islands using depth-first search and choose the largest island.
-
-  // Prune the neighbours that have been culled.
-  countries = pruneCulledNeighbours(countries);
+  // Calculate the largest island.
+  var island = calculateLargestIsland(countries);
 
   // Calculate the Voronoi cells for debugging.
   var cells = diagram.cells.map(verticesForCell);
 
-  return new World(width, height, hexgrid, countries, cells);
+  return new World(width, height, hexgrid, island, cells);
 };
