@@ -1,13 +1,13 @@
 'use strict';
 
 var core      = require('./core'),
+    voronoi   = require('./voronoi'),
     Country   = require('./country'),
     F         = require('fkit'),
     Hexgrid   = require('./geom/hexgrid'),
     Immutable = require('immutable'),
     Point     = require('./geom/point'),
     Polygon   = require('./geom/polygon'),
-    Voronoi   = require('../lib/voronoi'),
     World     = require('./world');
 
 /**
@@ -59,54 +59,6 @@ var MIN_COUNTRY_SIZE = 64;
 var MAX_COUNTRY_SIZE = 128;
 
 /**
- * Returns the vertices for a given cell.
- */
-function verticesForCell(cell) {
-  return cell.halfedges.map(function(halfedge) {
-    return Point(halfedge.getStartpoint());
-  });
-}
-
-/**
- * Returns the polygon for a given cell.
- */
-var polygonForCell = F.compose(Polygon, verticesForCell);
-
-/**
- * Calculates the Voronoi diagram for a given set of sites using a tessellation
- * function. A number of Lloyd relaxations will also be applied to the
- * resulting diagram.
- *
- * See http://en.wikipedia.org/wiki/Lloyd's_algorithm
- */
-function calculateDiagram(t, sites, relaxations) {
-  // Calculate the initial Voronoi diagram.
-  var diagram = t(sites);
-
-  // Apply a number of relaxations to the Voronoi diagram.
-  return F.range(0, relaxations).reduce(function(diagram) {
-    // Calculate the new sites from the centroids of the cells.
-    var sites = diagram.cells.map(function(cell) {
-      return polygonForCell(cell).centroid();
-    });
-
-    // Recycle the diagram before computing it again.
-    diagram.recycle();
-
-    // Return a new Voronoi diagram.
-    return t(sites);
-  }, diagram);
-}
-
-/**
- * Returns the cells neighbouring a given cell.
- */
-function neighbouringCells(cell, diagram) {
-  var cellWithId = F.flip(F.get, diagram.cells);
-  return cell.getNeighborIds().map(cellWithId);
-}
-
-/**
  * Calculates the slot polygons given a country polygon and a list of the inner
  * hexagons.
  */
@@ -130,14 +82,14 @@ var calculateCountries = F.curry(function(hexagons, diagram) {
   return diagram.cells.map(function(cell) {
     // Find the hexagons inside the cell.
     var countryHexagons = hexagons.filter(function(hexagon) {
-      return polygonForCell(cell).containsPoint(hexagon.centroid());
+      return voronoi.polygonForCell(cell).containsPoint(hexagon.centroid());
     });
 
     // Merge the hexagons into a larger polygon.
     var countryPolygon = Polygon.merge(countryHexagons);
 
     // Calculate the neighbouring cells.
-    var neighbours = neighbouringCells(cell, diagram);
+    var neighbours = voronoi.neighbouringCells(cell, diagram);
 
     // Calculate the neighbour IDs.
     var neighbourIds = neighbours.map(function(neighbour) {
@@ -157,20 +109,6 @@ var calculateCountries = F.curry(function(hexagons, diagram) {
     );
   });
 });
-
-/**
- * Returns a Voronoi tessellation function for the given width and height.
- */
-function tessellationFunction(width, height) {
-  var voronoi = new Voronoi(),
-      box = {xl:0, xr:width, yt:0, yb:height};
-
-  return function(points) {
-    var diagram = voronoi.compute(points, box);
-    diagram.recycle = function() { voronoi.recycle(diagram); };
-    return diagram;
-  };
-}
 
 /**
  * Prunes countries that are too small/big.
@@ -215,8 +153,7 @@ function traverse(start, countriesMap) {
 }
 
 /**
- * Calculates the islands of connected countries using a depth-first
- * travsersal.
+ * Calculates islands of connected countries using a depth-first travsersal.
  */
 function calculateIslands(countries) {
   var countriesMap = core.idMap(countries),
@@ -246,10 +183,8 @@ function calculateIslands(countries) {
 /**
  * Finds the largest island.
  */
-function findLargestIsland(countries) {
-  return calculateIslands(countries).max(function(a, b) {
-    return a.size > b.size;
-  });
+function findLargestIsland(islands) {
+  return islands.max(function(a, b) { return a.size > b.size; });
 }
 
 /**
@@ -261,7 +196,7 @@ exports.build = function(width, height) {
       hexagons = hexgrid.build(size, [1.0, 0.5]);
 
   // Create a Voronoi tessellation function.
-  var t = tessellationFunction(width, height);
+  var t = voronoi.tessellationFunction(width, height);
 
   // Generate a set of random "seed" sites within the clipping region.
   var sites = F.range(0, SEEDS).map(function() {
@@ -269,17 +204,18 @@ exports.build = function(width, height) {
   });
 
   // Calculate the Voronoi diagram.
-  var diagram = calculateDiagram(t, sites, RELAXATIONS);
+  var diagram = voronoi.calculateDiagram(t, sites, RELAXATIONS);
 
   // Calculate the countries.
   var countries = F.compose(
       findLargestIsland,
+      calculateIslands,
       pruneCountriesBySize,
       calculateCountries(hexagons)
     )(diagram);
 
   // Calculate the Voronoi cells for debugging.
-  var cells = diagram.cells.map(verticesForCell);
+  var cells = diagram.cells.map(voronoi.verticesForCell);
 
   return new World(width, height, hexgrid, countries, cells);
 };
