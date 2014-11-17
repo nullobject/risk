@@ -48,9 +48,9 @@ self = module.exports = {
   },
 
   /**
-   * Calculates the Voronoi diagram for a given set of sites using a tessellation
-   * function. A number of Lloyd relaxations will also be applied to the
-   * resulting diagram.
+   * Calculates the Voronoi diagram for a given set of sites using a
+   * tessellation function `t`. A number of Lloyd `relaxations` will also be
+   * applied to the resulting diagram.
    *
    * See http://en.wikipedia.org/wiki/Lloyd's_algorithm
    */
