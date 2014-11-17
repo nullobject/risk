@@ -189,11 +189,11 @@ exports.build = function(width, height) {
 
   // Calculate the countries.
   var countries = F.compose(
-      findLargestIsland,
-      calculateIslands,
-      pruneCountriesBySize,
-      calculateCountries(hexagons)
-    )(diagram);
+    findLargestIsland,
+    calculateIslands,
+    pruneCountriesBySize,
+    calculateCountries(hexagons)
+  )(diagram);
 
   // Calculate the Voronoi cells for debugging.
   var cells = diagram.cells.map(voronoi.verticesForCell);

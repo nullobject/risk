@@ -1,6 +1,7 @@
 'use strict';
 
 var core      = require('./core'),
+    island    = require('./island'),
     F         = require('fkit'),
     Immutable = require('immutable');
 
@@ -116,52 +117,6 @@ World.prototype.attack = function(s, t) {
 };
 
 /**
- * Calculates islands of connected countries using a depth-first travsersal.
- *
- * @curried
- * @function
- */
-var calculatePlayerIslands = F.curry(function(player, countries) {
-  var countriesMap = core.idMap(countries),
-      countriesSet = Immutable.Set(countries),
-      islandsSet   = Immutable.Set();
-
-  return calculateIslands_(countriesSet, islandsSet).toArray();
-
-  function calculateIslands_(remainingCountriesSet, islandsSet) {
-    if (remainingCountriesSet.size > 0) {
-      var nodes = function(country) {
-        return country.neighbourIds
-          .map(function(id) { return countriesMap.get(id); })
-          .filter(F.notEqual(undefined));
-      };
-
-      var island = core.traverse(remainingCountriesSet.first(), nodes);
-
-      // Add the island to the islands set.
-      islandsSet = islandsSet.add(island);
-
-      // Remove the island from the remaining countries set.
-      remainingCountriesSet = remainingCountriesSet.subtract(island);
-
-      // Recurse with the remaining countries set.
-      islandsSet = calculateIslands_(remainingCountriesSet, islandsSet);
-    }
-
-    return islandsSet;
-  }
-});
-
-/**
- * Finds the largest island.
- *
- * @function
- * @param as The list of islands.
- * @returns The largest island.
- */
-var findLargestIsland = F.maximumBy(function(a, b) { return a.length > b.length; });
-
-/**
  * Reinforces the countries in the list of `as` and returns a new world state.
  *
  * TODO: Reinforce leaf countries for player islands. Then reinforce the
@@ -172,10 +127,22 @@ World.prototype.reinforce = function(player) {
 
   var as = this.countriesOccupiedByPlayer(player);
 
-  // Find the largest player island.
-  var island = F.compose(findLargestIsland, calculatePlayerIslands(player))(as);
+  var countriesMap = core.idMap(as);
 
-  var ds = reinforce_(player, island.length);
+  // Create an adjacency function.
+  var f = function(country) {
+    return country.neighbourIds
+      .map(function(id) { return countriesMap.get(id); })
+      .filter(F.notEqual(undefined));
+  };
+
+  // Find the largest player island.
+  var playerIsland = F.compose(
+    island.findLargestIsland,
+    island.calculateIslands(f)
+  )(as);
+
+  var ds = reinforce_(player, playerIsland.length);
 
   return F.update('countriesSet', core.replace(as, ds), this);
 
