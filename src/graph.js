@@ -6,6 +6,11 @@ var core      = require('./core'),
 
 var self;
 
+/**
+ * This module defines operations on graphs.
+ *
+ * @module
+ */
 self = module.exports = {
   /**
    * Performs a depth-first traversal of a graph starting at node `n` using the
@@ -34,31 +39,31 @@ self = module.exports = {
   },
 
   /**
-   * Calculates islands of connected countries using a depth-first travsersal.
+   * Calculates islands of connected nodes using a depth-first travsersal.
    *
    * @curried
    * @function
    * @param f The adjacency function.
-   * @param countries The list of countries.
+   * @param nodes The list of nodes.
    */
-  calculateIslands: F.curry(function(f, countries) {
-    var countriesSet = Immutable.Set(countries),
-        islandsSet   = Immutable.Set();
+  calculateIslands: F.curry(function(f, nodes) {
+    var nodesSet   = Immutable.Set(nodes),
+        islandsSet = Immutable.Set();
 
-    return calculateIslands_(countriesSet, islandsSet).toArray();
+    return calculateIslands_(nodesSet, islandsSet).toArray();
 
-    function calculateIslands_(remainingCountriesSet, islandsSet) {
-      if (remainingCountriesSet.size > 0) {
-        var island = self.traverse(f, remainingCountriesSet.first());
+    function calculateIslands_(remainingNodesSet, islandsSet) {
+      if (remainingNodesSet.size > 0) {
+        var island = self.traverse(f, remainingNodesSet.first());
 
         // Add the island to the islands set.
         islandsSet = islandsSet.add(island);
 
-        // Remove the island from the remaining countries set.
-        remainingCountriesSet = remainingCountriesSet.subtract(island);
+        // Remove the island from the remaining nodes set.
+        remainingNodesSet = remainingNodesSet.subtract(island);
 
-        // Recurse with the remaining countries set.
-        islandsSet = calculateIslands_(remainingCountriesSet, islandsSet);
+        // Recurse with the remaining nodes set.
+        islandsSet = calculateIslands_(remainingNodesSet, islandsSet);
       }
 
       return islandsSet;

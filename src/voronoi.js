@@ -7,6 +7,11 @@ var F       = require('fkit'),
 
 var self;
 
+/**
+ * This module defines operations on Voronoi diagrams.
+ *
+ * @module
+ */
 self = module.exports = {
   /**
    * Returns a Voronoi tessellation function for the given `width` and

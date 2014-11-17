@@ -3,9 +3,18 @@
 var F         = require('fkit'),
     Immutable = require('immutable');
 
+/**
+ * This module defines core operations.
+ *
+ * @module
+ */
 module.exports = {
+  /**
+   * Logs a message to the console.
+   */
   log: function(message) {
-    if (typeof DEVELOPMENT !== 'undefined' && DEVELOPMENT) {
+    if ((typeof DEBUG !== 'undefined' && DEBUG) ||
+        (typeof DEVELOPMENT !== 'undefined' && DEVELOPMENT)) {
       console.log(message);
     }
   },
@@ -15,6 +24,13 @@ module.exports = {
    */
   clamp: function(n, a, b) {
     return Math.min(b, Math.max(a, n))
+  },
+
+  /**
+   * Returns true if `n` is between `a` and `b`, false otherwise.
+   */
+  between: function(n, a, b) {
+    return n >= a && n <= b;
   },
 
   /**
@@ -80,12 +96,5 @@ module.exports = {
     return as.reduce(function(map, a) {
       return map.set(a.id, a);
     }, Immutable.Map());
-  },
-
-  /**
-   * Returns true if `n` is between `a` and `b`, false otherwise.
-   */
-  between: function(n, a, b) {
-    return n >= a && n <= b;
   },
 };
