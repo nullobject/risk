@@ -1,7 +1,7 @@
 'use strict';
 
 var core      = require('./core'),
-    island    = require('./island'),
+    graph     = require('./graph'),
     F         = require('fkit'),
     Immutable = require('immutable');
 
@@ -127,6 +127,7 @@ World.prototype.reinforce = function(player) {
 
   var as = this.countriesOccupiedByPlayer(player);
 
+  // Create a map from country IDs to countries.
   var countriesMap = core.idMap(as);
 
   // Create an adjacency function.
@@ -137,12 +138,12 @@ World.prototype.reinforce = function(player) {
   };
 
   // Find the largest player island.
-  var playerIsland = F.compose(
-    island.findLargestIsland,
-    island.calculateIslands(f)
+  var island = F.compose(
+    graph.findLargestIsland,
+    graph.calculateIslands(f)
   )(as);
 
-  var ds = reinforce_(player, playerIsland.length);
+  var ds = reinforce_(player, island.length);
 
   return F.update('countriesSet', core.replace(as, ds), this);
 

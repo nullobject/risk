@@ -1,11 +1,11 @@
 'use strict';
 
 var core      = require('./core'),
+    graph     = require('./graph'),
     voronoi   = require('./voronoi'),
     Country   = require('./country'),
     F         = require('fkit'),
     Hexgrid   = require('./geom/hexgrid'),
-    Immutable = require('immutable'),
     Point     = require('./geom/point'),
     Polygon   = require('./geom/polygon'),
     World     = require('./world');
@@ -128,47 +128,6 @@ function pruneCountriesBySize(countries) {
 }
 
 /**
- * Calculates islands of connected countries using a depth-first travsersal.
- */
-function calculateIslands(countries) {
-  var countriesMap = core.idMap(countries),
-      countriesSet = Immutable.Set(countries),
-      islandsSet   = Immutable.Set();
-
-  return calculateIslands_(countriesSet, islandsSet).toArray();
-
-  function calculateIslands_(remainingCountriesSet, islandsSet) {
-    if (remainingCountriesSet.size > 0) {
-      var nodes = function(country) {
-        return country.neighbourIds.map(function(id) { return countriesMap.get(id); });
-      };
-
-      var island = core.traverse(remainingCountriesSet.first(), nodes);
-
-      // Add the island to the islands set.
-      islandsSet = islandsSet.add(island);
-
-      // Remove the island from the remaining countries set.
-      remainingCountriesSet = remainingCountriesSet.subtract(island);
-
-      // Recurse with the remaining countries set.
-      islandsSet = calculateIslands_(remainingCountriesSet, islandsSet);
-    }
-
-    return islandsSet;
-  }
-}
-
-/**
- * Returns the largest island.
- *
- * @function
- * @param as The list of islands.
- * @returns The largest island.
- */
-var findLargestIsland = F.maximumBy(function(a, b) { return a.length > b.length; });
-
-/**
  * Builds a new world with the given width and height.
  */
 exports.build = function(width, height) {
@@ -189,14 +148,27 @@ exports.build = function(width, height) {
 
   // Calculate the countries.
   var countries = F.compose(
-    findLargestIsland,
-    calculateIslands,
     pruneCountriesBySize,
     calculateCountries(hexagons)
   )(diagram);
 
+  // Create a map from country IDs to countries.
+  var countriesMap = core.idMap(countries);
+
+  // Create an adjacency function.
+  var f = function(country) {
+    return country.neighbourIds
+      .map(function(id) { return countriesMap.get(id); });
+  };
+
+  // Find the largest island.
+  var island = F.compose(
+    graph.findLargestIsland,
+    graph.calculateIslands(f)
+  )(countries);
+
   // Calculate the Voronoi cells for debugging.
   var cells = diagram.cells.map(voronoi.verticesForCell);
 
-  return new World(width, height, hexgrid, countries, cells);
+  return new World(width, height, hexgrid, island, cells);
 };

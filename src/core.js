@@ -74,32 +74,6 @@ module.exports = {
   },
 
   /**
-   * Performs a depth-first traversal of a graph starting at node `n` using the
-   * adjacency function `f`.
-   *
-   * @param n The start node.
-   * @param f The adjacency function.
-   * @returns A list of adjacent nodes.
-   */
-  traverse: function(n, f) {
-    var visited = Immutable.Set();
-
-    return traverse_(n, visited);
-
-    function traverse_(node, visited) {
-      visited = visited.add(node);
-
-      f(node).map(function(neighbour) {
-        if (!visited.contains(neighbour)) {
-          visited = traverse_(neighbour, visited);
-        }
-      });
-
-      return visited;
-    }
-  },
-
-  /**
    * Returns a map from IDs to objects for the list of `as`.
    */
   idMap: function(as) {
