@@ -100,7 +100,7 @@ Game.prototype.selectPlayer = function(player) {
   }
 
   var world = this.currentPlayer ?
-    this.world.reinforce(this.world.countriesOccupiedByPlayer(this.currentPlayer)) :
+    this.world.reinforce(this.currentPlayer) :
     this.world;
 
   return F.copy(this, {

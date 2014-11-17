@@ -135,7 +135,7 @@ function calculateIslands(countries) {
       countriesSet = Immutable.Set(countries),
       islandsSet   = Immutable.Set();
 
-  return calculateIslands_(countriesSet, islandsSet);
+  return calculateIslands_(countriesSet, islandsSet).toArray();
 
   function calculateIslands_(remainingCountriesSet, islandsSet) {
     if (remainingCountriesSet.size > 0) {
@@ -160,11 +160,13 @@ function calculateIslands(countries) {
 }
 
 /**
- * Finds the largest island.
+ * Returns the largest island.
+ *
+ * @function
+ * @param as The list of islands.
+ * @returns The largest island.
  */
-function findLargestIsland(islands) {
-  return islands.max(function(a, b) { return a.size > b.size; });
-}
+var findLargestIsland = F.maximumBy(function(a, b) { return a.length > b.length; });
 
 /**
  * Builds a new world with the given width and height.

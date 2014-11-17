@@ -116,23 +116,81 @@ World.prototype.attack = function(s, t) {
 };
 
 /**
- * Reinforces the countries in the list of `as` and returns a new world state.
+ * Calculates islands of connected countries using a depth-first travsersal.
+ *
+ * @curried
+ * @function
  */
-World.prototype.reinforce = function(as) {
+var calculatePlayerIslands = F.curry(function(player, countries) {
+  var countriesMap = core.idMap(countries),
+      countriesSet = Immutable.Set(countries),
+      islandsSet   = Immutable.Set();
+
+  return calculateIslands_(countriesSet, islandsSet).toArray();
+
+  function calculateIslands_(remainingCountriesSet, islandsSet) {
+    if (remainingCountriesSet.size > 0) {
+      var nodes = function(country) {
+        return country.neighbourIds
+          .map(function(id) { return countriesMap.get(id); })
+          .filter(F.notEqual(undefined));
+      };
+
+      var island = core.traverse(remainingCountriesSet.first(), nodes);
+
+      // Add the island to the islands set.
+      islandsSet = islandsSet.add(island);
+
+      // Remove the island from the remaining countries set.
+      remainingCountriesSet = remainingCountriesSet.subtract(island);
+
+      // Recurse with the remaining countries set.
+      islandsSet = calculateIslands_(remainingCountriesSet, islandsSet);
+    }
+
+    return islandsSet;
+  }
+});
+
+/**
+ * Finds the largest island.
+ *
+ * @function
+ * @param as The list of islands.
+ * @returns The largest island.
+ */
+var findLargestIsland = F.maximumBy(function(a, b) { return a.length > b.length; });
+
+/**
+ * Reinforces the countries in the list of `as` and returns a new world state.
+ *
+ * TODO: Reinforce leaf countries for player islands. Then reinforce the
+ * remaining countries.
+ */
+World.prototype.reinforce = function(player) {
   core.log('World#reinforce');
 
-  // Calculate the availability list.
-  var bs = as.map(F.get('availableSlots'));
+  var as = this.countriesOccupiedByPlayer(player);
 
-  // Calculate the distribution list.
-  var cs = core.distribute(bs.length, bs);
+  // Find the largest player island.
+  var island = F.compose(findLargestIsland, calculatePlayerIslands(player))(as);
 
-  // Distribute the armies.
-  var ds = F
-    .zip(cs, as)
-    .map(F.uncurry(F.applyMethod('reinforce')));
+  var ds = reinforce_(player, island.length);
 
   return F.update('countriesSet', core.replace(as, ds), this);
+
+  function reinforce_(player, n) {
+    // Calculate the availability list.
+    var bs = as.map(F.get('availableSlots'));
+
+    // Calculate the distribution list.
+    var cs = core.distribute(n, bs);
+
+    // Distribute the armies.
+    return F
+      .zip(cs, as)
+      .map(F.uncurry(F.applyMethod('reinforce')));
+  }
 };
 
 module.exports = World;
