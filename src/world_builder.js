@@ -128,31 +128,6 @@ function pruneCountriesBySize(countries) {
 }
 
 /**
- * Performs a depth-first traversal of the `countries` from the `start` node.
- */
-function traverse(start, countriesMap) {
-  var visited = Immutable.Set();
-
-  return traverse_(start, visited);
-
-  function traverse_(country, visited) {
-    var neighbours = country.neighbourIds.map(function(id) {
-      return countriesMap.get(id);
-    });
-
-    visited = visited.add(country);
-
-    neighbours.map(function(neighbour) {
-      if (!visited.contains(neighbour)) {
-        visited = traverse_(neighbour, visited);
-      }
-    });
-
-    return visited;
-  }
-}
-
-/**
  * Calculates islands of connected countries using a depth-first travsersal.
  */
 function calculateIslands(countries) {
@@ -164,7 +139,11 @@ function calculateIslands(countries) {
 
   function calculateIslands_(remainingCountriesSet, islandsSet) {
     if (remainingCountriesSet.size > 0) {
-      var island = traverse(remainingCountriesSet.first(), countriesMap);
+      var nodes = function(country) {
+        return country.neighbourIds.map(function(id) { return countriesMap.get(id); });
+      };
+
+      var island = core.traverse(remainingCountriesSet.first(), nodes);
 
       // Add the island to the islands set.
       islandsSet = islandsSet.add(island);

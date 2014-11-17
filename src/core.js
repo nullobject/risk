@@ -88,4 +88,26 @@ module.exports = {
   between: function(n, a, b) {
     return n >= a && n <= b;
   },
+
+  /**
+   * Performs a depth-first traversal from the `start` node using the
+   * `neighbours` function.
+   */
+  traverse: function(start, neighbours) {
+    var visited = Immutable.Set();
+
+    return traverse_(start, visited);
+
+    function traverse_(node, visited) {
+      visited = visited.add(node);
+
+      neighbours(node).map(function(neighbour) {
+        if (!visited.contains(neighbour)) {
+          visited = traverse_(neighbour, visited);
+        }
+      });
+
+      return visited;
+    }
+  },
 };
