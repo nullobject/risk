@@ -14,6 +14,8 @@ AI.prototype.constructor = AI;
 /**
  * Returns true if the country is not occupied by the given player, false
  * otherwise.
+ *
+ * @function
  */
 var notOccupiedByPlayer = function(player) {
   return F.compose(F.notEqual(player), F.get('player'));
@@ -22,6 +24,9 @@ var notOccupiedByPlayer = function(player) {
 /**
  * Returns true if the player can attack/move neighbouring countries with the
  * given country, false otherwise.
+ *
+ * @curried
+ * @function
  */
 var canMove = F.curry(function(world, player, country) {
   var neighbouringCountries = world.countriesNeighbouring(country);
@@ -30,14 +35,22 @@ var canMove = F.curry(function(world, player, country) {
 
 /**
  * Returns true if the country has more than two armies, false otherwise.
+ *
+ * @function
  */
 var withArmies = F.compose(F.gte(2), F.get('armies'));
 
 /**
- * Calculates the next move for an AI player.
+ * Selects a target country using a heuristic function.
  *
- * The next move is selected from the list of all possible moves using a
- * heuristic function.
+ * @function
+ */
+var selectTarget = F.minimumBy(function(a, b) {
+  return a.armies < b.armies;
+});
+
+/**
+ * Calculates the next move for an AI player.
  */
 AI.prototype.nextMove = function(world, player) {
   core.log('AI#nextMove');
@@ -49,7 +62,7 @@ AI.prototype.nextMove = function(world, player) {
   if (sourceCountry) {
     var neighbouringCountries = world.countriesNeighbouring(sourceCountry),
         targetCountries       = neighbouringCountries.filter(notOccupiedByPlayer(player)),
-        targetCountry         = F.head(targetCountries);
+        targetCountry         = selectTarget(targetCountries);
 
     if (targetCountry) {
       var moves = [
