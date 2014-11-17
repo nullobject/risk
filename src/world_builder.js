@@ -51,7 +51,7 @@ var MAX_SLOTS = 9;
 /**
  * The minimum country size.
  */
-var MIN_COUNTRY_SIZE = 64;
+var MIN_COUNTRY_SIZE = 48;
 
 /**
  * The maximum country size.
