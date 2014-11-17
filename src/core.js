@@ -1,12 +1,20 @@
 'use strict';
 
-var F = require('fkit');
+var F         = require('fkit'),
+    Immutable = require('immutable');
 
 module.exports = {
   log: function(message) {
     if (typeof DEVELOPMENT !== 'undefined' && DEVELOPMENT) {
       console.log(message);
     }
+  },
+
+  /**
+   * Clamps the number `n` between `a` and `b`.
+   */
+  clamp: function(n, a, b) {
+    return Math.min(b, Math.max(a, n))
   },
 
   /**
@@ -62,6 +70,44 @@ module.exports = {
       }
 
       return ds;
+    }
+  },
+
+  /**
+   * Returns a map from IDs to objects for the list of `as`.
+   */
+  idMap: function(as) {
+    return as.reduce(function(map, a) {
+      return map.set(a.id, a);
+    }, Immutable.Map());
+  },
+
+  /**
+   * Returns true if `n` is between `a` and `b`, false otherwise.
+   */
+  between: function(n, a, b) {
+    return n >= a && n <= b;
+  },
+
+  /**
+   * Performs a depth-first traversal from the `start` node using the
+   * `neighbours` function.
+   */
+  traverse: function(start, neighbours) {
+    var visited = Immutable.Set();
+
+    return traverse_(start, visited);
+
+    function traverse_(node, visited) {
+      visited = visited.add(node);
+
+      neighbours(node).map(function(neighbour) {
+        if (!visited.contains(neighbour)) {
+          visited = traverse_(neighbour, visited);
+        }
+      });
+
+      return visited;
     }
   },
 };

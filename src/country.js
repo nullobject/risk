@@ -6,11 +6,12 @@ var F         = require('fkit'),
 /**
  * Returns a new country.
  */
-function Country(id, neighbourIds, polygon, slots) {
+function Country(id, size, neighbourIds, polygon, slots) {
   var a = arguments;
 
   if (a.length > 0) {
     this.id           = id;
+    this.size         = size;
     this.neighbourIds = neighbourIds;
     this.polygon      = polygon;
     this.slots        = slots;
@@ -52,6 +53,18 @@ Country.prototype.reinforce = function(n) {
     var f = F.compose(F.min(this.slots.length), F.add(n));
     return F.update('armies', f, this);
   }
+};
+
+/**
+ * Recalculates the neighbours using the list of `countries`.
+ */
+Country.prototype.recalculateNeighbours = function(countries) {
+  var countryIds = countries.map(F.get('id'));
+
+  // Filter neighbours which are in the list of country IDs.
+  var neighbourIds = this.neighbourIds.filter(F.flip(F.elem, countryIds));
+
+  return F.copy(this, {neighbourIds: neighbourIds});
 };
 
 module.exports = Country;
