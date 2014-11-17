@@ -5,13 +5,18 @@ var rewire  = require('rewire'),
     F       = require('fkit'),
     World   = rewire('../src/world');
 
-var core = World.__get__('core');
+var core  = World.__get__('core'),
+    graph = World.__get__('graph');
 
 // Stub each call to the `rollDice` function with the return values in the
 // list of `xss`.
 var stubRollDice = F.variadic(function(sandbox, xss) {
   var stub = sandbox.stub(core, 'rollDice');
   xss.map(function(xs, i) { stub.onCall(i).returns(xs); });
+});
+
+var stubCalculateIslands = F.variadic(function(sandbox, xs) {
+  sandbox.stub(graph, 'calculateIslands').returns(F.const(xs));
 });
 
 function find(as, bs) {
@@ -34,9 +39,9 @@ function attack(world, a, b) {
   return find(result.countries, [a, b]);
 }
 
-function reinforce(world, a, b, c) {
-  var result = world.reinforce([a, b, c]);
-  return find(result.countries, [a, b, c]);
+function reinforce(world, player) {
+  var result = world.reinforce(player);
+  return find(result.countries, world.countriesOccupiedByPlayer(player));
 }
 
 describe('World', function() {
@@ -147,9 +152,11 @@ describe('World', function() {
 
   describe('#reinforce', function() {
     it('should reinforce the countries', function() {
-      sandbox.stub(core, 'distribute').returns([0, 1, 2]);
+      stubCalculateIslands(sandbox, [1, 2], [3]);
 
-      var result = reinforce(world, p1, p2, p3);
+      sandbox.stub(core, 'distribute').returns([0, 1, 1]);
+
+      var result = reinforce(world, p);
 
       x = result[0];
       y = result[1];

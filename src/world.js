@@ -143,11 +143,11 @@ World.prototype.reinforce = function(player) {
     graph.calculateIslands(f)
   )(as);
 
-  var ds = reinforce_(player, island.length);
+  var ds = reinforce_(island.length);
 
   return F.update('countriesSet', core.replace(as, ds), this);
 
-  function reinforce_(player, n) {
+  function reinforce_(n) {
     // Calculate the availability list.
     var bs = as.map(F.get('availableSlots'));
 

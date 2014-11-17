@@ -1,14 +1,14 @@
 'use strict';
 
-var core      = require('./core'),
-    graph     = require('./graph'),
-    voronoi   = require('./voronoi'),
-    Country   = require('./country'),
-    F         = require('fkit'),
-    Hexgrid   = require('./geom/hexgrid'),
-    Point     = require('./geom/point'),
-    Polygon   = require('./geom/polygon'),
-    World     = require('./world');
+var core    = require('./core'),
+    graph   = require('./graph'),
+    voronoi = require('./voronoi'),
+    Country = require('./country'),
+    F       = require('fkit'),
+    Hexgrid = require('./geom/hexgrid'),
+    Point   = require('./geom/point'),
+    Polygon = require('./geom/polygon'),
+    World   = require('./world');
 
 /**
  * Hexgrid cell size.
