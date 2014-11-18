@@ -23,7 +23,7 @@ module.exports = {
    * Clamps the number `n` between `a` and `b`.
    */
   clamp: function(n, a, b) {
-    return Math.min(b, Math.max(a, n))
+    return Math.min(b, Math.max(a, n));
   },
 
   /**
