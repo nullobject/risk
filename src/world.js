@@ -8,6 +8,14 @@ var core      = require('./core'),
 var reverseSort = F.compose(F.reverse, F.sort);
 
 /**
+ * Returns true if the country is occupied by the given player, false
+ * otherwise.
+ */
+var occupiedBy = function(player) {
+  return F.compose(F.equal(player), F.get('player'));
+};
+
+/**
  * Creates a new world.
  */
 function World(width, height, hexgrid, countries, cells) {
@@ -25,18 +33,15 @@ function World(width, height, hexgrid, countries, cells) {
 World.prototype.constructor = World;
 
 Object.defineProperty(World.prototype, 'countries', {
-  get: function() { return this.countriesSet.toArray(); },
-  set: function(as) { this.countriesSet = Immutable.Set(as); }
+  get: function() { return this.countriesMap.toArray(); },
+  set: function(as) { this.countriesMap = core.mapFromObjects(as); }
 });
 
 /**
  * Returns the countries occupied by a player.
  */
 World.prototype.countriesOccupiedByPlayer = function(player) {
-  return this.countries.filter(occupiedByPlayer(player));
-
-  // Returns true if the country is occupied by the given player, false otherwise.
-  function occupiedByPlayer(player) { return F.compose(F.equal(player), F.get('player')); }
+  return this.countries.filter(occupiedBy(player));
 };
 
 /**
@@ -59,7 +64,7 @@ World.prototype.assignPlayers = function(players) {
     });
   });
 
-  return F.update('countriesSet', core.replace(as, bs), this);
+  return F.update('countriesMap', core.mergeObjects(bs), this);
 };
 
 /**
@@ -74,7 +79,7 @@ World.prototype.move = function(s, t) {
   var u = F.set('armies', s.armies - n, s),
       v = F.copy(t, {armies: n, player: s.player});
 
-  return F.update('countriesSet', core.replace([s, t], [u, v]), this);
+  return F.update('countriesMap', core.mergeObjects([u, v]), this);
 };
 
 /**
@@ -113,7 +118,7 @@ World.prototype.attack = function(s, t) {
     v = F.set('armies', F.max(t.armies - defenderCasualties, 1), t);
   }
 
-  return F.update('countriesSet', core.replace([s, t], [u, v]), this);
+  return F.update('countriesMap', core.mergeObjects([u, v]), this);
 };
 
 /**
@@ -125,27 +130,25 @@ World.prototype.attack = function(s, t) {
 World.prototype.reinforce = function(player) {
   core.log('World#reinforce');
 
-  var as = this.countriesOccupiedByPlayer(player);
-
-  // Create a map from country IDs to countries.
-  var countriesMap = core.idMap(as);
-
   // Create an adjacency function.
   var f = function(country) {
     return country.neighbourIds
-      .map(function(id) { return countriesMap.get(id); })
-      .filter(F.notEqual(undefined));
+      .map(function(id) { return this.countriesMap.get(id); }, this)
+      .filter(occupiedBy(player));
   };
+
+  // Find the countries occupied by the player.
+  var as = this.countriesOccupiedByPlayer(player);
 
   // Find the largest player island.
   var island = F.compose(
     graph.findLargestIsland,
-    graph.calculateIslands(f)
+    graph.calculateIslands(f.bind(this))
   )(as);
 
   var ds = reinforce_(island.length);
 
-  return F.update('countriesSet', core.replace(as, ds), this);
+  return F.update('countriesMap', core.mergeObjects(ds), this);
 
   function reinforce_(n) {
     // Calculate the availability list.

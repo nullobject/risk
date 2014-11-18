@@ -41,13 +41,26 @@ module.exports = {
   },
 
   /**
-   * Replaces `as` with `bs` in the set `c`.
+   * Adds the hashable objects in the list of `as` to the `map`.
    */
-  replace: F.curry(function(as, bs, c) {
-    return c.withMutations(function(set) {
-      set.subtract(as).union(bs);
+  mergeObjects: F.curry(function(as, map) {
+    return map.withMutations(function(map) {
+      as.forEach(function(a) {
+        map.set(a.id, a);
+      });
     });
   }),
+
+  /**
+   * Creates a map from the hashable objects in the list of `as`.
+   */
+  mapFromObjects: function(as) {
+    return as
+      .reduce(function(map, a) {
+        return map.set(a.id, a);
+      }, Immutable.Map().asMutable())
+      .asImmutable();
+  },
 
   /**
    * Distributes `n` units round-robin using the availability list of `as`.
@@ -87,14 +100,5 @@ module.exports = {
 
       return ds;
     }
-  },
-
-  /**
-   * Returns a map from IDs to objects for the list of `as`.
-   */
-  idMap: function(as) {
-    return as.reduce(function(map, a) {
-      return map.set(a.id, a);
-    }, Immutable.Map());
   },
 };

@@ -23,7 +23,7 @@ self = module.exports = {
   traverse: function(f, n) {
     var visited = Immutable.Set();
 
-    return traverse_(n, visited);
+    return traverse_(n, visited).toArray();
 
     function traverse_(node, visited) {
       visited = visited.add(node);

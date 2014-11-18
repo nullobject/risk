@@ -13,19 +13,6 @@ describe('core', function() {
     });
   });
 
-  describe('.replace', function() {
-    it('should move to the target country', function() {
-      var s = {id: 1, name: 's'},
-          t = {id: 2, name: 't'},
-          u = {id: 1, name: 'u'},
-          v = {id: 2, name: 'v'};
-
-      var set = Immutable.Set([s, t]);
-
-      expect(core.replace([s, t], [u, v], set).toArray()).to.eql([u, v]);
-    });
-  });
-
   describe('.distribute', function() {
     it('should distribute the units', function() {
       expect(core.distribute(0, [1, 2, 3])).to.eql([0, 0, 0]);

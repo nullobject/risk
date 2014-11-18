@@ -153,7 +153,7 @@ exports.build = function(width, height) {
   )(diagram);
 
   // Create a map from country IDs to countries.
-  var countriesMap = core.idMap(countries);
+  var countriesMap = core.mapFromObjects(countries);
 
   // Create an adjacency function.
   var f = function(country) {
