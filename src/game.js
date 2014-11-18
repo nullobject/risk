@@ -26,7 +26,7 @@ Game.prototype.constructor = Game;
 Object.defineProperty(Game.prototype, 'alivePlayers', {
   get: function() {
     return this.players.filter(function(player) {
-      return this.world.countriesOccupiedByPlayer(player).length > 0;
+      return this.world.countriesOccupiedBy(player).length > 0;
     }, this);
   }
 });
@@ -37,7 +37,7 @@ Object.defineProperty(Game.prototype, 'alivePlayers', {
 Game.prototype.armiesForPlayer = function(player) {
   return F.sum(
     this.world
-      .countriesOccupiedByPlayer(player)
+      .countriesOccupiedBy(player)
       .map(F.get('armies'))
   );
 };

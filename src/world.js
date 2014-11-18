@@ -40,7 +40,7 @@ Object.defineProperty(World.prototype, 'countries', {
 /**
  * Returns the countries occupied by a player.
  */
-World.prototype.countriesOccupiedByPlayer = function(player) {
+World.prototype.countriesOccupiedBy = function(player) {
   return this.countries.filter(occupiedBy(player));
 };
 
@@ -122,10 +122,11 @@ World.prototype.attack = function(s, t) {
 };
 
 /**
- * Reinforces the countries in the list of `as` and returns a new world state.
+ * Reinforces the given `player` and returns a new world state.
  *
- * TODO: Reinforce leaf countries for player islands. Then reinforce the
- * remaining countries.
+ * TODO: Construct a border depth map, where each node is mapped to its
+ * distance from the border. Reinforce border countries for player islands,
+ * then reinforce the remaining countries.
  */
 World.prototype.reinforce = function(player) {
   core.log('World#reinforce');
@@ -137,8 +138,7 @@ World.prototype.reinforce = function(player) {
       .filter(occupiedBy(player));
   };
 
-  // Find the countries occupied by the player.
-  var as = this.countriesOccupiedByPlayer(player);
+  var as = this.countriesOccupiedBy(player);
 
   // Find the largest player island.
   var island = F.compose(

@@ -41,7 +41,7 @@ function attack(world, a, b) {
 
 function reinforce(world, player) {
   var result = world.reinforce(player);
-  return find(result.countries, world.countriesOccupiedByPlayer(player));
+  return find(result.countries, world.countriesOccupiedBy(player));
 }
 
 describe('World', function() {

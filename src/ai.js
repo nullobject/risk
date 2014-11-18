@@ -55,7 +55,7 @@ var selectTarget = F.minimumBy(function(a, b) {
 AI.prototype.nextMove = function(world, player) {
   core.log('AI#nextMove');
 
-  var countries       = world.countriesOccupiedByPlayer(player),
+  var countries       = world.countriesOccupiedBy(player),
       sourceCountries = countries.filter(withArmies).filter(canMove(world, player)),
       sourceCountry   = F.head(sourceCountries);
 
