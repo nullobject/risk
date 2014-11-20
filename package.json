@@ -17,6 +17,8 @@
     "url": "https://github.com/nullobject/hexgrid/issues"
   },
   "devDependencies": {
+    "6to5": "^1.12.20",
+    "6to5-loader": "^0.2.3",
     "chai": "^1.10.0",
     "css-loader": "^0.9.0",
     "extract-text-webpack-plugin": "^0.3.1",

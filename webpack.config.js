@@ -2,21 +2,32 @@ var path              = require('path'),
     DefinePlugin      = require('webpack').DefinePlugin,
     ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+var exclude = /(lib|node_modules)/;
+
 module.exports = {
   entry: {app: path.join(__dirname, 'src', 'main.js')},
   output: {
-    path: path.join(__dirname, 'build'),
+    path:       path.join(__dirname, 'build'),
     publicPath: '/build/',
-    filename: '[name].js'
+    filename:   '[name].js'
   },
   resolve: {
     extensions: ['', '.js', '.jsx']
   },
   module: {
-    loaders: [
-      {test: /\.less$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader')},
-      {test: /\.jsx$/, loader: 'jsx-loader'},
-    ]
+    loaders: [{
+      test:    /\.js$/,
+      exclude: exclude,
+      loader:  '6to5'
+    }, {
+      test:    /\.jsx$/,
+      exclude: exclude,
+      loaders: ['6to5', 'jsx']
+    }, {
+      test:    /\.less$/,
+      exclude: exclude,
+      loader:  ExtractTextPlugin.extract('style', 'css!less')
+    }]
   },
   plugins: [
     new DefinePlugin({
