@@ -1,22 +1,20 @@
-'use strict';
-
-var core  = require('../core'),
-    React = require('react');
+import * as core from '../core';
+import * as React from 'react';
 
 // Tile size.
 var TILE_COLS = 3,
     TILE_ROWS = 3;
 
-module.exports = React.createClass({
+export default React.createClass({
   displayName: 'HexgridComponent',
 
-  shouldComponentUpdate: function(nextProps, nextState) {
+  shouldComponentUpdate(nextProps, nextState) {
     // Don't ever update the component.
     return false;
   },
 
-  render: function() {
-    var hexgrid  = this.props.hexgrid;
+  render() {
+    var hexgrid = this.props.hexgrid;
 
     // Calculate the dimensions of the tile.
     var width  = hexgrid.width * 2,
@@ -38,12 +36,12 @@ module.exports = React.createClass({
     );
   },
 
-  renderHexgrid: function(hexgrid) {
+  renderHexgrid(hexgrid) {
     var hexagons = hexgrid.build([TILE_COLS, TILE_ROWS], [-0.5, -0.5]);
     return hexagons.map(this.renderPolygon);
   },
 
-  renderPolygon: function(polygon, index) {
+  renderPolygon(polygon, index) {
     return (
       /* jshint ignore:start */
       <polygon key={index} points={polygon} />

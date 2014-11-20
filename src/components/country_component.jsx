@@ -1,13 +1,11 @@
-'use strict';
-
-var core  = require('../core'),
-    Bacon = require('baconjs'),
-    F     = require('fkit'),
-    React = require('react/addons');
+import * as core from '../core';
+import * as Bacon from 'baconjs';
+import * as F from 'fkit';
+import * as React from 'react/addons';
 
 var cx = React.addons.classSet;
 
-module.exports = React.createClass({
+export default React.createClass({
   displayName: 'CountryComponent',
 
   propTypes: {
@@ -17,11 +15,11 @@ module.exports = React.createClass({
     stream:   React.PropTypes.instanceOf(Bacon.Observable).isRequired
   },
 
-  didSelectCountry: function(country) {
+  didSelectCountry(country) {
     this.props.stream.push({type: 'select-country', country: country});
   },
 
-  classes: function() {
+  classes() {
     var player = this.props.country.player,
         color  = player ? player.toString() : '';
 
@@ -32,13 +30,13 @@ module.exports = React.createClass({
     });
   },
 
-  shouldComponentUpdate: function(nextProps, nextState) {
+  shouldComponentUpdate(nextProps, nextState) {
     return nextProps.country !== this.props.country ||
       nextProps.nearby !== this.props.nearby ||
       nextProps.selected !== this.props.selected;
   },
 
-  render: function() {
+  render() {
     var country = this.props.country;
 
     core.log('CountryComponent#render (' + country + ')');
@@ -57,11 +55,11 @@ module.exports = React.createClass({
     );
   },
 
-  renderSlots: function(country) {
+  renderSlots(country) {
     return country.slots.map(this.renderSlot(country));
   },
 
-  renderSlot: F.curry(function(country, polygon, index) {
+  renderSlot: F.curry((country, polygon, index) => {
     var classes = {
       selected: index < country.armies,
       slot:     true

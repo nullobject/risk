@@ -1,14 +1,12 @@
-'use strict';
-
-var core    = require('./core'),
-    graph   = require('./graph'),
-    voronoi = require('./voronoi'),
-    Country = require('./country'),
-    F       = require('fkit'),
-    Hexgrid = require('./geom/hexgrid'),
-    Point   = require('./geom/point'),
-    Polygon = require('./geom/polygon'),
-    World   = require('./world');
+import * as core from './core';
+import * as graph from './graph';
+import * as voronoi from './voronoi';
+import Country from './country';
+import Hexgrid from './geom/hexgrid';
+import * as F from 'fkit';
+import Point from './geom/point';
+import Polygon from './geom/polygon';
+import World from './world';
 
 /**
  * Hexgrid cell size.
@@ -78,10 +76,10 @@ function calculateSlotPolygons(polygon, hexagons) {
 /**
  * Merges the given set of hexagons inside the Voronoi cells into countries.
  */
-var calculateCountries = F.curry(function(hexagons, diagram) {
-  return diagram.cells.map(function(cell) {
+var calculateCountries = F.curry((hexagons, diagram) => {
+  return diagram.cells.map((cell) => {
     // Find the hexagons inside the cell.
-    var countryHexagons = hexagons.filter(function(hexagon) {
+    var countryHexagons = hexagons.filter((hexagon) => {
       return voronoi.polygonForCell(cell).containsPoint(hexagon.centroid());
     });
 
@@ -92,7 +90,7 @@ var calculateCountries = F.curry(function(hexagons, diagram) {
     var neighbours = voronoi.neighbouringCells(cell, diagram);
 
     // Calculate the neighbour IDs.
-    var neighbourIds = neighbours.map(function(neighbour) {
+    var neighbourIds = neighbours.map((neighbour) => {
       return neighbour.site.voronoiId;
     });
 
@@ -115,12 +113,12 @@ var calculateCountries = F.curry(function(hexagons, diagram) {
  */
 function pruneCountriesBySize(countries) {
   // Filter countries by size.
-  countries = countries.filter(function(country) {
+  countries = countries.filter((country) => {
     return core.between(country.size, MIN_COUNTRY_SIZE, MAX_COUNTRY_SIZE);
   });
 
   // Recalculate neighbours.
-  countries = countries.map(function(country) {
+  countries = countries.map((country) => {
     return country.recalculateNeighbours(countries);
   });
 
@@ -130,8 +128,8 @@ function pruneCountriesBySize(countries) {
 /**
  * Builds a new world with the given width and height.
  */
-exports.build = function(width, height) {
-  var hexgrid  = Hexgrid(CELL_SIZE),
+export function build(width, height) {
+  var hexgrid  = new Hexgrid(CELL_SIZE),
       size     = hexgrid.sizeForRect(width, height),
       hexagons = hexgrid.build(size, [1.0, 0.5]);
 
@@ -139,8 +137,8 @@ exports.build = function(width, height) {
   var t = voronoi.tessellationFunction(width, height);
 
   // Generate a set of random "seed" sites within the clipping region.
-  var sites = F.range(0, SEEDS).map(function() {
-    return Point(F.randomFloat(0, width), F.randomFloat(0, height));
+  var sites = F.range(0, SEEDS).map(() => {
+    return new Point(F.randomFloat(0, width), F.randomFloat(0, height));
   });
 
   // Calculate the Voronoi diagram.
@@ -156,9 +154,9 @@ exports.build = function(width, height) {
   var countriesMap = core.mapFromObjects(countries);
 
   // Create an adjacency function.
-  var f = function(country) {
+  var f = country => {
     return country.neighbourIds
-      .map(function(id) { return countriesMap.get(id); });
+      .map(id => { return countriesMap.get(id); });
   };
 
   // Find the largest island.
@@ -171,4 +169,4 @@ exports.build = function(width, height) {
   var cells = diagram.cells.map(voronoi.verticesForCell);
 
   return new World(width, height, hexgrid, island, cells);
-};
+}

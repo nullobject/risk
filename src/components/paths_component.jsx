@@ -1,10 +1,8 @@
-'use strict';
-
-var React = require('react');
+import * as React from 'react';
 
 function polygon(d) { return 'M' + d.join('L') + 'Z'; }
 
-module.exports = React.createClass({
+export default React.createClass({
   displayName: 'PathsComponent',
 
   propTypes: {
@@ -12,7 +10,7 @@ module.exports = React.createClass({
     className: React.PropTypes.string.isRequired
   },
 
-  render: function() {
+  render() {
     return (
       /* jshint ignore:start */
       <g className={this.props.className}>{this.renderPaths(this.props.paths)}</g>
@@ -20,11 +18,11 @@ module.exports = React.createClass({
     );
   },
 
-  renderPaths: function(paths) {
+  renderPaths(paths) {
     return paths.map(this.renderPath);
   },
 
-  renderPath: function(path, index) {
+  renderPath(path, index) {
     return (
       /* jshint ignore:start */
       <path key={index} d={polygon(path)} />

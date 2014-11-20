@@ -1,15 +1,13 @@
-'use strict';
+import * as core from '../core';
+import * as Bacon from 'baconjs';
+import * as React from 'react';
 
-var core  = require('../core'),
-    Bacon = require('baconjs'),
-    React = require('react');
+import ControlsComponent from './controls_component';
+import GameComponent from './game_component';
+import HexgridComponent from './hexgrid_component';
+import PlayersComponent from './players_component';
 
-var ControlsComponent = require('./controls_component'),
-    GameComponent     = require('./game_component'),
-    HexgridComponent  = require('./hexgrid_component'),
-    PlayersComponent  = require('./players_component');
-
-module.exports = React.createClass({
+export default React.createClass({
   displayName: 'RootComponent',
 
   propTypes: {
@@ -17,11 +15,11 @@ module.exports = React.createClass({
     stream: React.PropTypes.instanceOf(Bacon.Observable).isRequired
   },
 
-  shouldComponentUpdate: function(nextProps, nextState) {
+  shouldComponentUpdate(nextProps, nextState) {
     return nextProps.game !== this.props.game;
   },
 
-  render: function() {
+  render() {
     var stream = this.props.stream,
         game   = this.props.game;
 
@@ -42,7 +40,7 @@ module.exports = React.createClass({
     );
   },
 
-  renderGameOver: function(game) {
+  renderGameOver(game) {
     return game.over ? (
       /* jshint ignore:start */
       <g className="game-over">

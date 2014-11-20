@@ -1,8 +1,6 @@
-'use strict';
+import Game from '../src/game';
 
-var Game = require('../src/game');
-
-describe('Game', function() {
+describe('Game', () => {
   var sandbox, game;
 
   // Player stub.
@@ -14,30 +12,30 @@ describe('Game', function() {
   // World stub.
   var world = {
     countries:           [source, target],
-    assignPlayers:       function() {},
-    countriesOccupiedBy: function() {},
-    move:                function() {},
-    attack:              function() {}
+    assignPlayers:       () => {},
+    countriesOccupiedBy: () => {},
+    move:                () => {},
+    attack:              () => {}
   };
 
-  beforeEach(function() {
+  beforeEach(() => {
     sandbox = sinon.sandbox.create();
     sandbox.stub(world, 'assignPlayers').returns(world);
     sandbox.stub(world, 'countriesOccupiedBy').returns(1);
     game = new Game([player], world);
   });
 
-  afterEach(function() {
+  afterEach(() => {
     sandbox.restore();
   });
 
-  describe('#moveToCountry', function() {
-    beforeEach(function() {
+  describe('#moveToCountry', () => {
+    beforeEach(() => {
       game.currentPlayer = player;
       game.selectedCountry = source;
     });
 
-    it('should move to the target country if the selected country is unoccupied', function() {
+    it('should move to the target country if the selected country is unoccupied', () => {
       var newWorld = {};
 
       var mock = sandbox
@@ -55,7 +53,7 @@ describe('Game', function() {
       mock.verify();
     });
 
-    it('should attack the target country if the selected country is occupied', function() {
+    it('should attack the target country if the selected country is occupied', () => {
       target.player = {};
 
       var newWorld = {};

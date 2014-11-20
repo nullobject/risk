@@ -22,7 +22,7 @@ module.exports = {
     }, {
       test:    /\.jsx$/,
       exclude: exclude,
-      loaders: ['6to5', 'jsx']
+      loaders: ['jsx', '6to5']
     }, {
       test:    /\.less$/,
       exclude: exclude,

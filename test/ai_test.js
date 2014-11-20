@@ -1,15 +1,13 @@
-'use strict';
+import AI from '../src/ai';
 
-var AI = require('../src/ai');
-
-describe('AI', function() {
+describe('AI', () => {
   var ai;
 
-  beforeEach(function() {
+  beforeEach(() => {
     ai = new AI();
   });
 
-  describe('#nextMove', function() {
+  describe('#nextMove', () => {
     it('should calculate the next move');
   });
 });

@@ -1,17 +1,15 @@
-'use strict';
+import * as core from '../core';
+import * as Bacon from 'baconjs';
+import * as F from 'fkit';
+import * as React from 'react';
 
-var core  = require('../core'),
-    Bacon = require('baconjs'),
-    F     = require('fkit'),
-    React = require('react');
-
-var CountryComponent = require('./country_component'),
-    PathsComponent   = require('./paths_component');
+import CountryComponent from './country_component';
+import PathsComponent from './paths_component';
 
 function isNearby(game, country) { return game.canMoveToCountry(country); }
 function isSelected(game, country) { return country === game.selectedCountry; }
 
-module.exports = React.createClass({
+export default React.createClass({
   displayName: 'GameComponent',
 
   propTypes: {
@@ -19,11 +17,11 @@ module.exports = React.createClass({
     game:   React.PropTypes.object.isRequired
   },
 
-  shouldComponentUpdate: function(nextProps, nextState) {
+  shouldComponentUpdate(nextProps, nextState) {
     return nextProps.game !== this.props.game;
   },
 
-  render: function() {
+  render() {
     var stream = this.props.stream,
         game   = this.props.game;
 
@@ -39,11 +37,11 @@ module.exports = React.createClass({
     );
   },
 
-  renderCountries: function(stream, game) {
+  renderCountries(stream, game) {
     return game.world.countries.map(this.renderCountry(stream, game));
   },
 
-  renderCountry: F.curry(function(stream, game, country) {
+  renderCountry: F.curry((stream, game, country) => {
     var nearby   = isNearby(game, country),
         selected = isSelected(game, country);
 
@@ -60,7 +58,7 @@ module.exports = React.createClass({
     );
   }),
 
-  renderCells: function(game) {
+  renderCells(game) {
     return DEBUG ? (
       /* jshint ignore:start */
       <PathsComponent className="voronoi" paths={game.world.cells} />

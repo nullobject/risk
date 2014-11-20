@@ -1,11 +1,8 @@
-'use strict';
+import * as core from '../src/core';
 
-var core      = require('../src/core'),
-    Immutable = require('immutable');
-
-describe('core', function() {
-  describe('.clamp', function() {
-    it('should clamp a value', function() {
+describe('core', () => {
+  describe('.clamp', () => {
+    it('should clamp a value', () => {
       expect(core.clamp(0, 1, 2)).to.eql(1);
       expect(core.clamp(1, 1, 2)).to.eql(1);
       expect(core.clamp(2, 1, 2)).to.eql(2);
@@ -13,8 +10,8 @@ describe('core', function() {
     });
   });
 
-  describe('.distribute', function() {
-    it('should distribute the units', function() {
+  describe('.distribute', () => {
+    it('should distribute the units', () => {
       expect(core.distribute(0, [1, 2, 3])).to.eql([0, 0, 0]);
       expect(core.distribute(1, [1, 2, 3])).to.eql([1, 0, 0]);
       expect(core.distribute(2, [1, 2, 3])).to.eql([1, 1, 0]);

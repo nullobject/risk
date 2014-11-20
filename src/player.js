@@ -1,14 +1,9 @@
-'use strict';
+export default class Player {
+  constructor(id) {
+    this.id = id;
+  }
 
-/**
- * Returns a new player.
- */
-module.exports = function(id) {
-  return {
-    id: id,
-
-    toString: function() {
-      return 'player-' + this.id;
-    }
-  };
-};
+  toString() {
+    return 'player-' + this.id;
+  }
+}

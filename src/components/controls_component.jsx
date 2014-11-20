@@ -1,10 +1,8 @@
-'use strict';
+import * as core from '../core';
+import * as Bacon from 'baconjs';
+import * as React from 'react';
 
-var core  = require('../core'),
-    Bacon = require('baconjs'),
-    React = require('react');
-
-module.exports = React.createClass({
+export default React.createClass({
   displayName: 'ControlsComponent',
 
   propTypes: {
@@ -12,15 +10,15 @@ module.exports = React.createClass({
     stream:        React.PropTypes.instanceOf(Bacon.Observable).isRequired
   },
 
-  didEndTurn: function() {
+  didEndTurn() {
     this.props.stream.push({type: 'end-turn'});
   },
 
-  shouldComponentUpdate: function(nextProps, nextState) {
+  shouldComponentUpdate(nextProps, nextState) {
     return nextProps.currentPlayer !== this.props.currentPlayer;
   },
 
-  render: function() {
+  render() {
     var currentPlayer = this.props.currentPlayer ? this.props.currentPlayer.toString() : '';
 
     core.log('ControlsComponent#render');

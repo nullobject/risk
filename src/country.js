@@ -1,70 +1,59 @@
-'use strict';
+import * as F from 'fkit';
+import * as Immutable from 'immutable';
 
-var F         = require('fkit'),
-    Immutable = require('immutable');
+export default class Country {
+  constructor(id, size, neighbourIds, polygon, slots) {
+    var a = arguments;
 
-/**
- * Returns a new country.
- */
-function Country(id, size, neighbourIds, polygon, slots) {
-  var a = arguments;
+    if (a.length > 0) {
+      this.id           = id;
+      this.size         = size;
+      this.neighbourIds = neighbourIds;
+      this.polygon      = polygon;
+      this.slots        = slots;
+      this.armies       = 0;
+      this.player       = null;
+    }
+  }
 
-  if (a.length > 0) {
-    this.id           = id;
-    this.size         = size;
-    this.neighbourIds = neighbourIds;
-    this.polygon      = polygon;
-    this.slots        = slots;
-    this.armies       = 0;
-    this.player       = null;
+  get neighbourIds() { return this.neighbourIdsSet.toArray(); }
+  set neighbourIds(as) { this.neighbourIdsSet = Immutable.Set(as); }
+
+  get availableSlots() { return this.slots.length - this.armies; }
+
+  /**
+   * Returns true if a given country neighbours this country, false otherwise.
+   */
+  hasNeighbour(country) {
+    return this.neighbourIdsSet.contains(country.id);
+  }
+
+  hashCode() {
+    return this.id;
+  }
+
+  toString() {
+    return 'country-' + this.id;
+  }
+
+  reinforce(n) {
+    if (n <= 0) {
+      return this;
+    } else {
+      var f = F.compose(F.min(this.slots.length), F.add(n));
+      return F.update('armies', f, this);
+    }
+  }
+
+  /**
+   * Recalculates the neighbours using the list of `countries`.
+   */
+  recalculateNeighbours(countries) {
+    var countryIds = countries.map(F.get('id'));
+
+    // Filter neighbours which are in the list of country IDs.
+    var neighbourIds = this.neighbourIds.filter(F.flip(F.elem, countryIds));
+
+    return F.copy(this, {neighbourIds: neighbourIds});
   }
 }
-
-Country.prototype.constructor = Country;
-
-Object.defineProperty(Country.prototype, 'neighbourIds', {
-  get: function() { return this.neighbourIdsSet.toArray(); },
-  set: function(as) { this.neighbourIdsSet = Immutable.Set(as); }
-});
-
-Object.defineProperty(Country.prototype, 'availableSlots', {
-  get: function() { return this.slots.length - this.armies; }
-});
-
-/**
- * Returns true if a given country neighbours this country, false otherwise.
- */
-Country.prototype.hasNeighbour = function(country) {
-  return this.neighbourIdsSet.contains(country.id);
-};
-
-Country.prototype.hashCode = function() {
-  return this.id;
-};
-
-Country.prototype.toString = function() {
-  return 'country-' + this.id;
-};
-
-Country.prototype.reinforce = function(n) {
-  if (n <= 0) {
-    return this;
-  } else {
-    var f = F.compose(F.min(this.slots.length), F.add(n));
-    return F.update('armies', f, this);
-  }
-};
-
-/**
- * Recalculates the neighbours using the list of `countries`.
- */
-Country.prototype.recalculateNeighbours = function(countries) {
-  var countryIds = countries.map(F.get('id'));
-
-  // Filter neighbours which are in the list of country IDs.
-  var neighbourIds = this.neighbourIds.filter(F.flip(F.elem, countryIds));
-
-  return F.copy(this, {neighbourIds: neighbourIds});
-};
-
-module.exports = Country;

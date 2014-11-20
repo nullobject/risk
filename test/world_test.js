@@ -1,26 +1,25 @@
-'use strict';
+import * as factory from './support/factory';
+import * as rewire from 'rewire';
+import * as F from 'fkit';
 
-var rewire  = require('rewire'),
-    factory = require('./support/factory'),
-    F       = require('fkit'),
-    World   = rewire('../src/world');
+var World = rewire('../src/world');
 
 var core  = World.__get__('core'),
     graph = World.__get__('graph');
 
 // Stub each call to the `rollDice` function with the return values in the
 // list of `xss`.
-var stubRollDice = F.variadic(function(sandbox, xss) {
+var stubRollDice = F.variadic((sandbox, xss) => {
   var stub = sandbox.stub(core, 'rollDice');
-  xss.map(function(xs, i) { stub.onCall(i).returns(xs); });
+  xss.map((xs, i) => { stub.onCall(i).returns(xs); });
 });
 
-var stubCalculateIslands = F.variadic(function(sandbox, xs) {
+var stubCalculateIslands = F.variadic((sandbox, xs) => {
   sandbox.stub(graph, 'calculateIslands').returns(F.const(xs));
 });
 
 function find(as, bs) {
-  return bs.map(function(q) {
+  return bs.map((q) => {
     return F.find(comparator(q), as);
   });
 
@@ -44,7 +43,7 @@ function reinforce(world, player) {
   return find(result.countries, world.countriesOccupiedBy(player));
 }
 
-describe('World', function() {
+describe('World', () => {
   var sandbox, x, y, z;
 
   // Player stubs.
@@ -58,110 +57,91 @@ describe('World', function() {
 
   var world = factory.buildWorld([p1, p2, p3, q1]);
 
-  beforeEach(function() {
+  beforeEach(() => {
     sandbox = sinon.sandbox.create();
   });
 
-  afterEach(function() {
+  afterEach(() => {
     sandbox.restore();
   });
 
-  describe('#move', function() {
-    beforeEach(function() {
-      var result = move(world, p1, q1);
-
-      x = result[0];
-      y = result[1];
+  describe('#move', () => {
+    beforeEach(() => {
+      [x, y] = move(world, p1, q1);
     });
 
-    it('should move to the target country', function() {
+    it('should move to the target country', () => {
       expect(x.player).to.equal(p);
       expect(y.player).to.equal(p);
     });
 
-    it('should distribute the armies', function() {
+    it('should distribute the armies', () => {
       expect(x.armies).to.equal(2);
       expect(y.armies).to.equal(2);
     });
   });
 
-  describe('#attack', function() {
-    context('when the attacker rolls higher than the defender', function() {
-      beforeEach(function() {
+  describe('#attack', () => {
+    context('when the attacker rolls higher than the defender', () => {
+      beforeEach(() => {
         stubRollDice(sandbox, [6, 4, 2, 1], [6, 5]);
-
-        var result = attack(world, p1, q1);
-
-        x = result[0];
-        y = result[1];
+        [x, y] = attack(world, p1, q1);
       });
 
-      it('should move the attacker to target country', function() {
+      it('should move the attacker to target country', () => {
         expect(x.player).to.equal(p);
         expect(y.player).to.equal(p);
       });
 
-      it('should update the armies', function() {
+      it('should update the armies', () => {
         expect(x.armies).to.equal(2);
         expect(y.armies).to.equal(1);
       });
     });
 
-    context('when the attacker rolls equal to the defender', function() {
-      beforeEach(function() {
+    context('when the attacker rolls equal to the defender', () => {
+      beforeEach(() => {
         stubRollDice(sandbox, [5, 1, 1, 1], [6, 4]);
-
-        var result = attack(world, p1, q1);
-
-        x = result[0];
-        y = result[1];
+        [x, y] = attack(world, p1, q1);
       });
 
-      it('should not move the attacker', function() {
+      it('should not move the attacker', () => {
         expect(x.player).to.equal(p);
         expect(y.player).to.equal(q);
       });
 
-      it('should update the armies', function() {
+      it('should update the armies', () => {
         expect(x.armies).to.equal(2);
         expect(y.armies).to.equal(2);
       });
     });
 
-    context('when the attacker rolls lower than the defender', function() {
-      beforeEach(function() {
+    context('when the attacker rolls lower than the defender', () => {
+      beforeEach(() => {
         stubRollDice(sandbox, [5, 2, 1, 1], [6, 4]);
-
-        var result = attack(world, p1, q1);
-
-        x = result[0];
-        y = result[1];
+        [x, y] = attack(world, p1, q1);
       });
 
-      it('should not move the attacker', function() {
+      it('should not move the attacker', () => {
         expect(x.player).to.equal(p);
         expect(y.player).to.equal(q);
       });
 
-      it('should update the armies', function() {
+      it('should update the armies', () => {
         expect(x.armies).to.equal(2);
         expect(y.armies).to.equal(2);
       });
     });
   });
 
-  describe('#reinforce', function() {
-    it('should reinforce the countries', function() {
-      stubCalculateIslands(sandbox, [1, 2], [3]);
-
+  describe('#reinforce', () => {
+    beforeEach(() => {
       sandbox.stub(core, 'distribute').returns([0, 1, 1]);
+      stubCalculateIslands(sandbox, [1, 2], [3]);
+      [x, y, z] = reinforce(world, p);
+    });
 
-      var result = reinforce(world, p);
-
-      x = result[0];
-      y = result[1];
-      z = result[2];
-
+    it('should reinforce the countries', () => {
       expect(x.armies).to.equal(4);
       expect(y.armies).to.equal(3);
       expect(z.armies).to.equal(2);

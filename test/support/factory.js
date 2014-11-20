@@ -1,6 +1,6 @@
-var Country = require('../../src/country'),
-    World   = require('../../src/world'),
-    F       = require('fkit');
+import Country from '../../src/country';
+import * as F from 'fkit';
+import World from '../../src/world';
 
 module.exports = {
   buildCountry: function(id, player, neighbourIds, armies, slots) {

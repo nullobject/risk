@@ -1,15 +1,5 @@
-'use strict';
-
-var core = require('./core'),
-    F    = require('fkit');
-
-/**
- * Creates a new AI.
- */
-function AI() {
-}
-
-AI.prototype.constructor = AI;
+import * as core from './core';
+import * as F from 'fkit';
 
 /**
  * Returns true if the country is not occupied by the given player, false
@@ -17,7 +7,7 @@ AI.prototype.constructor = AI;
  *
  * @function
  */
-var notOccupiedByPlayer = function(player) {
+var notOccupiedByPlayer = player => {
   return F.compose(F.notEqual(player), F.get('player'));
 };
 
@@ -28,7 +18,7 @@ var notOccupiedByPlayer = function(player) {
  * @curried
  * @function
  */
-var canMove = F.curry(function(world, player, country) {
+var canMove = F.curry((world, player, country) => {
   var neighbouringCountries = world.countriesNeighbouring(country);
   return F.any(notOccupiedByPlayer(player), neighbouringCountries);
 });
@@ -45,36 +35,36 @@ var withArmies = F.compose(F.gte(2), F.get('armies'));
  *
  * @function
  */
-var selectTarget = F.minimumBy(function(a, b) {
+var selectTarget = F.minimumBy((a, b) => {
   return a.armies < b.armies;
 });
 
-/**
- * Calculates the next move for an AI player.
- */
-AI.prototype.nextMove = function(world, player) {
-  core.log('AI#nextMove');
+export default class AI {
+  /**
+   * Calculates the next move for an AI player.
+   */
+  nextMove(world, player) {
+    core.log('AI#nextMove');
 
-  var countries       = world.countriesOccupiedBy(player),
-      sourceCountries = countries.filter(withArmies).filter(canMove(world, player)),
-      sourceCountry   = F.head(sourceCountries);
+    var countries       = world.countriesOccupiedBy(player),
+        sourceCountries = countries.filter(withArmies).filter(canMove(world, player)),
+        sourceCountry   = F.head(sourceCountries);
 
-  if (sourceCountry) {
-    var neighbouringCountries = world.countriesNeighbouring(sourceCountry),
-        targetCountries       = neighbouringCountries.filter(notOccupiedByPlayer(player)),
-        targetCountry         = selectTarget(targetCountries);
+    if (sourceCountry) {
+      var neighbouringCountries = world.countriesNeighbouring(sourceCountry),
+          targetCountries       = neighbouringCountries.filter(notOccupiedByPlayer(player)),
+          targetCountry         = selectTarget(targetCountries);
 
-    if (targetCountry) {
-      var moves = [
-        {type: 'select-country', country: sourceCountry},
-        {type: 'select-country', country: targetCountry}
-      ];
+      if (targetCountry) {
+        var moves = [
+          {type: 'select-country', country: sourceCountry},
+          {type: 'select-country', country: targetCountry}
+        ];
 
-      return [F.copy(this), moves];
+        return [F.copy(this), moves];
+      }
     }
+
+    return [F.copy(this), [{type: 'end-turn'}]];
   }
-
-  return [F.copy(this), [{type: 'end-turn'}]];
-};
-
-module.exports = AI;
+}

@@ -2,5 +2,6 @@
   "expr": true,
   "newcap": false,
   "node": true,
+  "esnext": true,
   "predef": ["context", "describe", "it", "expect", "sinon", "beforeEach", "afterEach", "DEBUG", "DEVELOPMENT", "PRODUCTION"]
 }

@@ -1,23 +1,21 @@
-'use strict';
+import Point from '../../src/geom/point';
+import Polygon from '../../src/geom/polygon';
 
-var Point   = require('../../src/geom/point'),
-    Polygon = require('../../src/geom/polygon');
-
-describe('Polygon', function() {
-  var polygon = Polygon([
-    Point(-1, -1),
-    Point(-1,  1),
-    Point( 1,  1),
-    Point( 1, -1)
+describe('Polygon', () => {
+  var polygon = new Polygon([
+    new Point(-1, -1),
+    new Point(-1,  1),
+    new Point( 1,  1),
+    new Point( 1, -1)
   ]);
 
-  describe('#containsPoint', function() {
-    it('should return true if the polygon contains a given point', function() {
-      expect(polygon.containsPoint(Point(0, 0))).to.be.true;
+  describe('#containsPoint', () => {
+    it('should return true if the polygon contains a given point', () => {
+      expect(polygon.containsPoint(new Point(0, 0))).to.be.true;
     });
 
-    it('should return false if the polygon does not contain a given point', function() {
-      expect(polygon.containsPoint(Point(2, 2))).to.be.false;
+    it('should return false if the polygon does not contain a given point', () => {
+      expect(polygon.containsPoint(new Point(2, 2))).to.be.false;
     });
   });
 });

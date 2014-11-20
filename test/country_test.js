@@ -1,31 +1,29 @@
-'use strict';
+import * as factory from './support/factory';
 
-var factory = require('./support/factory');
-
-describe('Country', function() {
+describe('Country', () => {
   var country = factory.buildCountry(1, null, [2, 3], 2, 3);
 
-  describe('#availableSlots', function() {
-    it('should add armies', function() {
+  describe('#availableSlots', () => {
+    it('should add armies', () => {
       expect(country.availableSlots).to.equal(1);
     });
   });
 
-  describe('#hasNeighbour', function() {
-    it('should be true if the country has the given neighbour', function() {
+  describe('#hasNeighbour', () => {
+    it('should be true if the country has the given neighbour', () => {
       expect(country.hasNeighbour({id: 2})).to.be.true;
       expect(country.hasNeighbour({id: 3})).to.be.true;
       expect(country.hasNeighbour({id: 4})).to.be.false;
     });
   });
 
-  describe('#reinforce', function() {
-    it('should add armies', function() {
+  describe('#reinforce', () => {
+    it('should add armies', () => {
       var result = country.reinforce(1);
       expect(result.armies).to.equal(3);
     });
 
-    it('should not add more armies than available slots', function() {
+    it('should not add more armies than available slots', () => {
       var result = country.reinforce(2);
       expect(result.armies).to.equal(3);
     });

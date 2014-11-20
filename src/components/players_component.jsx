@@ -1,12 +1,10 @@
-'use strict';
-
-var core  = require('../core'),
-    F     = require('fkit'),
-    React = require('react/addons');
+import * as core from '../core';
+import * as F from 'fkit';
+import * as React from 'react/addons';
 
 var cx = React.addons.classSet;
 
-module.exports = React.createClass({
+export default React.createClass({
   displayName: 'PlayersComponent',
 
   propTypes: {
@@ -14,17 +12,17 @@ module.exports = React.createClass({
     game:          React.PropTypes.object.isRequired
   },
 
-  classes: function(player) {
+  classes(player) {
     var selected = player === this.props.currentPlayer;
     return F.set(player, true, {selected: selected});
   },
 
-  shouldComponentUpdate: function(nextProps, nextState) {
+  shouldComponentUpdate(nextProps, nextState) {
     return nextProps.currentPlayer !== this.props.currentPlayer ||
       nextProps.game.world !== this.props.game.world;
   },
 
-  render: function() {
+  render() {
     var game = this.props.game;
 
     core.log('PlayersComponent#render');
@@ -36,11 +34,11 @@ module.exports = React.createClass({
     );
   },
 
-  renderPlayers: function(game) {
+  renderPlayers(game) {
     return game.players.map(this.renderPlayer(this.classes, game));
   },
 
-  renderPlayer: F.curry(function(classes, game, player, index) {
+  renderPlayer: F.curry((classes, game, player, index) => {
     return (
       /* jshint ignore:start */
       <li className={cx(classes(player))} key={index}>{game.armiesForPlayer(player)}</li>
