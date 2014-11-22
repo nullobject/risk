@@ -16,13 +16,13 @@ import * as Immutable from 'immutable';
  * @returns A list of adjacent nodes.
  */
 export function traverse(f, n) {
-  var visited = Immutable.Set();
-
-  return traverse_(n, visited).toArray();
+  return traverse_(n, Immutable.OrderedSet()).toArray();
 
   function traverse_(node, visited) {
+    // Add the node to the set of visited nodes.
     visited = visited.add(node);
 
+    // Recurse with the neighbours that are not yet visited.
     f(node).map(neighbour => {
       if (!visited.contains(neighbour)) {
         visited = traverse_(neighbour, visited);
@@ -34,34 +34,36 @@ export function traverse(f, n) {
 }
 
 /**
- * Calculates islands of connected nodes using a depth-first travsersal.
+ * Calculates islands of connected nodes in the list of `ns` using the
+ * adjacency function `f`.
  *
  * @curried
  * @function
  * @param f The adjacency function.
- * @param nodes The list of nodes.
+ * @param ns The list of nodes.
  */
-export var calculateIslands = F.curry((f, nodes) => {
-  var nodesSet   = Immutable.Set(nodes),
-      islandsSet = Immutable.Set();
+export var calculateIslands = F.curry((f, ns) => {
+  return calculateIslands_(
+    Immutable.OrderedSet(ns),
+    Immutable.OrderedSet()
+  ).toArray();
 
-  return calculateIslands_(nodesSet, islandsSet).toArray();
+  function calculateIslands_(nodes, islands) {
+    if (nodes.size > 0) {
+      // Traverse the graph starting at the first node.
+      var island = traverse(f, nodes.first());
 
-  function calculateIslands_(remainingNodesSet, islandsSet) {
-    if (remainingNodesSet.size > 0) {
-      var island = traverse(f, remainingNodesSet.first());
+      // Add the island to the set of islands.
+      islands = islands.add(island);
 
-      // Add the island to the islands set.
-      islandsSet = islandsSet.add(island);
+      // Remove the island from the set of nodes.
+      nodes = nodes.subtract(island);
 
-      // Remove the island from the remaining nodes set.
-      remainingNodesSet = remainingNodesSet.subtract(island);
-
-      // Recurse with the remaining nodes set.
-      islandsSet = calculateIslands_(remainingNodesSet, islandsSet);
+      // Recurse with the remaining set of nodes.
+      islands = calculateIslands_(nodes, islands);
     }
 
-    return islandsSet;
+    return islands;
   }
 });
 

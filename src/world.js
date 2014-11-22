@@ -121,6 +121,11 @@ export default class World {
    * distance from the border. Reinforce border countries for player islands
    * first, then if there are any remaining armies reinforce the rest of the
    * countries.
+   *
+   * To construct the border depth map perform a depth-first traversal from an
+   * abritrary node. When the traversal hits a border country then mark its
+   * depth as 0. Unfold the recursion to mark the rest of the nodes as depth
+   * d+1 from the previous node. Repeat this process for all player nodes.
    */
   reinforce(player) {
     core.log('World#reinforce');
