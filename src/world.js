@@ -3,8 +3,6 @@ import * as graph from './graph';
 import * as F from 'fkit';
 import * as Immutable from 'immutable';
 
-var reverseSort = F.compose(F.reverse, F.sort);
-
 /**
  * Returns true if the country is occupied by the given player, false
  * otherwise.
@@ -44,7 +42,8 @@ export default class World {
   }
 
   /**
-   * Assigns the given players to random countries and returns a new world state.
+   * Assigns the given players to random countries and returns a new world
+   * state.
    */
   assignPlayers(players) {
     var as = F.sample(players.length, this.countries);
@@ -60,7 +59,8 @@ export default class World {
   }
 
   /**
-   * Moves to the country `t` from the country `s` and returns a new world state.
+   * Moves to the country `t` from the country `s` and returns a new world
+   * state.
    */
   move(s, t) {
     core.log('World#move');
@@ -75,7 +75,8 @@ export default class World {
   }
 
   /**
-   * Attacks the country `t` from the country `s` and returns a new world state.
+   * Attacks the country `t` from the country `s` and returns a new world
+   * state.
    */
   attack(s, t) {
     core.log('World#attack');
@@ -90,7 +91,7 @@ export default class World {
     // Calculate the number of defender dice with a value greater than or equal
     // to the corresponding attacker dice.
     var comparisons = F
-      .zip(reverseSort(attackerDice), reverseSort(defenderDice))
+      .zip(core.reverseSort(attackerDice), core.reverseSort(defenderDice))
       .map(F.uncurry(F.gte));
 
     // Calculate the casualties.
@@ -117,8 +118,9 @@ export default class World {
    * Reinforces the given `player` and returns a new world state.
    *
    * TODO: Construct a border depth map, where each node is mapped to its
-   * distance from the border. Reinforce border countries for player islands,
-   * then reinforce the remaining countries.
+   * distance from the border. Reinforce border countries for player islands
+   * first, then if there are any remaining armies reinforce the rest of the
+   * countries.
    */
   reinforce(player) {
     core.log('World#reinforce');

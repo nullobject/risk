@@ -63,6 +63,13 @@ export function mapFromObjects(as) {
 }
 
 /**
+ * Reverse sorts a list using natural ordering.
+ *
+ * @function
+ */
+export var reverseSort = F.compose(F.reverse, F.sort);
+
+/**
  * Distributes `n` units round-robin using the availability list of `as`.
  */
 export function distribute(n, as) {
