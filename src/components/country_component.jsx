@@ -3,7 +3,7 @@ import * as Bacon from 'baconjs';
 import * as F from 'fkit';
 import * as React from 'react/addons';
 
-var cx = React.addons.classSet;
+const cx = React.addons.classSet;
 
 export default React.createClass({
   displayName: 'CountryComponent',
@@ -20,7 +20,7 @@ export default React.createClass({
   },
 
   classes() {
-    var player = this.props.country.player,
+    let player = this.props.country.player,
         color  = player ? player.toString() : '';
 
     return F.set(color, true, {
@@ -37,7 +37,7 @@ export default React.createClass({
   },
 
   render() {
-    var country = this.props.country;
+    let country = this.props.country;
 
     core.log('CountryComponent#render (' + country + ')');
 
@@ -60,7 +60,7 @@ export default React.createClass({
   },
 
   renderSlot: F.curry((country, polygon, index) => {
-    var classes = {
+    let classes = {
       selected: index < country.armies,
       slot:     true
     };

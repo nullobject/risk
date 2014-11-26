@@ -19,7 +19,7 @@ export default React.createClass({
   },
 
   render() {
-    var currentPlayer = this.props.currentPlayer ? this.props.currentPlayer.toString() : '';
+    let currentPlayer = this.props.currentPlayer ? this.props.currentPlayer.toString() : '';
 
     core.log('ControlsComponent#render');
 

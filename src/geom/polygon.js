@@ -2,18 +2,14 @@ import * as clipper from '../../lib/clipper';
 import * as F from 'fkit';
 import Point from './point';
 
-var SCALE = 100;
+const SCALE = 100;
 
 /**
  * Converts a given polygon to a clipper path.
  */
 function toPath(polygon) {
-  var path = polygon.vertices.map(point => {
-    return {X: point.x, Y: point.y};
-  });
-
+  let path = polygon.vertices.map(point => { return {X: point.x, Y: point.y}; });
   clipper.JS.ScaleUpPath(path, SCALE);
-
   return path;
 }
 
@@ -22,11 +18,7 @@ function toPath(polygon) {
  */
 function toPolygon(path) {
   clipper.JS.ScaleDownPath(path, SCALE);
-
-  var vertices = path.map(vertex => {
-    return new Point(vertex.X, vertex.Y);
-  });
-
+  let vertices = path.map(vertex => new Point(vertex.X, vertex.Y));
   return new Polygon(vertices);
 }
 
@@ -43,9 +35,9 @@ export default class Polygon {
    */
   centroid() {
     if (this.centroid_ === undefined) {
-      this.centroid_ = this.vertices.reduce((sum, vertex) => {
-        return sum.add(vertex);
-      }, Point.zero()).divide(this.vertices.length);
+      this.centroid_ = this.vertices
+        .reduce((sum, vertex) => sum.add(vertex), Point.zero())
+        .divide(this.vertices.length);
     }
 
     return this.centroid_;
@@ -57,15 +49,15 @@ export default class Polygon {
    * See http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
    */
   containsPoint(point) {
-    var inside = false;
+    let inside = false;
 
-    for (var i = 0, j = this.vertices.length - 1; i < this.vertices.length; j = i++) {
-      var xi = this.vertices[i].x,
+    for (let i = 0, j = this.vertices.length - 1; i < this.vertices.length; j = i++) {
+      let xi = this.vertices[i].x,
           yi = this.vertices[i].y,
           xj = this.vertices[j].x,
           yj = this.vertices[j].y;
 
-      var intersect = ((yi > point.y) != (yj > point.y)) && (point.x < (xj - xi) * (point.y - yi) / (yj - yi) + xi);
+      let intersect = ((yi > point.y) != (yj > point.y)) && (point.x < (xj - xi) * (point.y - yi) / (yj - yi) + xi);
 
       if (intersect) { inside = !inside; }
     }
@@ -79,11 +71,13 @@ export default class Polygon {
    * See http://jsclipper.sourceforge.net/6.1.3.2/
    */
   offset(delta) {
-    var co = new clipper.ClipperOffset(),
-        solutionPaths = [];
+    let solutionPaths = [];
+
+    // Create a new clipper offset.
+    let co = new clipper.ClipperOffset();
 
     // Convert the polygon to a path.
-    var subjectPath = toPath(this);
+    let subjectPath = toPath(this);
 
     // Add the path.
     co.AddPath(subjectPath, clipper.JoinType.jtMiter, clipper.EndType.etClosedPolygon);
@@ -105,11 +99,13 @@ export default class Polygon {
    * See http://jsclipper.sourceforge.net/6.1.3.2/
    */
   static merge(polygons) {
-    var c = new clipper.Clipper(),
-        solutionPaths = [];
+    let solutionPaths = [];
+
+    // Create a new clipper.
+    let c = new clipper.Clipper();
 
     // Convert the polygons to paths.
-    var subjectPaths = polygons.map(toPath);
+    let subjectPaths = polygons.map(toPath);
 
     // Add the paths.
     c.AddPaths(subjectPaths, clipper.PolyType.ptSubject, true);
@@ -126,7 +122,7 @@ export default class Polygon {
    */
   static get distanceComparator() {
     return F.curry((p, a, b) => {
-      var da = a.centroid().distance(p.centroid()),
+      let da = a.centroid().distance(p.centroid()),
           db = b.centroid().distance(p.centroid());
 
       return F.compare(da, db);

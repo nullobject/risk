@@ -2,7 +2,7 @@ import * as core from '../core';
 import * as F from 'fkit';
 import * as React from 'react/addons';
 
-var cx = React.addons.classSet;
+const cx = React.addons.classSet;
 
 export default React.createClass({
   displayName: 'PlayersComponent',
@@ -13,8 +13,8 @@ export default React.createClass({
   },
 
   classes(player) {
-    var selected = player === this.props.currentPlayer;
-    return F.set(player, true, {selected: selected});
+    let selected = player === this.props.currentPlayer;
+    return F.set(player, true, {selected});
   },
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -23,7 +23,7 @@ export default React.createClass({
   },
 
   render() {
-    var game = this.props.game;
+    let game = this.props.game;
 
     core.log('PlayersComponent#render');
 

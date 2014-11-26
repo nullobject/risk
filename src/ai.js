@@ -7,9 +7,8 @@ import * as F from 'fkit';
  *
  * @function
  */
-var notOccupiedByPlayer = player => {
-  return F.compose(F.notEqual(player), F.get('player'));
-};
+const notOccupiedByPlayer = player =>
+  F.compose(F.notEqual(player), F.get('player'));
 
 /**
  * Returns true if the player can attack/move neighbouring countries with the
@@ -18,8 +17,8 @@ var notOccupiedByPlayer = player => {
  * @curried
  * @function
  */
-var canMove = F.curry((world, player, country) => {
-  var neighbouringCountries = world.countriesNeighbouring(country);
+const canMove = F.curry((world, player, country) => {
+  let neighbouringCountries = world.countriesNeighbouring(country);
   return F.any(notOccupiedByPlayer(player), neighbouringCountries);
 });
 
@@ -28,16 +27,14 @@ var canMove = F.curry((world, player, country) => {
  *
  * @function
  */
-var withArmies = F.compose(F.gte(2), F.get('armies'));
+const withArmies = F.compose(F.gte(2), F.get('armies'));
 
 /**
  * Selects a target country using a heuristic function.
  *
  * @function
  */
-var selectTarget = F.minimumBy((a, b) => {
-  return a.armies < b.armies;
-});
+const selectTarget = F.minimumBy((a, b) => a.armies < b.armies);
 
 export default class AI {
   /**
@@ -46,17 +43,17 @@ export default class AI {
   nextMove(world, player) {
     core.log('AI#nextMove');
 
-    var countries       = world.countriesOccupiedBy(player),
+    let countries       = world.countriesOccupiedBy(player),
         sourceCountries = countries.filter(withArmies).filter(canMove(world, player)),
         sourceCountry   = F.head(sourceCountries);
 
     if (sourceCountry) {
-      var neighbouringCountries = world.countriesNeighbouring(sourceCountry),
+      let neighbouringCountries = world.countriesNeighbouring(sourceCountry),
           targetCountries       = neighbouringCountries.filter(notOccupiedByPlayer(player)),
           targetCountry         = selectTarget(targetCountries);
 
       if (targetCountry) {
-        var moves = [
+        let moves = [
           {type: 'select-country', country: sourceCountry},
           {type: 'select-country', country: targetCountry}
         ];

@@ -2,8 +2,8 @@ import * as core from '../core';
 import * as React from 'react';
 
 // Tile size.
-var TILE_COLS = 3,
-    TILE_ROWS = 3;
+const TILE_COLS = 3,
+      TILE_ROWS = 3;
 
 export default React.createClass({
   displayName: 'HexgridComponent',
@@ -14,10 +14,10 @@ export default React.createClass({
   },
 
   render() {
-    var hexgrid = this.props.hexgrid;
+    let hexgrid = this.props.hexgrid;
 
     // Calculate the dimensions of the tile.
-    var width  = hexgrid.width * 2,
+    let width  = hexgrid.width * 2,
         height = hexgrid.height * 2;
 
     core.log('HexgridComponent#render');
@@ -37,7 +37,7 @@ export default React.createClass({
   },
 
   renderHexgrid(hexgrid) {
-    var hexagons = hexgrid.build([TILE_COLS, TILE_ROWS], [-0.5, -0.5]);
+    let hexagons = hexgrid.build([TILE_COLS, TILE_ROWS], [-0.5, -0.5]);
     return hexagons.map(this.renderPolygon);
   },
 

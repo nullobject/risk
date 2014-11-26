@@ -51,7 +51,7 @@ export default class Hexgrid {
 
     // Calculates the vertices of a hexagon at a given coordinate.
     this.hexagonVertices = F.curry((origin, coordinate) => {
-      var position = calculatePosition(coordinate, this.width, this.height);
+      let position = calculatePosition(coordinate, this.width, this.height);
       return calculateVertices(origin.add(position), this.r, this.h, this.radius);
     });
   }
@@ -62,10 +62,10 @@ export default class Hexgrid {
    */
   build(size, offset) {
     // Generate the coordinates of the cells in the hexgrid.
-    var coordinates = F.cartesian(F.range(0, size[0]), F.range(0, size[1]));
+    let coordinates = F.cartesian(F.range(0, size[0]), F.range(0, size[1]));
 
     // Calculate the origin of the hexgrid.
-    var origin = new Point(this.width * offset[0], this.height * offset[1]);
+    let origin = new Point(this.width * offset[0], this.height * offset[1]);
 
     // Create haxagons for every coordinate.
     return coordinates.map(F.compose(vertices => new Polygon(vertices), this.hexagonVertices(origin)));
@@ -76,7 +76,7 @@ export default class Hexgrid {
    * size.
    */
   sizeForRect(width, height) {
-    var cols = Math.floor(width / (2 * this.r)) - 1,
+    let cols = Math.floor(width / (2 * this.r)) - 1,
         rows = Math.floor(height / (this.radius + this.h)) - 1;
 
     return [cols, rows];

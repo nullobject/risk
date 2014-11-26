@@ -20,7 +20,7 @@ export default React.createClass({
   },
 
   render() {
-    var stream = this.props.stream,
+    let stream = this.props.stream,
         game   = this.props.game;
 
     core.log('RootComponent#render');

@@ -3,23 +3,20 @@
  */
 export default class Point {
   constructor() {
-    var x, y, a = arguments;
+    let a = arguments;
 
     if (a.length === 1) {
       if (Array.isArray(a[0])) {
-        x = a[0][0];
-        y = a[0][1];
+        this.x = a[0][0];
+        this.y = a[0][1];
       } else {
-        x = a[0].x;
-        y = a[0].y;
+        this.x = a[0].x;
+        this.y = a[0].y;
       }
     } else if (a.length === 2) {
-      x = a[0];
-      y = a[1];
+      this.x = a[0];
+      this.y = a[1];
     }
-
-    this.x = x;
-    this.y = y;
   }
 
   add(p) {
@@ -31,7 +28,7 @@ export default class Point {
   }
 
   distance(p) {
-    var dx = this.x - p.x,
+    let dx = this.x - p.x,
         dy = this.y - p.y;
 
     return Math.sqrt((dx * dx) + (dy * dy));

@@ -22,7 +22,7 @@ export default React.createClass({
   },
 
   render() {
-    var stream = this.props.stream,
+    let stream = this.props.stream,
         game   = this.props.game;
 
     core.log('GameComponent#render');
@@ -42,7 +42,7 @@ export default React.createClass({
   },
 
   renderCountry: F.curry((stream, game, country) => {
-    var nearby   = isNearby(game, country),
+    let nearby   = isNearby(game, country),
         selected = isSelected(game, country);
 
     return (
