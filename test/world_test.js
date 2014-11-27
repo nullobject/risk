@@ -132,6 +132,8 @@ describe('World', () => {
   describe('#reinforce', () => {
     beforeEach(() => {
       sandbox.stub(core, 'distribute').returns([0, 1, 1]);
+      sandbox.stub(world.graph, 'connectedComponents').returns([['a'], ['b', 'c']]);
+      sandbox.stub(world.graph, 'shortestPathBy').returns(['a', 'b', 'c']);
       [x, y, z] = reinforce(world, p);
     });
 

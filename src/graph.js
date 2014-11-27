@@ -42,33 +42,31 @@ function traverse(graph, k) {
     vertices = adjacentVertices.reduce((a, b) => a.add(b), vertices);
 
     // Recurse with the adjacent vertices that have not been visited.
-    adjacentVertices
+    return adjacentVertices
       .filter(j => !visited.contains(j))
       .reduce(traverse_, [visited, vertices]);
-
-    return [visited, vertices];
   });
 
   let [_, keys] = traverse_(
-    [Immutable.Set().asMutable(), Immutable.OrderedSet.of(k).asMutable()],
+    [Immutable.Set(), Immutable.OrderedSet.of(k)],
     k
   );
 
-  return keys.asImmutable();
+  return keys;
 }
 
-function shortestPathBy(graph, p, k) {
-  let [path, _, last] = shortestPathBy_([
-    Immutable.OrderedMap([[k, null]]).asMutable(),
-    Immutable.List.of(k).asMutable(),
+function shortestPathBy(graph, p, key) {
+  let [path, _, k] = shortestPathBy_([
+    Immutable.OrderedMap([[key, null]]),
+    Immutable.List.of(key),
     null
   ]);
 
-  return reconstructPath(last, path);
+  return reconstructPath(k, path);
 
-  function shortestPathBy_([path, frontier, last]) {
+  function shortestPathBy_([path, frontier, k]) {
     if (frontier.size === 0) {
-      return [path, frontier, last];
+      return [path, frontier, k];
     }
 
     let next = frontier.first();
@@ -86,14 +84,14 @@ function shortestPathBy(graph, p, k) {
       }
     });
 
-    return shortestPathBy_([path, frontier.shift(), last]);
+    return shortestPathBy_([path, frontier.shift(), k]);
   }
 
   function reconstructPath(k, path) {
     let result = Immutable.Stack();
 
-    return k ?
-      reconstructPath_(result.asMutable(), path, k).asImmutable() :
+    return k !== null ?
+      reconstructPath_(result, path, k) :
       result;
 
     function reconstructPath_(result, path, k) {
@@ -101,9 +99,9 @@ function shortestPathBy(graph, p, k) {
 
       result = result.unshift(k);
 
-      return j === null ?
-        result :
-        reconstructPath_(result, path, j);
+      return j !== null ?
+        reconstructPath_(result, path, j) :
+        result;
     }
   }
 }
@@ -131,8 +129,8 @@ function connectedComponents(graph) {
 
   return traverseComponents(
     keys,
-    Immutable.OrderedSet().asMutable()
-  ).asImmutable();
+    Immutable.OrderedSet()
+  );
 }
 
 export default class Graph {
@@ -146,12 +144,26 @@ export default class Graph {
 
       this.adjacencyMap = edges.reduce(
         addEdge,
-        Immutable.Map().asMutable()
-      ).asImmutable();
+        Immutable.Map()
+      );
     }
   }
 
   get size() { return this.vertexMap.size; }
+
+  /**
+   * Returns the first value in the graph.
+   */
+  first() {
+    return this.vertexMap.first();
+  }
+
+  /**
+   * Returns the last value in the graph.
+   */
+  last() {
+    return this.vertexMap.last();
+  }
 
   /**
    * Returns the vertex with `k`.
@@ -165,6 +177,14 @@ export default class Graph {
    */
   merge(as) {
     let vertexMap = this.vertexMap.merge(as.map(a => [a.id, a]));
+    return F.copy(this, {vertexMap});
+  }
+
+  /**
+   * Updates the vertex `k` with updater function `f`.
+   */
+  update(k, f) {
+    let vertexMap = this.vertexMap.update(k, f);
     return F.copy(this, {vertexMap});
   }
 
@@ -194,7 +214,7 @@ export default class Graph {
    */
   edges() {
     return this.adjacencyMap
-      .reduce(addEdges, Immutable.List().asMutable())
+      .reduce(addEdges, Immutable.List())
       .toArray();
 
     function addEdges(edges, kSet, k) {
@@ -215,11 +235,11 @@ export default class Graph {
    */
   removeVertex(k) {
     let [vertexMap, adjacencyMap] = removeVertex(
-      [this.vertexMap.asMutable(), this.adjacencyMap.asMutable()],
+      [this.vertexMap, this.adjacencyMap],
       k
     );
 
-    return F.copy(this, {vertexMap: vertexMap.asImmutable(), adjacencyMap: adjacencyMap.asImmutable()});
+    return F.copy(this, {vertexMap: vertexMap, adjacencyMap: adjacencyMap});
   }
 
   /**
@@ -260,7 +280,7 @@ export default class Graph {
    */
   adjacentValues(k) {
     let kSet = this.adjacencyMap.get(k);
-    return kSet.reduce((values, key) => values.push(this.get(key)), Immutable.List().asMutable()).toArray();
+    return kSet.reduce((values, key) => values.push(this.get(key)), Immutable.List()).toArray();
   }
 
   /**
@@ -271,10 +291,10 @@ export default class Graph {
 
     let [vertexMap, adjacencyMap] = keys.reduce(
       removeVertex,
-      [this.vertexMap.asMutable(), this.adjacencyMap.asMutable()]
+      [this.vertexMap, this.adjacencyMap]
     );
 
-    return F.copy(this, {vertexMap: vertexMap.asImmutable(), adjacencyMap: adjacencyMap.asImmutable()});
+    return F.copy(this, {vertexMap: vertexMap, adjacencyMap: adjacencyMap});
   }
 
   /**

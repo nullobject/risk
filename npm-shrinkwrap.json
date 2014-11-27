@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "dependencies": {
     "baconjs": {
-      "version": "0.7.36",
-      "from": "baconjs@0.7.36",
-      "resolved": "https://registry.npmjs.org/baconjs/-/baconjs-0.7.36.tgz"
+      "version": "0.7.37",
+      "from": "baconjs@0.7.37",
+      "resolved": "https://registry.npmjs.org/baconjs/-/baconjs-0.7.37.tgz"
     },
     "fkit": {
       "version": "0.16.2",

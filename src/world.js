@@ -1,5 +1,6 @@
 import * as core from './core';
 import * as graph from './graph';
+import * as reinforcement from './reinforcement';
 import * as F from 'fkit';
 import * as Immutable from 'immutable';
 
@@ -9,18 +10,6 @@ import * as Immutable from 'immutable';
  */
 function occupiedBy(player) {
   return F.compose(F.equal(player), F.get('player'));
-}
-
-function calculateDepthMap(player, keys, graph) {
-  return keys.reduce((map, key) => {
-    let path = graph.shortestPathBy(country => country.player !== player, key);
-
-    if (F.empty(path)) {
-      throw "Can't calculate depth map from empty path."
-    }
-
-    return map.set(key, path.length - 2)
-  }, Immutable.Map().asMutable()).toObject();
 }
 
 export default class World {
@@ -140,59 +129,23 @@ export default class World {
 
   /**
    * Reinforces the given `player` and returns a new world state.
-   *
-   * This algorithm reinforces with a number of armies equal to the size of the
-   * largest subgraph for the player.
-   *
-   * TODO: Construct a border depth map, where each node is mapped to its
-   * distance from the border. Reinforce border countries for player islands
-   * first, then if there are any remaining armies reinforce the rest of the
-   * countries.
-   *
-   * To construct the border depth map perform a depth-first traversal from an
-   * abritrary node. When the traversal hits a border country then mark its
-   * depth as 0. Unfold the recursion to mark the rest of the nodes as depth
-   * d+1 from the previous node. Repeat this process for all player nodes.
    */
   reinforce(player) {
     core.log('World#reinforce');
 
-    let as = this.countriesOccupiedBy(player);
-
-    // Calculate the player subgraphs.
     let subgraphs = this.graph
       .filter(country => country.player === player)
       .connectedComponents();
 
-    let sortedSubgraphs = F.sortBy(core.bySizeDescending, subgraphs);
+    let depthIndex = reinforcement.depthIndex(this.graph, subgraphs);
+    console.log(depthIndex);
+    let reinforcementMap = reinforcement.reinforcementMap(this.graph, subgraphs, depthIndex);
+    console.log(reinforcementMap);
 
-    let graph = F.head(sortedSubgraphs);
+    let graph = reinforcementMap.reduce((graph, [key, n]) => {
+      return graph.update(key, country => country.reinforce(n));
+    }, this.graph);
 
-    console.log(sortedSubgraphs);
-
-    let keys = F.concatMap(subgraph => subgraph.keys(), subgraphs);
-
-    console.log(keys)
-
-    let depthMap = calculateDepthMap(player, keys, this.graph);
-
-    console.log(depthMap);
-
-    let ds = reinforce_(graph.size);
-
-    return F.set('graph', this.graph.merge(ds), this);
-
-    function reinforce_(n) {
-      // Calculate the availability list.
-      let bs = as.map(F.get('availableSlots'));
-
-      // Calculate the distribution list.
-      let cs = core.distribute(n, bs);
-
-      // Distribute the armies.
-      return F
-        .zip(cs, as)
-        .map(F.uncurry(F.applyMethod('reinforce')));
-    }
+    return F.set('graph', graph, this);
   }
 }
