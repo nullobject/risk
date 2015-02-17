@@ -1,6 +1,6 @@
 import * as core from '../core';
-import * as F from 'fkit';
-import * as React from 'react/addons';
+import F from 'fkit';
+import React from 'react/addons';
 
 const cx = React.addons.classSet;
 

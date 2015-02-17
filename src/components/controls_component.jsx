@@ -1,6 +1,6 @@
 import * as core from '../core';
-import * as Bacon from 'baconjs';
-import * as React from 'react';
+import Bacon from 'baconjs';
+import React from 'react';
 
 export default React.createClass({
   displayName: 'ControlsComponent',

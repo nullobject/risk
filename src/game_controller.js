@@ -1,12 +1,11 @@
 import AI from './ai';
-import * as Bacon from 'baconjs';
-import * as F from 'fkit';
+import Bacon from 'baconjs';
+import F from 'fkit';
 import Game from './game';
 import Player from './player';
-import * as React from 'react';
+import React from 'react';
+import RootComponent from './components/root_component';
 import * as WorldBuilder from './world_builder';
-
-const RootComponent = React.createFactory(require('./components/root_component').default);
 
 /**
  * The number of milliseconds between clock ticks.
@@ -69,7 +68,7 @@ export default class GameController {
 
     // Render the UI whenever the game property changes.
     gameProperty.onValue(game =>
-      React.render(RootComponent({game: game, stream: inputBus}), options.el)
+      React.render(React.createElement(RootComponent, {game: game, stream: inputBus}), options.el)
     );
 
     /*

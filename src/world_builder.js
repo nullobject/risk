@@ -3,7 +3,7 @@ import * as voronoi from './voronoi';
 import Country from './country';
 import Graph from './graph';
 import Hexgrid from './geom/hexgrid';
-import * as F from 'fkit';
+import F from 'fkit';
 import Point from './geom/point';
 import Polygon from './geom/polygon';
 import World from './world';

@@ -1,23 +1,16 @@
 import * as core from '../core';
-import * as Bacon from 'baconjs';
-import * as React from 'react';
+import Bacon from 'baconjs';
+import React from 'react';
 
 import ControlsComponent from './controls_component';
 import GameComponent from './game_component';
 import HexgridComponent from './hexgrid_component';
 import PlayersComponent from './players_component';
 
-export default React.createClass({
-  displayName: 'RootComponent',
-
-  propTypes: {
-    game:   React.PropTypes.object.isRequired,
-    stream: React.PropTypes.instanceOf(Bacon.Observable).isRequired
-  },
-
+export default class RootComponent extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     return nextProps.game !== this.props.game;
-  },
+  }
 
   render() {
     let stream = this.props.stream,
@@ -38,7 +31,7 @@ export default React.createClass({
       </div>
       /* jshint ignore:end */
     );
-  },
+  }
 
   renderGameOver(game) {
     return game.over ? (
@@ -48,5 +41,10 @@ export default React.createClass({
       </g>
       /* jshint ignore:end */
     ) : null;
-  },
-});
+  }
+}
+
+RootComponent.propTypes = {
+  game:   React.PropTypes.object.isRequired,
+  stream: React.PropTypes.instanceOf(Bacon.Observable).isRequired
+};

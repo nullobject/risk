@@ -5,8 +5,8 @@
  */
 
 import * as core from './core';
-import * as F from 'fkit';
-import * as Immutable from 'immutable';
+import F from 'fkit';
+import Immutable from 'immutable';
 
 function addEdge(adjacencyMap, [k, j]) {
   let kSet = adjacencyMap.get(k) || Immutable.Set();

@@ -4,10 +4,10 @@
  * @module
  */
 
-import * as F from 'fkit';
+import F from 'fkit';
 import Point from './geom/point';
 import Polygon from './geom/polygon';
-import * as Voronoi from '../lib/voronoi';
+import Voronoi from '../lib/voronoi';
 
 /**
  * Returns a Voronoi tessellation function for the given `width` and

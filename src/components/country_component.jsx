@@ -1,7 +1,7 @@
 import * as core from '../core';
-import * as Bacon from 'baconjs';
-import * as F from 'fkit';
-import * as React from 'react/addons';
+import Bacon from 'baconjs';
+import F from 'fkit';
+import React from 'react/addons';
 
 const cx = React.addons.classSet;
 

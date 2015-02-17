@@ -1,7 +1,7 @@
 import * as core from '../core';
-import * as Bacon from 'baconjs';
-import * as F from 'fkit';
-import * as React from 'react';
+import Bacon from 'baconjs';
+import F from 'fkit';
+import React from 'react';
 
 import CountryComponent from './country_component';
 import PathsComponent from './paths_component';

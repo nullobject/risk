@@ -1,5 +1,5 @@
 import * as core from '../core';
-import * as React from 'react';
+import React from 'react';
 
 // Tile size.
 const TILE_COLS = 3,

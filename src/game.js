@@ -1,5 +1,5 @@
 import * as core from './core';
-import * as F from 'fkit';
+import F from 'fkit';
 
 export default class Game {
   constructor(players, world) {

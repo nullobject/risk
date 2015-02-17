@@ -1,5 +1,5 @@
-import * as clipper from '../../lib/clipper';
-import * as F from 'fkit';
+import clipper from '../../lib/clipper';
+import F from 'fkit';
 import Point from './point';
 
 const SCALE = 100;

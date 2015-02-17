@@ -1,4 +1,4 @@
-import * as F from 'fkit';
+import F from 'fkit';
 import Point from './point';
 import Polygon from './polygon';
 

@@ -1,8 +1,8 @@
 import * as core from './core';
 import * as graph from './graph';
 import * as reinforcement from './reinforcement';
-import * as F from 'fkit';
-import * as Immutable from 'immutable';
+import F from 'fkit';
+import Immutable from 'immutable';
 
 /**
  * Returns true if the country is occupied by the given player, false

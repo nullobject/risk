@@ -1,4 +1,4 @@
-import * as F from 'fkit';
+import F from 'fkit';
 
 export default class Country {
   constructor(id, size, polygon, slots) {

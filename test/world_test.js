@@ -1,5 +1,5 @@
 import * as factory from './support/factory';
-import * as rewire from 'rewire';
+import rewire from 'rewire';
 import * as F from 'fkit';
 
 const World = rewire('../src/world');

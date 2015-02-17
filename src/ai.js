@@ -1,5 +1,5 @@
 import * as core from './core';
-import * as F from 'fkit';
+import F from 'fkit';
 
 /**
  * Returns true if the country is not occupied by the given player, false
