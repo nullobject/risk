@@ -5,13 +5,11 @@ import React from 'react';
 const TILE_COLS = 3,
       TILE_ROWS = 3;
 
-export default React.createClass({
-  displayName: 'HexgridComponent',
-
+export default class HexgridComponent extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     // Don't ever update the component.
     return false;
-  },
+  }
 
   render() {
     let hexgrid = this.props.hexgrid;
@@ -34,12 +32,12 @@ export default React.createClass({
       </g>
       /* jshint ignore:end */
     );
-  },
+  }
 
   renderHexgrid(hexgrid) {
     let hexagons = hexgrid.build([TILE_COLS, TILE_ROWS], [-0.5, -0.5]);
     return hexagons.map(this.renderPolygon);
-  },
+  }
 
   renderPolygon(polygon, index) {
     return (
@@ -47,5 +45,5 @@ export default React.createClass({
       <polygon key={index} points={polygon} />
       /* jshint ignore:end */
     );
-  },
-});
+  }
+}

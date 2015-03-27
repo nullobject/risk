@@ -9,17 +9,10 @@ import PathsComponent from './paths_component';
 function isNearby(game, country) { return game.canMoveToCountry(country); }
 function isSelected(game, country) { return country === game.selectedCountry; }
 
-export default React.createClass({
-  displayName: 'GameComponent',
-
-  propTypes: {
-    stream: React.PropTypes.instanceOf(Bacon.Observable).isRequired,
-    game:   React.PropTypes.object.isRequired
-  },
-
+export default class GameComponent extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     return nextProps.game !== this.props.game;
-  },
+  }
 
   render() {
     let stream = this.props.stream,
@@ -35,28 +28,30 @@ export default React.createClass({
       </g>
       /* jshint ignore:end */
     );
-  },
+  }
 
   renderCountries(stream, game) {
     return game.world.countries.map(this.renderCountry(stream, game));
-  },
+  }
 
-  renderCountry: F.curry((stream, game, country) => {
-    let nearby   = isNearby(game, country),
-        selected = isSelected(game, country);
+  renderCountry(stream, game) {
+    return function (country) {
+      let nearby   = isNearby(game, country),
+          selected = isSelected(game, country);
 
-    return (
-      /* jshint ignore:start */
-      <CountryComponent
-        key={country}
-        country={country}
-        nearby={nearby}
-        selected={selected}
-        stream={stream}
-      />
-      /* jshint ignore:end */
-    );
-  }),
+      return (
+        /* jshint ignore:start */
+        <CountryComponent
+          key={country}
+          country={country}
+          nearby={nearby}
+          selected={selected}
+          stream={stream}
+        />
+        /* jshint ignore:end */
+      );
+    };
+  }
 
   renderCells(game) {
     return DEBUG ? (
@@ -64,5 +59,10 @@ export default React.createClass({
       <PathsComponent className="voronoi" paths={game.world.cells} />
       /* jshint ignore:end */
     ) : null;
-  },
-});
+  }
+}
+
+GameComponent.propTypes = {
+  game:   React.PropTypes.object.isRequired,
+  stream: React.PropTypes.instanceOf(Bacon.Observable).isRequired
+};
