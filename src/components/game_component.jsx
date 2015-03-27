@@ -1,7 +1,7 @@
 import * as core from '../core';
-import * as Bacon from 'baconjs';
-import * as F from 'fkit';
-import * as React from 'react';
+import Bacon from 'baconjs';
+import F from 'fkit';
+import React from 'react';
 
 import CountryComponent from './country_component';
 import PathsComponent from './paths_component';
@@ -22,7 +22,7 @@ export default React.createClass({
   },
 
   render() {
-    var stream = this.props.stream,
+    let stream = this.props.stream,
         game   = this.props.game;
 
     core.log('GameComponent#render');
@@ -42,7 +42,7 @@ export default React.createClass({
   },
 
   renderCountry: F.curry((stream, game, country) => {
-    var nearby   = isNearby(game, country),
+    let nearby   = isNearby(game, country),
         selected = isSelected(game, country);
 
     return (

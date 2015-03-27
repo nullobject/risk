@@ -1,7 +1,7 @@
 import AI from '../src/ai';
 
 describe('AI', () => {
-  var ai;
+  let ai;
 
   beforeEach(() => {
     ai = new AI();

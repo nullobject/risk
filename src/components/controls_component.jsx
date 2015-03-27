@@ -1,6 +1,6 @@
 import * as core from '../core';
-import * as Bacon from 'baconjs';
-import * as React from 'react';
+import Bacon from 'baconjs';
+import React from 'react';
 
 export default React.createClass({
   displayName: 'ControlsComponent',
@@ -19,7 +19,7 @@ export default React.createClass({
   },
 
   render() {
-    var currentPlayer = this.props.currentPlayer ? this.props.currentPlayer.toString() : '';
+    let currentPlayer = this.props.currentPlayer ? this.props.currentPlayer.toString() : '';
 
     core.log('ControlsComponent#render');
 

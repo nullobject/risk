@@ -17,29 +17,29 @@
     "url": "https://github.com/nullobject/hexgrid/issues"
   },
   "devDependencies": {
-    "6to5": "^1.12.20",
-    "6to5-loader": "^0.2.3",
-    "chai": "^1.10.0",
+    "babel": "^4.7.0",
+    "babel-loader": "^4.2.0",
+    "chai": "^2.1.2",
     "css-loader": "^0.9.0",
-    "extract-text-webpack-plugin": "^0.3.1",
-    "jshint": "^2.5.0",
-    "jsx-loader": "^0.12.0",
-    "less": "^1.7.5",
-    "less-loader": "^0.7.7",
-    "mocha": "^2.0.1",
-    "react-tools": "^0.12.0",
-    "rewire": "^2.1.0",
-    "sinon": "^1.11.0",
+    "extract-text-webpack-plugin": "^0.5.0",
+    "jshint": "^2.6.3",
+    "jsx-loader": "^0.12.2",
+    "less": "^2.4.0",
+    "less-loader": "^2.2.0",
+    "mocha": "^2.1.0",
+    "react-tools": "0.13.1",
+    "rewire": "^2.3.1",
+    "sinon": "^1.14.1",
     "sinon-chai": "^2.5.0",
-    "style-loader": "^0.8.0",
-    "webpack": "^1.4.8",
-    "webpack-dev-server": "^1.6.5"
+    "style-loader": "^0.9.0",
+    "webpack": "^1.7.3",
+    "webpack-dev-server": "^1.7.0"
   },
   "dependencies": {
-    "baconjs": "^0.7.23",
-    "fkit": "^0.16.0",
-    "immutable": "^3.1.0",
+    "baconjs": "^0.7.53",
+    "fkit": "^0.16.2",
+    "immutable": "^3.6.4",
     "normalize.css": "^3.0.1",
-    "react": "^0.12.0"
+    "react": "0.13.1"
   }
 }

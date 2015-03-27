@@ -1,16 +1,16 @@
 import Game from '../src/game';
 
 describe('Game', () => {
-  var sandbox, game;
+  let sandbox, game;
 
   // Player stub.
-  var player = {};
+  let player = {};
 
   // Country stubs.
-  var source = {}, target = {};
+  let source = {}, target = {};
 
   // World stub.
-  var world = {
+  let world = {
     countries:           [source, target],
     assignPlayers:       () => {},
     countriesOccupiedBy: () => {},
@@ -36,16 +36,16 @@ describe('Game', () => {
     });
 
     it('should move to the target country if the selected country is unoccupied', () => {
-      var newWorld = {};
+      let newWorld = {};
 
-      var mock = sandbox
+      let mock = sandbox
         .mock(world)
         .expects('move')
         .withArgs(source, target)
         .once()
         .returns(newWorld);
 
-      var result = game.moveToCountry(target);
+      let result = game.moveToCountry(target);
 
       expect(result.selectedCountry).to.be.null;
       expect(result.world).to.equal(newWorld);
@@ -56,16 +56,16 @@ describe('Game', () => {
     it('should attack the target country if the selected country is occupied', () => {
       target.player = {};
 
-      var newWorld = {};
+      let newWorld = {};
 
-      var mock = sandbox
+      let mock = sandbox
         .mock(world)
         .expects('attack')
         .withArgs(source, target)
         .once()
         .returns(newWorld);
 
-      var result = game.moveToCountry(target);
+      let result = game.moveToCountry(target);
 
       expect(result.selectedCountry).to.be.null;
       expect(result.world).to.equal(newWorld);

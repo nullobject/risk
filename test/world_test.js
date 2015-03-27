@@ -1,21 +1,16 @@
 import * as factory from './support/factory';
-import * as rewire from 'rewire';
+import rewire from 'rewire';
 import * as F from 'fkit';
 
-var World = rewire('../src/world');
+const World = rewire('../src/world');
 
-var core  = World.__get__('core'),
-    graph = World.__get__('graph');
+const core  = World.__get__('core');
 
 // Stub each call to the `rollDice` function with the return values in the
 // list of `xss`.
-var stubRollDice = F.variadic((sandbox, xss) => {
-  var stub = sandbox.stub(core, 'rollDice');
+const stubRollDice = F.variadic((sandbox, xss) => {
+  let stub = sandbox.stub(core, 'rollDice');
   xss.map((xs, i) => { stub.onCall(i).returns(xs); });
-});
-
-var stubCalculateIslands = F.variadic((sandbox, xs) => {
-  sandbox.stub(graph, 'calculateIslands').returns(F.const(xs));
 });
 
 function find(as, bs) {
@@ -29,33 +24,33 @@ function find(as, bs) {
 }
 
 function move(world, a, b) {
-  var result = world.move(a, b);
+  let result = world.move(a, b);
   return find(result.countries, [a, b]);
 }
 
 function attack(world, a, b) {
-  var result = world.attack(a, b);
+  let result = world.attack(a, b);
   return find(result.countries, [a, b]);
 }
 
 function reinforce(world, player) {
-  var result = world.reinforce(player);
+  let result = world.reinforce(player);
   return find(result.countries, world.countriesOccupiedBy(player));
 }
 
 describe('World', () => {
-  var sandbox, x, y, z;
+  let sandbox, x, y, z;
 
   // Player stubs.
-  var p = {}, q = {};
+  let p = {}, q = {};
 
   // Country stubs.
-  var p1 = factory.buildCountry(1, p, [], 4, 4),
-      p2 = factory.buildCountry(2, p, [], 2, 3),
-      p3 = factory.buildCountry(3, p, [], 1, 2),
-      q1 = factory.buildCountry(4, q, [], 2, 2);
+  let p1 = factory.buildCountry(1, p, 4, 4),
+      p2 = factory.buildCountry(2, p, 2, 3),
+      p3 = factory.buildCountry(3, p, 1, 2),
+      q1 = factory.buildCountry(4, q, 2, 2);
 
-  var world = factory.buildWorld([p1, p2, p3, q1]);
+  let world = factory.buildWorld([p1, p2, p3, q1]);
 
   beforeEach(() => {
     sandbox = sinon.sandbox.create();
@@ -137,7 +132,8 @@ describe('World', () => {
   describe('#reinforce', () => {
     beforeEach(() => {
       sandbox.stub(core, 'distribute').returns([0, 1, 1]);
-      stubCalculateIslands(sandbox, [1, 2], [3]);
+      sandbox.stub(world.graph, 'connectedComponents').returns([['a'], ['b', 'c']]);
+      sandbox.stub(world.graph, 'shortestPathBy').returns(['a', 'b', 'c']);
       [x, y, z] = reinforce(world, p);
     });
 

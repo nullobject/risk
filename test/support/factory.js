@@ -1,24 +1,24 @@
 import Country from '../../src/country';
 import * as F from 'fkit';
+import Graph from '../../src/graph';
 import World from '../../src/world';
 
 module.exports = {
-  buildCountry: function(id, player, neighbourIds, armies, slots) {
-    var country = new Country();
+  buildCountry: function(id, player, armies, slots) {
+    let country = new Country();
 
-    country.id           = id;
-    country.player       = player;
-    country.neighbourIds = neighbourIds;
-    country.armies       = armies;
-    country.slots        = F.array(slots);
+    country.id     = id;
+    country.player = player;
+    country.armies = armies;
+    country.slots  = F.array(slots);
 
     return country;
   },
 
   buildWorld: function(countries) {
-    var world = new World();
+    let world = new World();
 
-    world.countries = countries;
+    world.graph = new Graph(countries, []);
 
     return world;
   },

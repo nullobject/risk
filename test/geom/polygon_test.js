@@ -2,7 +2,7 @@ import Point from '../../src/geom/point';
 import Polygon from '../../src/geom/polygon';
 
 describe('Polygon', () => {
-  var polygon = new Polygon([
+  let polygon = new Polygon([
     new Point(-1, -1),
     new Point(-1,  1),
     new Point( 1,  1),

@@ -1,9 +1,9 @@
 import * as core from './core';
-import * as F from 'fkit';
+import F from 'fkit';
 
 export default class Game {
   constructor(players, world) {
-    var a = arguments;
+    let a = arguments;
 
     if (a.length > 0) {
       // Assign each player to a random country.
@@ -18,9 +18,10 @@ export default class Game {
   }
 
   get alivePlayers() {
-    return this.players.filter(player => {
-      return this.world.countriesOccupiedBy(player).length > 0;
-    }, this);
+    return this.players.filter(
+      player => this.world.countriesOccupiedBy(player).length > 0,
+      this
+    );
   }
 
   /**
@@ -63,7 +64,7 @@ export default class Game {
       this.selectedCountry !== null &&
       this.selectedCountry.player === this.currentPlayer &&
       this.selectedCountry.armies > 1 &&
-      this.selectedCountry.hasNeighbour(country);
+      this.world.neighbouring(country, this.selectedCountry);
   }
 
   /**
@@ -75,7 +76,7 @@ export default class Game {
     core.log('Game#endTurn');
 
     // Find the index of the current and next players.
-    var i = F.elemIndex(this.currentPlayer, this.alivePlayers),
+    let i = F.elemIndex(this.currentPlayer, this.alivePlayers),
         j = (i + 1) % this.alivePlayers.length;
 
     return this.selectPlayer(this.alivePlayers[j]);
@@ -91,7 +92,7 @@ export default class Game {
       throw new Error('The player is already selected');
     }
 
-    var world = this.currentPlayer ?
+    let world = this.currentPlayer ?
       this.world.reinforce(this.currentPlayer) :
       this.world;
 
@@ -127,7 +128,7 @@ export default class Game {
   moveToCountry(country) {
     core.log('Game#moveToCountry');
 
-    var world = country.player ?
+    let world = country.player ?
       this.world.attack(this.selectedCountry, country) :
       this.world.move(this.selectedCountry, country);
 

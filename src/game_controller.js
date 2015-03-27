@@ -1,27 +1,26 @@
 import AI from './ai';
-import * as Bacon from 'baconjs';
-import * as F from 'fkit';
+import Bacon from 'baconjs';
+import F from 'fkit';
 import Game from './game';
 import Player from './player';
-import * as React from 'react';
+import React from 'react';
+import RootComponent from './components/root_component';
 import * as WorldBuilder from './world_builder';
-
-var RootComponent = React.createFactory(require('./components/root_component').default);
 
 /**
  * The number of milliseconds between clock ticks.
  */
-var CLOCK_INTERVAL = 100;
+const CLOCK_INTERVAL = 100;
 
 /**
  * The number of players in the game.
  */
-var PLAYERS = 5;
+const PLAYERS = 5;
 
 /**
  * The number of human players in the game.
  */
-var HUMANS = 1;
+const HUMANS = 1;
 
 function transformGameState(game, event) {
   switch (event.type) {
@@ -37,29 +36,29 @@ function transformGameState(game, event) {
 export default class GameController {
   constructor(options) {
     // Create the players.
-    var players = F.range(0, PLAYERS).map(id => new Player(id));
+    let players = F.range(0, PLAYERS).map(id => new Player(id));
 
     // Create the world.
-    var world = WorldBuilder.build(options.width, options.height);
+    let world = WorldBuilder.build(options.width, options.height);
 
     // Create the game state.
-    var game = new Game(players, world);
+    let game = new Game(players, world);
 
     // Create the input bus.
-    var inputBus = new Bacon.Bus();
+    let inputBus = new Bacon.Bus();
 
     // Create the main app bus.
-    var mainBus = new Bacon.Bus();
+    let mainBus = new Bacon.Bus();
 
     // Create the clock tick stream.
-    var clock = Bacon.interval(CLOCK_INTERVAL, CLOCK_INTERVAL);
+    let clock = Bacon.interval(CLOCK_INTERVAL, CLOCK_INTERVAL);
 
     // The game property scans the game state transformer function over events on
     // the main bus.
-    var gameProperty = mainBus.scan(game, transformGameState);
+    let gameProperty = mainBus.scan(game, transformGameState);
 
     // Map player IDs to AI streams.
-    var aiStream = Bacon.mergeAll(F.drop(HUMANS, game.players).map(playerAI));
+    let aiStream = Bacon.mergeAll(F.drop(HUMANS, game.players).map(playerAI));
 
     // Plug the input bus into the main bus.
     mainBus.plug(inputBus);
@@ -68,27 +67,22 @@ export default class GameController {
     mainBus.plug(aiStream);
 
     // Render the UI whenever the game property changes.
-    gameProperty.onValue(game => {
-      React.render(
-        RootComponent({game: game, stream: inputBus}),
-        options.el
-      );
-    });
+    gameProperty.onValue(game =>
+      React.render(React.createElement(RootComponent, {game: game, stream: inputBus}), options.el)
+    );
 
     /*
      * The player AI stream emits the moves calculated for a player.
      */
     function playerAI(player) {
-      var worldProperty = gameProperty.map('.world');
+      let worldProperty = gameProperty.map('.world');
 
       return worldProperty
         .sampledBy(playerClock(player))
         .withStateMachine(new AI(), (ai, event) => {
           if (event.hasValue()) {
-            var world         = event.value(),
-                [ai_, events] = ai.nextMove(world, player);
-
-            return [ai_, events.map(move => { return new Bacon.Next(move); })];
+            let [ai_, events] = ai.nextMove(event.value(), player);
+            return [ai_, events.map(move => new Bacon.Next(move))];
           } else {
             return [ai, [event]];
           }
@@ -100,7 +94,7 @@ export default class GameController {
      * current.
      */
     function playerClock(player) {
-      var currentPlayerProperty = gameProperty.map('.currentPlayer');
+      let currentPlayerProperty = gameProperty.map('.currentPlayer');
       return clock.map(currentPlayerProperty).filter(F.equal(player));
     }
   }
