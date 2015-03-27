@@ -1,5 +1,7 @@
 # Hexgrid
 
+[![Build Status](https://travis-ci.org/nullobject/hexgrid.svg?branch=master)](https://travis-ci.org/nullobject/hexgrid)
+
 ## The game
 
 The game is played with two or more players on a map. The object of the game is
