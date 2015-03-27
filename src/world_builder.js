@@ -91,7 +91,7 @@ const calculateCountries = F.curry((hexagons, diagram) =>
 
     // Return a new country.
     return new Country(
-      cell.site.voronoiId,
+      cell.site.voronoiId.toString(),
       countryHexagons.length,
       countryPolygon.offset(-COUNTRY_POLYGON_INSET),
       slots
@@ -100,10 +100,11 @@ const calculateCountries = F.curry((hexagons, diagram) =>
 );
 
 function calculateEdges(diagram) {
-  return F.concatMap(cell => {
+  // FIXME: FKit `concatMap` should handle arrays of strings properly.
+  return F.concat(diagram.cells.map(cell => {
     let a = cell.site.voronoiId;
-    return cell.getNeighborIds().map(b => [a, b]);
-  }, diagram.cells);
+    return cell.getNeighborIds().map(b => [a.toString(), b.toString()]);
+  }));
 }
 
 // Filters countries that are too small/big.

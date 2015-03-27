@@ -41,8 +41,8 @@ describe('reinforcement', () => {
         .filter(country => country.player === q)
         .connectedComponents();
       let depthIndex = [['b', 'c'], ['f', 'd', 'e']];
-      expect(reinforcement.reinforcementMap(graph, subgraphs, depthIndex)).to.eql([['b', 2], ['c', 1], ['f', 0], ['d', 1], ['e', 0]]);
-      // expect(reinforcement.reinforcementMap(graph, subgraphs, depthIndex)).to.eql({'b': 2, 'c': 1, 'd': 1, 'e': 0, 'f': 0});
+      // expect(reinforcement.reinforcementMap(graph, subgraphs, depthIndex)).to.eql([['b', 2], ['c', 1], ['f', 0], ['d', 1], ['e', 0]]);
+      expect(reinforcement.reinforcementMap(graph, subgraphs, depthIndex)).to.eql({'b': 2, 'c': 1, 'd': 1, 'e': 0, 'f': 0});
     });
   });
 });

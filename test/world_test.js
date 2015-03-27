@@ -4,7 +4,8 @@ import F from 'fkit';
 
 const World = rewire('../src/world');
 
-const core  = World.__get__('core');
+const core          = World.__get__('core');
+const reinforcement = World.__get__('reinforcement');
 
 // Stub each call to the `rollDice` function with the return values in the
 // list of `xss`.
@@ -45,10 +46,10 @@ describe('World', () => {
   let p = {}, q = {};
 
   // Country stubs.
-  let p1 = factory.buildCountry(1, p, 4, 4),
-      p2 = factory.buildCountry(2, p, 2, 3),
-      p3 = factory.buildCountry(3, p, 1, 2),
-      q1 = factory.buildCountry(4, q, 2, 2);
+  let p1 = factory.buildCountry('a', p, 4, 4),
+      p2 = factory.buildCountry('b', p, 2, 3),
+      p3 = factory.buildCountry('c', p, 1, 2),
+      q1 = factory.buildCountry('d', q, 2, 2);
 
   let world = factory.buildWorld([p1, p2, p3, q1]);
 
@@ -131,9 +132,8 @@ describe('World', () => {
 
   describe('#reinforce', () => {
     beforeEach(() => {
-      sandbox.stub(core, 'distribute').returns([0, 1, 1]);
-      sandbox.stub(world.graph, 'connectedComponents').returns([['a'], ['b', 'c']]);
-      sandbox.stub(world.graph, 'shortestPathBy').returns(['a', 'b', 'c']);
+      sandbox.stub(reinforcement, 'depthIndex').returns([['a', 'b', 'c']]);
+      sandbox.stub(reinforcement, 'reinforcementMap').returns({a: 1, b: 1, c: 1});
       [x, y, z] = reinforce(world, p);
     });
 

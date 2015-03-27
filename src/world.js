@@ -138,11 +138,9 @@ export default class World {
       .connectedComponents();
 
     let depthIndex = reinforcement.depthIndex(this.graph, subgraphs);
-    console.log(depthIndex);
     let reinforcementMap = reinforcement.reinforcementMap(this.graph, subgraphs, depthIndex);
-    console.log(reinforcementMap);
 
-    let graph = reinforcementMap.reduce((graph, [key, n]) => {
+    let graph = F.pairs(reinforcementMap).reduce((graph, [key, n]) => {
       return graph.update(key, country => country.reinforce(n));
     }, this.graph);
 

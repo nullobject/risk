@@ -23,7 +23,9 @@ export function depthIndex(graph, subgraphs) {
 
     let depth = path.length - 2;
 
-    return list.update(depth, set => (set || Immutable.Set()).add(key));
+    return list.update(depth, set => {
+      return (set || Immutable.Set()).add(key);
+    });
   }, Immutable.List()).toJS();
 }
 
@@ -55,8 +57,10 @@ export function reinforcementMap(graph, subgraphs, depthIndex) {
 
     n -= F.sum(bs);
 
-    result = keys.reduce((result, key, index) => F.append([key, bs[index]], result), result);
+    result = keys.reduce((result, key, index) => {
+      return F.set(key, bs[index], result);
+    }, result);
 
     return [n, result];
-  }, [n, []])[1];
+  }, [n, {}])[1];
 }

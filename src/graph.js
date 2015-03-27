@@ -210,7 +210,7 @@ export default class Graph {
   }
 
   /**
-   * Returns the values of the vertices in the graph.
+   * Returns the the edges in the graph.
    */
   edges() {
     return this.adjacencyMap
