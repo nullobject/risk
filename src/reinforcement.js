@@ -2,6 +2,12 @@ import * as core from './core';
 import F from 'fkit';
 import Immutable from 'immutable';
 
+/**
+ * Calculates the depth index for the player subgraphs.
+ *
+ * The depth index is a list of lists, where each list contains the countries
+ * that are the same distance from any country belonging to another player.
+ */
 export function depthIndex(graph, subgraphs) {
   let player = subgraphs[0].first().player;
 
