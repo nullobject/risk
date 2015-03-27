@@ -1,4 +1,4 @@
-import * as F from 'fkit';
+import F from 'fkit';
 import * as reinforcement from '../src/reinforcement';
 import Graph from '../src/graph';
 

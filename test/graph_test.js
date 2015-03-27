@@ -1,4 +1,4 @@
-import * as F from 'fkit';
+import F from 'fkit';
 import Graph from '../src/graph';
 
 describe('Graph', () => {

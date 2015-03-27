@@ -1,4 +1,4 @@
-import * as factory from './support/factory';
+import factory from './support/factory';
 
 describe('Country', () => {
   let country = factory.buildCountry(1, [2, 3], 2, 3);

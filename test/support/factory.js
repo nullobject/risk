@@ -1,5 +1,5 @@
 import Country from '../../src/country';
-import * as F from 'fkit';
+import F from 'fkit';
 import Graph from '../../src/graph';
 import World from '../../src/world';
 
