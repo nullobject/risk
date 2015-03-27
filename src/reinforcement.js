@@ -23,9 +23,7 @@ export function depthIndex(graph, subgraphs) {
 
     let depth = path.length - 2;
 
-    return list.update(depth, set => {
-      return (set || Immutable.Set()).add(key);
-    });
+    return list.update(depth, set => (set || Immutable.Set()).add(key));
   }, Immutable.List()).toJS();
 }
 
