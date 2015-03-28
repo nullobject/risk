@@ -35,7 +35,7 @@ export default class GameComponent extends React.Component {
   }
 
   renderCountry(stream, game) {
-    return function (country) {
+    return (country) => {
       let nearby   = isNearby(game, country),
           selected = isSelected(game, country);
 

@@ -51,7 +51,7 @@ export default class CountryComponent extends React.Component {
   }
 
   renderSlot(country) {
-    return function (polygon, index) {
+    return (polygon, index) => {
       let classes = {
         selected: index < country.armies,
         slot:     true

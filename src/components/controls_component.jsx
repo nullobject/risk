@@ -20,7 +20,7 @@ export default class ControlsComponent extends React.Component {
       /* jshint ignore:start */
       <div className="controls">
         <span>{currentPlayer}</span>
-        <button type="button" onClick={this.didEndTurn}>End Turn</button>
+        <button type="button" onClick={this.didEndTurn.bind(this)}>End Turn</button>
       </div>
       /* jshint ignore:end */
     );

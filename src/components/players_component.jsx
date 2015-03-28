@@ -28,14 +28,14 @@ export default class PlayersComponent extends React.Component {
   }
 
   renderPlayers(game) {
-    return game.players.map(this.renderPlayer(this.classes, game));
+    return game.players.map(this.renderPlayer(game));
   }
 
-  renderPlayer(classes, game) {
-    return function (player, index) {
+  renderPlayer(game) {
+    return (player, index) => {
       return (
         /* jshint ignore:start */
-        <li className={cx(classes(player))} key={index}>{game.armiesForPlayer(player)}</li>
+        <li className={cx(this.classes(player))} key={index}>{game.armiesForPlayer(player)}</li>
         /* jshint ignore:end */
       );
     };
