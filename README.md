@@ -24,7 +24,7 @@ They can place these armies in any of their occupied countries.
 Run the development server:
 
 ```sh
-> make start
+> make up
 ```
 
 Open `http://localhost:8080/webpack-dev-server/` in your browser. Any changes
