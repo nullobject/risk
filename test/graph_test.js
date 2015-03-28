@@ -4,18 +4,18 @@ import Graph from '../src/graph';
 describe('Graph', () => {
   let p = {}, q = {}, r = {}, s = {};
 
-  let a = {id: 'a', player: p},
-      b = {id: 'b', player: q},
-      c = {id: 'c', player: q},
-      d = {id: 'd', player: q},
-      e = {id: 'e', player: q},
-      f = {id: 'f', player: q},
-      g = {id: 'g', player: r},
-      h = {id: 'h', player: r},
-      i = {id: 'i', player: r},
-      j = {id: 'j', player: r},
-      k = {id: 'k', player: r},
-      l = {id: 'l', player: s};
+  let a = {id: 'a', player: p, score: 1},
+      b = {id: 'b', player: q, score: 2},
+      c = {id: 'c', player: q, score: 3},
+      d = {id: 'd', player: q, score: 4},
+      e = {id: 'e', player: q, score: 5},
+      f = {id: 'f', player: q, score: 6},
+      g = {id: 'g', player: r, score: 7},
+      h = {id: 'h', player: r, score: 8},
+      i = {id: 'i', player: r, score: 9},
+      j = {id: 'j', player: r, score: 10},
+      k = {id: 'k', player: r, score: 11},
+      l = {id: 'l', player: s, score: 12};
 
   let values = [a, b, c, d, e, f, g, h, i, j, k, l];
 
@@ -37,14 +37,88 @@ describe('Graph', () => {
   let graph = new Graph(values, edges);
 
   describe('#size', () => {
-    it('should return the graph size', () => {
-      expect(graph.size).to.eql(12);
+    it('should return the number of vertices', () => {
+      expect(graph.size).to.eq(12);
+    });
+  });
+
+  describe('#first', () => {
+    it('should return the first vertex', () => {
+      expect(graph.first()).to.eq(a);
+    });
+  });
+
+  describe('#last', () => {
+    it('should return the last vertex', () => {
+      expect(graph.last()).to.eq(l);
+    });
+  });
+
+  describe('#get', () => {
+    it('should return the vertex with the given key', () => {
+      expect(graph.get('a')).to.eq(a);
+      expect(graph.get('l')).to.eq(l);
+    });
+  });
+
+  describe('#merge', () => {
+    it('should merge the given vertices', () => {
+      let m = {id: 'm', player: s, score: 13};
+      expect(graph.merge([m]).last()).to.eq(m);
+    });
+  });
+
+  describe('#update', () => {
+    it('should update the vertex with the given key', () => {
+      let graph_ = graph.update('a', F.update('score', F.inc));
+      expect(graph_.get('a').score).to.eq(2);
+    });
+  });
+
+  describe('#keys', () => {
+    it('should return the vertex keys', () => {
+      expect(graph.keys()).to.eql(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l']);
     });
   });
 
   describe('#values', () => {
-    it('should return the graph values', () => {
+    it('should return the vertex values', () => {
       expect(graph.values()).to.eql(values);
+    });
+  });
+
+  describe('#edges', () => {
+    it('should return the edges', () => {
+      expect(graph.edges()).to.eql(edges);
+    });
+  });
+
+  describe('#addVertex', () => {
+    it('should add a vertex with the given key and value', () => {
+      let m = {id: 'm', player: s, score: 13};
+      expect(graph.addVertex(m.id, m).last()).to.eql(m);
+    });
+  });
+
+  describe('#removeVertex', () => {
+    it('should remove the vertex with the given key', () => {
+      expect(graph.removeVertex('l').get('l')).to.be.undefined;
+    });
+  });
+
+  describe('#addEdge', () => {
+    it('should connect the vertices with the given keys', () => {
+      expect(graph.adjacent('c', 'd')).to.be.false;
+      let graph_ = graph.addEdge('c', 'd');
+      expect(graph_.adjacent('c', 'd')).to.be.true;
+    });
+  });
+
+  describe('#removeEdge', () => {
+    it('should connect the vertices with the given keys', () => {
+      expect(graph.adjacent('a', 'b')).to.be.true;
+      let graph_ = graph.removeEdge('a', 'b');
+      expect(graph_.adjacent('a', 'b')).to.be.false;
     });
   });
 

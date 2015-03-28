@@ -8,10 +8,20 @@ import * as core from './core';
 import F from 'fkit';
 import Immutable from 'immutable';
 
+function keySet(graph) {
+  return graph.vertexMap.keySeq().toSet();
+}
+
 function addEdge(adjacencyMap, [k, j]) {
-  let kSet = adjacencyMap.get(k) || Immutable.Set();
-  let jSet = adjacencyMap.get(j) || Immutable.Set();
+  let kSet = adjacencyMap.get(k) || Immutable.Set(),
+      jSet = adjacencyMap.get(j) || Immutable.Set();
   return adjacencyMap.set(k, kSet.add(j)).set(j, jSet.add(k));
+}
+
+function removeEdge(adjacencyMap, [k, j]) {
+  let kSet = adjacencyMap.get(k) || Immutable.Set(),
+      jSet = adjacencyMap.get(j) || Immutable.Set();
+  return adjacencyMap.set(k, kSet.delete(j)).set(j, jSet.delete(k));
 }
 
 function removeVertex([vertexMap, adjacencyMap], k) {
@@ -125,7 +135,7 @@ function connectedComponents(graph) {
     return subgraphs;
   };
 
-  let keys = graph.keySet();
+  let keys = keySet(graph);
 
   return traverseComponents(
     keys,
@@ -149,6 +159,9 @@ export default class Graph {
     }
   }
 
+  /**
+   * Returns the number of vertices in the graph.
+   */
   get size() { return this.vertexMap.size; }
 
   /**
@@ -166,17 +179,18 @@ export default class Graph {
   }
 
   /**
-   * Returns the vertex with `k`.
+   * Returns the vertex with key `k`.
    */
   get(k) {
     return this.vertexMap.get(k);
   }
 
   /**
-   * Merges the map of `as` into the graph.
+   * Merges the list of `as` into the graph.
    */
   merge(as) {
-    let vertexMap = this.vertexMap.merge(as.map(a => [a.id, a]));
+    let bs        = Immutable.Map(as.map(a => [a.id, a])),
+        vertexMap = this.vertexMap.merge(bs);
     return F.copy(this, {vertexMap});
   }
 
@@ -191,15 +205,8 @@ export default class Graph {
   /**
    * Returns the keys of the vertices in the graph.
    */
-  keySet() {
-    return this.vertexMap.keySeq().toSet();
-  }
-
-  /**
-   * Returns the keys of the vertices in the graph.
-   */
   keys() {
-    return this.keySet().toArray();
+    return keySet(this).toArray();
   }
 
   /**
@@ -239,7 +246,7 @@ export default class Graph {
       k
     );
 
-    return F.copy(this, {vertexMap: vertexMap, adjacencyMap: adjacencyMap});
+    return F.copy(this, {vertexMap, adjacencyMap});
   }
 
   /**
@@ -247,15 +254,15 @@ export default class Graph {
    */
   addEdge(k, j) {
     let adjacencyMap = this.adjacencyMap.withMutations(m => addEdge(m, [k, j]));
-    return F.copy(this, {vertexMap, edgesMap});
+    return F.copy(this, {adjacencyMap});
   }
 
   /**
-   * Removes the edge in the graph that is incident upon the vertex with key
-   * `k`.
+   * Disconnects the vertices in the graph with keys `k` and `j`.
    */
   removeEdge(k, j) {
-    // TODO
+    let adjacencyMap = this.adjacencyMap.withMutations(m => removeEdge(m, [k, j]));
+    return F.copy(this, {adjacencyMap});
   }
 
   /**
@@ -276,7 +283,7 @@ export default class Graph {
   }
 
   /**
-   * Returns the keys of the vertices adjacent to the vertex with key `k`.
+   * Returns the vertices adjacent to the vertex with key `k`.
    */
   adjacentValues(k) {
     let kSet = this.adjacencyMap.get(k);
