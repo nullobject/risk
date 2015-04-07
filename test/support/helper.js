@@ -1,7 +1,7 @@
-var chai      = require('chai'),
+var babel     = require('babel-core/register'),
+    chai      = require('chai'),
     sinon     = require('sinon'),
-    sinonChai = require('sinon-chai'),
-    to5       = require('babel/register');
+    sinonChai = require('sinon-chai');
 
 global.expect = chai.expect;
 global.sinon  = sinon;
@@ -9,4 +9,4 @@ global.sinon  = sinon;
 chai.use(sinonChai);
 
 // Register babel.
-to5({ignore: /(lib|node_modules)/});
+babel({ignore: /(lib|node_modules)/});
