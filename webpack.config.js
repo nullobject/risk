@@ -1,6 +1,6 @@
-var path              = require('path'),
-    DefinePlugin      = require('webpack').DefinePlugin,
-    ExtractTextPlugin = require('extract-text-webpack-plugin');
+var DefinePlugin      = require('webpack').DefinePlugin,
+    ExtractTextPlugin = require('extract-text-webpack-plugin'),
+    path              = require('path');
 
 var exclude = /(lib|node_modules)/;
 

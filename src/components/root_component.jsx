@@ -38,6 +38,7 @@ export default class RootComponent extends React.Component {
       /* jshint ignore:start */
       <g className="game-over">
         <rect width="100%" height="100%" />
+        <text x="50%" y="50%">Game Over</text>
       </g>
       /* jshint ignore:end */
     ) : null;

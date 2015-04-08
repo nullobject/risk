@@ -13,15 +13,24 @@ export default class Game {
       this.players         = players;
       this.currentPlayer   = F.head(players);
       this.selectedCountry = null;
-      this.over            = false;
     }
   }
 
+  /**
+   * Returns the players that are alive.
+   */
   get alivePlayers() {
     return this.players.filter(
       player => this.world.countriesOccupiedBy(player).length > 0,
       this
     );
+  }
+
+  /**
+   * Returns true if the game is over, false otherwise.
+   */
+  get over() {
+    return this.alivePlayers.length === 1;
   }
 
   /**
@@ -134,8 +143,7 @@ export default class Game {
 
     return F.copy(this, {
       selectedCountry: null,
-      world:           world,
-      over:            this.alivePlayers.length === 1
+      world:           world
     });
   }
 }
