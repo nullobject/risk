@@ -8,6 +8,11 @@ import HexgridComponent from './hexgrid_component';
 import PlayersComponent from './players_component';
 
 export default class RootComponent extends React.Component {
+  static propTypes = {
+    game:   React.PropTypes.object.isRequired,
+    stream: React.PropTypes.instanceOf(Bacon.Observable).isRequired
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     return nextProps.game !== this.props.game;
   }
@@ -44,8 +49,3 @@ export default class RootComponent extends React.Component {
     ) : null;
   }
 }
-
-RootComponent.propTypes = {
-  game:   React.PropTypes.object.isRequired,
-  stream: React.PropTypes.instanceOf(Bacon.Observable).isRequired
-};

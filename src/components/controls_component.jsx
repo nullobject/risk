@@ -3,6 +3,11 @@ import Bacon from 'baconjs';
 import React from 'react';
 
 export default class ControlsComponent extends React.Component {
+ static propTypes = {
+    currentPlayer: React.PropTypes.object,
+    stream:        React.PropTypes.instanceOf(Bacon.Observable).isRequired
+  }
+
   didEndTurn() {
     this.props.stream.push({type: 'end-turn'});
   }
@@ -26,8 +31,3 @@ export default class ControlsComponent extends React.Component {
     );
   }
 }
-
-ControlsComponent.propTypes = {
-  currentPlayer: React.PropTypes.object,
-  stream:        React.PropTypes.instanceOf(Bacon.Observable).isRequired
-};

@@ -5,6 +5,11 @@ import React from 'react/addons';
 const cx = React.addons.classSet;
 
 export default class PlayersComponent extends React.Component {
+  static propTypes = {
+    currentPlayer: React.PropTypes.object,
+    game:          React.PropTypes.object.isRequired
+  }
+
   classes(player) {
     let selected = player === this.props.currentPlayer;
     return F.set(player, true, {selected});
@@ -41,8 +46,3 @@ export default class PlayersComponent extends React.Component {
     };
   }
 }
-
-PlayersComponent.propTypes = {
-  currentPlayer: React.PropTypes.object,
-  game:          React.PropTypes.object.isRequired
-};

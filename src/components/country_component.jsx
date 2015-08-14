@@ -6,6 +6,13 @@ import React from 'react/addons';
 const cx = React.addons.classSet;
 
 export default class CountryComponent extends React.Component {
+  static propTypes = {
+    country:  React.PropTypes.object.isRequired,
+    nearby:   React.PropTypes.bool.isRequired,
+    selected: React.PropTypes.bool.isRequired,
+    stream:   React.PropTypes.instanceOf(Bacon.Observable).isRequired
+  }
+
   didSelectCountry(country) {
     this.props.stream.push({type: 'select-country', country: country});
   }
@@ -65,10 +72,3 @@ export default class CountryComponent extends React.Component {
     };
   }
 }
-
-CountryComponent.propTypes = {
-  country:  React.PropTypes.object.isRequired,
-  nearby:   React.PropTypes.bool.isRequired,
-  selected: React.PropTypes.bool.isRequired,
-  stream:   React.PropTypes.instanceOf(Bacon.Observable).isRequired
-};

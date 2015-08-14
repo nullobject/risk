@@ -3,6 +3,11 @@ import React from 'react';
 function polygon(d) { return 'M' + d.join('L') + 'Z'; }
 
 export default class PathsComponent extends React.Component {
+  static propTypes = {
+    paths:     React.PropTypes.array.isRequired,
+    className: React.PropTypes.string.isRequired
+  }
+
   render() {
     return (
       /* jshint ignore:start */
@@ -23,8 +28,3 @@ export default class PathsComponent extends React.Component {
     );
   }
 }
-
-PathsComponent.propTypes = {
-  paths:     React.PropTypes.array.isRequired,
-  className: React.PropTypes.string.isRequired
-};
