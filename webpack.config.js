@@ -18,11 +18,11 @@ module.exports = {
     loaders: [{
       test:    /\.js$/,
       exclude: exclude,
-      loader:  'babel'
+      loader:  'babel?stage=0'
     }, {
       test:    /\.jsx$/,
       exclude: exclude,
-      loaders: ['jsx', 'babel']
+      loaders: ['jsx', 'babel?stage=0']
     }, {
       test:    /\.less$/,
       exclude: exclude,
