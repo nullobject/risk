@@ -81,11 +81,11 @@ function shortestPathBy(graph, p, key) {
 
     let next = frontier.first();
 
-    let adjacentVertices = graph.adjacentVertices(next);
-
     if (p(graph.get(next), next)) {
       return [path, frontier, next];
     }
+
+    let adjacentVertices = graph.adjacentVertices(next);
 
     adjacentVertices.forEach(vertex => {
       if (!path.has(vertex)) {
