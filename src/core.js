@@ -16,7 +16,7 @@ export function log (message) {
 /**
  * Returns true if `n` is between `a` and `b`, false otherwise.
  */
-export function between (n, a, b) {
+export function between (a, b, n) {
   return n >= a && n <= b
 }
 

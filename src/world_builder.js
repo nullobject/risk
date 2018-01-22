@@ -108,7 +108,7 @@ function calculateEdges (diagram) {
 }
 
 // Filters countries that are too small/big.
-const byCountrySize = country => core.between(country.size, MIN_COUNTRY_SIZE, MAX_COUNTRY_SIZE)
+const byCountrySize = country => core.between(MIN_COUNTRY_SIZE, MAX_COUNTRY_SIZE, country.size)
 
 /**
  * Builds a new world with the given width and height.
