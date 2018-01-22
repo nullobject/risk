@@ -1,6 +1,6 @@
 * {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
+  touch-callout: none;
+  user-select: none;
 };
 
 body {
@@ -9,9 +9,9 @@ body {
 }
 
 .container {
-  display: -webkit-flex;
-  -webkit-flex-direction: row;
-  -webkit-justify-content: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 svg {
@@ -64,7 +64,7 @@ svg {
     }
   }
 
-  .game-over {
+  .gameOver {
     rect {
       fill: black;
       fill-opacity: 0.6;

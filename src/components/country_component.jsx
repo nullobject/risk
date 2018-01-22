@@ -1,27 +1,23 @@
 import * as core from '../core';
-import Bacon from 'baconjs';
-import F from 'fkit';
 import React from 'react';
 import classnames from 'classnames'
+import styles from '../styles.scss'
 
 export default class CountryComponent extends React.PureComponent {
   didSelectCountry(country) {
     this.props.stream.push({type: 'select-country', country: country});
   }
 
-  classes() {
-    let player = this.props.country.player,
-        color  = player ? player.toString() : '';
-
-    return F.set(color, true, {
-      country:  true,
-      nearby:   this.props.nearby,
-      selected: this.props.selected
-    });
-  }
-
   render() {
-    let country = this.props.country;
+    const country = this.props.country;
+    const className = classnames(
+      styles[country.player],
+      styles.country,
+      {
+        [styles.nearby]: this.props.nearby,
+        [styles.selected]: this.props.selected
+      }
+    )
 
     core.log('CountryComponent#render (' + country + ')');
 
@@ -29,7 +25,7 @@ export default class CountryComponent extends React.PureComponent {
       /* jshint ignore:start */
       <g>
         <polygon
-          className={classnames(this.classes())}
+          className={className}
           points={country.polygon}
           onClick={this.didSelectCountry.bind(this, country)}
         />
@@ -45,10 +41,7 @@ export default class CountryComponent extends React.PureComponent {
 
   renderSlot(country) {
     return (polygon, index) => {
-      let classes = {
-        selected: index < country.armies,
-        slot:     true
-      };
+      const classes = classnames(styles.slot, {[styles.selected]: index < country.armies});
 
       return (
         /* jshint ignore:start */

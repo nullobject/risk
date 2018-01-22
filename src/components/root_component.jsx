@@ -1,11 +1,10 @@
 import * as core from '../core';
-import Bacon from 'baconjs';
-import React from 'react';
-
 import ControlsComponent from './controls_component';
 import GameComponent from './game_component';
 import HexgridComponent from './hexgrid_component';
 import PlayersComponent from './players_component';
+import React from 'react';
+import styles from '../styles.scss'
 
 export default class RootComponent extends React.PureComponent {
   render() {
@@ -16,7 +15,7 @@ export default class RootComponent extends React.PureComponent {
 
     return (
       /* jshint ignore:start */
-      <div className="game">
+      <div className={styles.game}>
         <PlayersComponent currentPlayer={game.currentPlayer} game={game} />
         <svg width={game.world.width} height={game.world.height}>
           <HexgridComponent width={game.world.width} height={game.world.height} hexgrid={game.world.hexgrid} />
@@ -32,7 +31,7 @@ export default class RootComponent extends React.PureComponent {
   renderGameOver(game) {
     return game.over ? (
       /* jshint ignore:start */
-      <g className="game-over">
+      <g className={styles.gameOver}>
         <rect width="100%" height="100%" />
         <text x="50%" y="50%">Game Over</text>
       </g>
