@@ -7,9 +7,9 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "parcel index.html",
-    "build": "parcel build index.html --public-url ./",
-    "test": "mocha"
+    "start": "make start",
+    "build": "make dist",
+    "test": "make test"
   },
   "repository": {
     "type": "git",

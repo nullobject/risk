@@ -17,37 +17,8 @@ armies. During a turn a player can move or attack as many times as they wish.
 At the end of their turn, a player is rewarded a number of additional armies.
 They can place these armies in any of their occupied countries.
 
-## Contribute
+## Licence
 
-### Develop
-
-Run the development server:
-
-```sh
-> make up
-```
-
-Open `http://localhost:8080/webpack-dev-server/` in your browser. Any changes
-to the app will be live reloaded.
-
-### Build
-
-Build the app:
-
-```sh
-> make production
-```
-
-### Test
-
-Run the tests:
-
-```sh
-> make test
-```
-
-## License
-
-Hexgrid is licensed under the MIT license. See the
-[LICENSE](https://github.com/nullobject/hexgrid/blob/master/LICENSE.md) file
+Hexgrid is licensed under the MIT licence. See the
+[LICENCE](https://github.com/nullobject/hexgrid/blob/master/LICENCE.md) file
 for more details.

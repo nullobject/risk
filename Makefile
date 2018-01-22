@@ -1,21 +1,24 @@
 .PHONY: clean lint production start test unit
 
-up: node_modules
-	@node_modules/.bin/webpack-dev-server --colors -d
+start: node_modules
+	@node_modules/.bin/parcel index.html
 
-production: node_modules
-	@NODE_ENV=production node_modules/.bin/webpack --colors --progress -p
+dist: node_modules
+	@node_modules/.bin/parcel build index.html --public-url ./
 
 test: unit lint
 
+watch: node_modules
+	@./node_modules/.bin/mocha -w
+
 clean:
-	@rm -rf doc node_modules
+	@rm -rf node_modules
 
 node_modules:
 	@npm install
 
-unit:
+unit: node_modules
 	@node_modules/.bin/mocha
 
-lint:
-	@node_modules/.bin/jshint src
+lint: node_modules
+	@node_modules/.bin/standard "*.js" "src/**/*.js" "test/**/*.js"
