@@ -14,13 +14,6 @@ export function log (message) {
 }
 
 /**
- * Returns true if `n` is between `a` and `b`, false otherwise.
- */
-export function between (a, b, n) {
-  return n >= a && n <= b
-}
-
-/**
  * Rolls `n` dice and returns the sum of their values.
  */
 export function rollDice (n) {

@@ -1,15 +1,6 @@
 import * as core from '../src/core';
 
 describe('core', () => {
-  describe('.clamp', () => {
-    it('should clamp a value', () => {
-      expect(core.clamp(0, 1, 2)).to.eql(1);
-      expect(core.clamp(1, 1, 2)).to.eql(1);
-      expect(core.clamp(2, 1, 2)).to.eql(2);
-      expect(core.clamp(3, 1, 2)).to.eql(2);
-    });
-  });
-
   describe('.distribute', () => {
     it('should distribute the units', () => {
       expect(core.distribute(0, [1, 2, 3])).to.eql([0, 0, 0]);
