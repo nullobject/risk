@@ -1,10 +1,8 @@
 import * as core from '../core';
-import Bacon from 'baconjs';
-import F from 'fkit';
-import React from 'react';
-
 import CountryComponent from './country_component';
 import PathsComponent from './paths_component';
+import React from 'react';
+import styles from '../styles.scss'
 
 function isNearby(game, country) { return game.canMoveToCountry(country); }
 function isSelected(game, country) { return country === game.selectedCountry; }
@@ -18,8 +16,8 @@ export default class GameComponent extends React.PureComponent {
 
     return (
       /* jshint ignore:start */
-      <g className="world">
-        <g className="countries">{this.renderCountries(stream, game)}</g>
+      <g className={styles.world}>
+        <g className={styles.countries}>{this.renderCountries(stream, game)}</g>
         {this.renderCells(game)}
       </g>
       /* jshint ignore:end */
@@ -50,9 +48,9 @@ export default class GameComponent extends React.PureComponent {
   }
 
   renderCells(game) {
-    return DEBUG ? (
+    return false ? (
       /* jshint ignore:start */
-      <PathsComponent className="voronoi" paths={game.world.cells} />
+      <PathsComponent className={styles.voronoi} paths={game.world.cells} />
       /* jshint ignore:end */
     ) : null;
   }

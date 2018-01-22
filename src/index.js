@@ -1,6 +1,5 @@
 /* jshint browser:true */
 
-import './style.less';
 import GameController from './game_controller';
 
 new GameController({

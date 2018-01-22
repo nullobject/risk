@@ -1,5 +1,6 @@
 import * as core from '../core';
 import React from 'react';
+import styles from '../styles.scss'
 
 // Tile size.
 const TILE_COLS = 3,
@@ -22,7 +23,7 @@ export default class HexgridComponent extends React.Component {
 
     return (
       /* jshint ignore:start */
-      <g className="hexgrid">
+      <g className={styles.hexgrid}>
         <defs>
           <pattern id="tile" width={width} height={height} patternUnits="userSpaceOnUse">
             {this.renderHexgrid(hexgrid)}

@@ -1,14 +1,9 @@
 import * as core from '../core';
-import F from 'fkit';
 import React from 'react';
 import classnames from 'classnames'
+import styles from '../styles.scss'
 
 export default class PlayersComponent extends React.PureComponent {
-  classes(player) {
-    let selected = player === this.props.currentPlayer;
-    return F.set(player, true, {selected});
-  }
-
   render() {
     let game = this.props.game;
 
@@ -16,7 +11,7 @@ export default class PlayersComponent extends React.PureComponent {
 
     return (
       /* jshint ignore:start */
-      <ul className="players">{this.renderPlayers(game)}</ul>
+      <ul className={styles.players}>{this.renderPlayers(game)}</ul>
       /* jshint ignore:end */
     );
   }
@@ -27,9 +22,12 @@ export default class PlayersComponent extends React.PureComponent {
 
   renderPlayer(game) {
     return (player, index) => {
+      const selected = player === this.props.currentPlayer;
+      const className = classnames(styles[player], {[styles.selected]: selected})
+
       return (
         /* jshint ignore:start */
-        <li className={classnames(this.classes(player))} key={index}>{game.armiesForPlayer(player)}</li>
+        <li className={className} key={index}>{game.armiesForPlayer(player)}</li>
         /* jshint ignore:end */
       );
     };
