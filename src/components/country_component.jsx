@@ -1,18 +1,10 @@
 import * as core from '../core';
 import Bacon from 'baconjs';
 import F from 'fkit';
-import React from 'react/addons';
-
-const cx = React.addons.classSet;
+import React from 'react';
+import classnames from 'classnames'
 
 export default class CountryComponent extends React.Component {
-  static propTypes = {
-    country:  React.PropTypes.object.isRequired,
-    nearby:   React.PropTypes.bool.isRequired,
-    selected: React.PropTypes.bool.isRequired,
-    stream:   React.PropTypes.instanceOf(Bacon.Observable).isRequired
-  }
-
   didSelectCountry(country) {
     this.props.stream.push({type: 'select-country', country: country});
   }
@@ -43,7 +35,7 @@ export default class CountryComponent extends React.Component {
       /* jshint ignore:start */
       <g>
         <polygon
-          className={cx(this.classes())}
+          className={classnames(this.classes())}
           points={country.polygon}
           onClick={this.didSelectCountry.bind(this, country)}
         />
@@ -66,7 +58,7 @@ export default class CountryComponent extends React.Component {
 
       return (
         /* jshint ignore:start */
-        <polygon className={cx(classes)} key={index} points={polygon} />
+        <polygon className={classnames(classes)} key={index} points={polygon} />
         /* jshint ignore:end */
       );
     };

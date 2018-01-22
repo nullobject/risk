@@ -10,11 +10,6 @@ function isNearby(game, country) { return game.canMoveToCountry(country); }
 function isSelected(game, country) { return country === game.selectedCountry; }
 
 export default class GameComponent extends React.Component {
-  static propTypes = {
-    game:   React.PropTypes.object.isRequired,
-    stream: React.PropTypes.instanceOf(Bacon.Observable).isRequired
-  }
-
   shouldComponentUpdate(nextProps, nextState) {
     return nextProps.game !== this.props.game;
   }

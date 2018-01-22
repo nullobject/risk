@@ -27,7 +27,6 @@
     "less": "^2.5.0",
     "less-loader": "^2.2.0",
     "mocha": "^2.3.0",
-    "react-tools": "0.13.3",
     "rewire": "^2.3.1",
     "sinon": "^1.16.1",
     "sinon-chai": "^2.5.0",
@@ -37,9 +36,11 @@
   },
   "dependencies": {
     "baconjs": "^0.7.53",
+    "classnames": "^2.2.5",
     "fkit": "^0.16.2",
     "immutable": "^3.7.1",
     "normalize.css": "^3.0.3",
-    "react": "0.13.3"
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
   }
 }

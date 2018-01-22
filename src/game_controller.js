@@ -4,6 +4,7 @@ import F from 'fkit';
 import Game from './game';
 import Player from './player';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import RootComponent from './components/root_component';
 import * as WorldBuilder from './world_builder';
 
@@ -68,7 +69,7 @@ export default class GameController {
 
     // Render the UI whenever the game property changes.
     gameProperty.onValue(game =>
-      React.render(React.createElement(RootComponent, {game: game, stream: inputBus}), options.el)
+      ReactDOM.render(<RootComponent game={game} stream={inputBus} />, options.el)
     );
 
     /*

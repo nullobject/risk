@@ -1,15 +1,9 @@
 import * as core from '../core';
 import F from 'fkit';
-import React from 'react/addons';
-
-const cx = React.addons.classSet;
+import React from 'react';
+import classnames from 'classnames'
 
 export default class PlayersComponent extends React.Component {
-  static propTypes = {
-    currentPlayer: React.PropTypes.object,
-    game:          React.PropTypes.object.isRequired
-  }
-
   classes(player) {
     let selected = player === this.props.currentPlayer;
     return F.set(player, true, {selected});
@@ -40,7 +34,7 @@ export default class PlayersComponent extends React.Component {
     return (player, index) => {
       return (
         /* jshint ignore:start */
-        <li className={cx(this.classes(player))} key={index}>{game.armiesForPlayer(player)}</li>
+        <li className={classnames(this.classes(player))} key={index}>{game.armiesForPlayer(player)}</li>
         /* jshint ignore:end */
       );
     };
