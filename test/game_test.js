@@ -1,76 +1,79 @@
-import Game from '../src/game';
+import Game from '../src/game'
+import sinon from 'sinon'
+import {assert} from 'chai'
 
 describe('Game', () => {
-  let sandbox, game;
+  let sandbox, game
 
   // Player stub.
-  let player = {};
+  const player = {}
 
   // Country stubs.
-  let source = {}, target = {};
+  const source = {}
+  const target = {}
 
   // World stub.
-  let world = {
-    countries:           [source, target],
-    assignPlayers:       () => {},
+  const world = {
+    countries: [source, target],
+    assignPlayers: () => {},
     countriesOccupiedBy: () => {},
-    move:                () => {},
-    attack:              () => {}
-  };
+    move: () => {},
+    attack: () => {}
+  }
 
   beforeEach(() => {
-    sandbox = sinon.sandbox.create();
-    sandbox.stub(world, 'assignPlayers').returns(world);
-    sandbox.stub(world, 'countriesOccupiedBy').returns(1);
-    game = new Game([player], world);
-  });
+    sandbox = sinon.sandbox.create()
+    sandbox.stub(world, 'assignPlayers').returns(world)
+    sandbox.stub(world, 'countriesOccupiedBy').returns(1)
+    game = new Game([player], world)
+  })
 
   afterEach(() => {
-    sandbox.restore();
-  });
+    sandbox.restore()
+  })
 
   describe('#moveToCountry', () => {
     beforeEach(() => {
-      game.currentPlayer = player;
-      game.selectedCountry = source;
-    });
+      game.currentPlayer = player
+      game.selectedCountry = source
+    })
 
     it('should move to the target country if the selected country is unoccupied', () => {
-      let newWorld = {};
+      const newWorld = {}
 
-      let mock = sandbox
+      const mock = sandbox
         .mock(world)
         .expects('move')
         .withArgs(source, target)
         .once()
-        .returns(newWorld);
+        .returns(newWorld)
 
-      let result = game.moveToCountry(target);
+      const result = game.moveToCountry(target)
 
-      expect(result.selectedCountry).to.be.null;
-      expect(result.world).to.equal(newWorld);
+      assert.isNull(result.selectedCountry)
+      assert.equal(result.world, newWorld)
 
-      mock.verify();
-    });
+      mock.verify()
+    })
 
     it('should attack the target country if the selected country is occupied', () => {
-      target.player = {};
+      target.player = {}
 
-      let newWorld = {};
+      const newWorld = {}
 
-      let mock = sandbox
+      const mock = sandbox
         .mock(world)
         .expects('attack')
         .withArgs(source, target)
         .once()
-        .returns(newWorld);
+        .returns(newWorld)
 
-      let result = game.moveToCountry(target);
+      const result = game.moveToCountry(target)
 
-      expect(result.selectedCountry).to.be.null;
-      expect(result.world).to.equal(newWorld);
+      assert.isNull(result.selectedCountry)
+      assert.equal(result.world, newWorld)
 
-      mock.verify();
-    });
-  });
-});
+      mock.verify()
+    })
+  })
+})

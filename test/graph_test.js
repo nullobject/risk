@@ -1,25 +1,29 @@
-import F from 'fkit';
-import Graph from '../src/graph';
+import * as F from 'fkit'
+import Graph from '../src/graph'
+import {assert} from 'chai'
 
 describe('Graph', () => {
-  let p = {}, q = {}, r = {}, s = {};
+  const p = {}
+  const q = {}
+  const r = {}
+  const s = {}
 
-  let a = {id: 'a', player: p, score: 1},
-      b = {id: 'b', player: q, score: 2},
-      c = {id: 'c', player: q, score: 3},
-      d = {id: 'd', player: q, score: 4},
-      e = {id: 'e', player: q, score: 5},
-      f = {id: 'f', player: q, score: 6},
-      g = {id: 'g', player: r, score: 7},
-      h = {id: 'h', player: r, score: 8},
-      i = {id: 'i', player: r, score: 9},
-      j = {id: 'j', player: r, score: 10},
-      k = {id: 'k', player: r, score: 11},
-      l = {id: 'l', player: s, score: 12};
+  const a = {id: 'a', player: p, score: 1}
+  const b = {id: 'b', player: q, score: 2}
+  const c = {id: 'c', player: q, score: 3}
+  const d = {id: 'd', player: q, score: 4}
+  const e = {id: 'e', player: q, score: 5}
+  const f = {id: 'f', player: q, score: 6}
+  const g = {id: 'g', player: r, score: 7}
+  const h = {id: 'h', player: r, score: 8}
+  const i = {id: 'i', player: r, score: 9}
+  const j = {id: 'j', player: r, score: 10}
+  const k = {id: 'k', player: r, score: 11}
+  const l = {id: 'l', player: s, score: 12}
 
-  let values = [a, b, c, d, e, f, g, h, i, j, k, l];
+  const values = [a, b, c, d, e, f, g, h, i, j, k, l]
 
-  let edges = [
+  const edges = [
     ['a', 'b'], ['a', 'c'],
     ['b', 'a'], ['b', 'c'], ['b', 'd'], ['b', 'e'],
     ['c', 'a'], ['c', 'b'], ['c', 'e'], ['c', 'f'],
@@ -32,192 +36,192 @@ describe('Graph', () => {
     ['j', 'g'], ['j', 'h'], ['j', 'k'], ['j', 'l'],
     ['k', 'h'], ['k', 'i'], ['k', 'j'], ['k', 'l'],
     ['l', 'j'], ['l', 'k']
-  ];
+  ]
 
-  let graph = new Graph(values, edges);
+  const graph = new Graph(values, edges)
 
   describe('#size', () => {
     it('should return the number of vertices', () => {
-      expect(graph.size).to.eq(12);
-    });
-  });
+      assert.strictEqual(graph.size, 12)
+    })
+  })
 
   describe('#first', () => {
     it('should return the first vertex', () => {
-      expect(graph.first()).to.eq(a);
-    });
-  });
+      assert.strictEqual(graph.first(), a)
+    })
+  })
 
   describe('#last', () => {
     it('should return the last vertex', () => {
-      expect(graph.last()).to.eq(l);
-    });
-  });
+      assert.strictEqual(graph.last(), l)
+    })
+  })
 
   describe('#get', () => {
     it('should return the vertex with the given key', () => {
-      expect(graph.get('a')).to.eq(a);
-      expect(graph.get('l')).to.eq(l);
-    });
-  });
+      assert.strictEqual(graph.get('a'), a)
+      assert.strictEqual(graph.get('l'), l)
+    })
+  })
 
   describe('#merge', () => {
     it('should merge the given vertices', () => {
-      let m = {id: 'm', player: s, score: 13};
-      expect(graph.merge([m]).last()).to.eq(m);
-    });
-  });
+      const m = {id: 'm', player: s, score: 13}
+      assert.strictEqual(graph.merge([m]).last(), m)
+    })
+  })
 
   describe('#update', () => {
     it('should update the vertex with the given key', () => {
-      let graph_ = graph.update('a', F.update('score', F.inc));
-      expect(graph_.get('a').score).to.eq(2);
-    });
-  });
+      const graph_ = graph.update('a', F.update('score', F.inc))
+      assert.strictEqual(graph_.get('a').score, 2)
+    })
+  })
 
   describe('#keys', () => {
     it('should return the vertex keys', () => {
-      expect(graph.keys()).to.eql(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l']);
-    });
-  });
+      assert.deepEqual(graph.keys(), ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'])
+    })
+  })
 
   describe('#values', () => {
     it('should return the vertex values', () => {
-      expect(graph.values()).to.eql(values);
-    });
-  });
+      assert.deepEqual(graph.values(), values)
+    })
+  })
 
   describe('#edges', () => {
     it('should return the edges', () => {
-      expect(graph.edges()).to.eql(edges);
-    });
-  });
+      assert.deepEqual(graph.edges(), edges)
+    })
+  })
 
   describe('#addVertex', () => {
     it('should add a vertex with the given key and value', () => {
-      let m = {id: 'm', player: s, score: 13};
-      expect(graph.addVertex(m.id, m).last()).to.eql(m);
-    });
-  });
+      const m = {id: 'm', player: s, score: 13}
+      assert.deepEqual(graph.addVertex(m.id, m).last(), m)
+    })
+  })
 
   describe('#removeVertex', () => {
     it('should remove the vertex with the given key', () => {
-      expect(graph.removeVertex('l').get('l')).to.be.undefined;
-    });
-  });
+      assert.isUndefined(graph.removeVertex('l').get('l'))
+    })
+  })
 
   describe('#addEdge', () => {
     it('should connect the vertices with the given keys', () => {
-      expect(graph.adjacent('c', 'd')).to.be.false;
-      let graph_ = graph.addEdge('c', 'd');
-      expect(graph_.adjacent('c', 'd')).to.be.true;
-    });
-  });
+      assert.isFalse(graph.adjacent('c', 'd'))
+      const graph_ = graph.addEdge('c', 'd')
+      assert.isTrue(graph_.adjacent('c', 'd'))
+    })
+  })
 
   describe('#removeEdge', () => {
     it('should connect the vertices with the given keys', () => {
-      expect(graph.adjacent('a', 'b')).to.be.true;
-      let graph_ = graph.removeEdge('a', 'b');
-      expect(graph_.adjacent('a', 'b')).to.be.false;
-    });
-  });
+      assert.isTrue(graph.adjacent('a', 'b'))
+      const graph_ = graph.removeEdge('a', 'b')
+      assert.isFalse(graph_.adjacent('a', 'b'))
+    })
+  })
 
   describe('#adjacent', () => {
     it('should return true for vertices that are adjacent', () => {
-      expect(graph.adjacent('a', 'b')).to.be.true;
-      expect(graph.adjacent('b', 'a')).to.be.true;
-    });
+      assert.isTrue(graph.adjacent('a', 'b'))
+      assert.isTrue(graph.adjacent('b', 'a'))
+    })
 
     it('should return false for vertices that are not adjacent', () => {
-      expect(graph.adjacent('c', 'd')).to.be.false;
-      expect(graph.adjacent('d', 'c')).to.be.false;
-    });
-  });
+      assert.isFalse(graph.adjacent('c', 'd'))
+      assert.isFalse(graph.adjacent('d', 'c'))
+    })
+  })
 
   describe('#adjacentVertices', () => {
     it('should return keys of the vertices that are adjacent to the vertex', () => {
-      expect(graph.adjacentVertices('a')).to.eql(['b', 'c']);
-      expect(graph.adjacentVertices('b')).to.eql(['a', 'c', 'd', 'e']);
-      expect(graph.adjacentVertices('c')).to.eql(['a', 'b', 'e', 'f']);
-    });
-  });
+      assert.deepEqual(graph.adjacentVertices('a'), ['b', 'c'])
+      assert.deepEqual(graph.adjacentVertices('b'), ['a', 'c', 'd', 'e'])
+      assert.deepEqual(graph.adjacentVertices('c'), ['a', 'b', 'e', 'f'])
+    })
+  })
 
   describe('#adjacentValues', () => {
     it('should return keys of the vertices that are adjacent to the vertex', () => {
-      expect(graph.adjacentValues('a')).to.eql([b, c]);
-      expect(graph.adjacentValues('b')).to.eql([a, c, d, e]);
-      expect(graph.adjacentValues('c')).to.eql([a, b, e, f]);
-    });
-  });
+      assert.deepEqual(graph.adjacentValues('a'), [b, c])
+      assert.deepEqual(graph.adjacentValues('b'), [a, c, d, e])
+      assert.deepEqual(graph.adjacentValues('c'), [a, b, e, f])
+    })
+  })
 
   describe('#filter', () => {
     it('should filter the values', () => {
-      let result = graph.filter((value, key) => F.elem(key, 'abc'));
-      expect(result.keys()).to.eql(['a', 'b', 'c']);
-      expect(result.edges()).to.eql([
+      const result = graph.filter((value, key) => F.elem(key, 'abc'))
+      assert.deepEqual(result.keys(), ['a', 'b', 'c'])
+      assert.deepEqual(result.edges(), [
         ['a', 'b'], ['a', 'c'], ['b', 'a'], ['b', 'c'], ['c', 'a'], ['c', 'b']
-      ]);
-    });
-  });
+      ])
+    })
+  })
 
   describe('#traverse', () => {
     it('should return a traverse of the graph from the starting vertex', () => {
-      expect(graph.traverse('a')).to.eql(['a', 'b', 'c', 'd', 'e', 'f']);
-      expect(graph.traverse('g')).to.eql(['g', 'h', 'j', 'i', 'k', 'l']);
-    });
-  });
+      assert.deepEqual(graph.traverse('a'), ['a', 'b', 'c', 'd', 'e', 'f'])
+      assert.deepEqual(graph.traverse('g'), ['g', 'h', 'j', 'i', 'k', 'l'])
+    })
+  })
 
   describe('#shortestPath', () => {
     it('should return the shortest path to a matching vertex', () => {
-      expect(graph.shortestPath('a', 'a')).to.eql(['a']);
-      expect(graph.shortestPath('a', 'b')).to.eql(['a', 'b']);
-      expect(graph.shortestPath('f', 'a')).to.eql(['f', 'c', 'a']);
-    });
+      assert.deepEqual(graph.shortestPath('a', 'a'), ['a'])
+      assert.deepEqual(graph.shortestPath('a', 'b'), ['a', 'b'])
+      assert.deepEqual(graph.shortestPath('f', 'a'), ['f', 'c', 'a'])
+    })
 
     it('should return an empty path when no matching vertex is found', () => {
-      expect(graph.shortestPath('a', 'z')).to.eql([]);
-    });
-  });
+      assert.deepEqual(graph.shortestPath('a', 'z'), [])
+    })
+  })
 
   describe('#shortestPathBy', () => {
-    let player = F.curry((p, a) => a.player === p);
+    const player = F.curry((p, a) => a.player === p)
 
     it('should return the shortest path to a matching vertex', () => {
-      expect(graph.shortestPathBy(player(p), 'a')).to.eql(['a']);
-      expect(graph.shortestPathBy(player(q), 'a')).to.eql(['a', 'b']);
-      expect(graph.shortestPathBy(player(p), 'f')).to.eql(['f', 'c', 'a']);
-    });
+      assert.deepEqual(graph.shortestPathBy(player(p), 'a'), ['a'])
+      assert.deepEqual(graph.shortestPathBy(player(q), 'a'), ['a', 'b'])
+      assert.deepEqual(graph.shortestPathBy(player(p), 'f'), ['f', 'c', 'a'])
+    })
 
     it('should return an empty path when no matching vertex is found', () => {
-      expect(graph.shortestPathBy(player(r), 'a')).to.eql([]);
-    });
-  });
+      assert.deepEqual(graph.shortestPathBy(player(r), 'a'), [])
+    })
+  })
 
   describe('#connectedComponents', () => {
     it('should return the connected components of a graph', () => {
-      let result = graph.connectedComponents();
+      const result = graph.connectedComponents()
 
-      expect(result.length).to.eql(2);
+      assert.strictEqual(result.length, 2)
 
-      expect(result[0].keys()).to.eql(['a', 'b', 'c', 'd', 'e', 'f']);
-      expect(result[0].edges()).to.eql([
+      assert.deepEqual(result[0].keys(), ['a', 'b', 'c', 'd', 'e', 'f'])
+      assert.deepEqual(result[0].edges(), [
         ['a', 'b'], ['a', 'c'],
         ['b', 'a'], ['b', 'c'], ['b', 'd'], ['b', 'e'],
         ['c', 'a'], ['c', 'b'], ['c', 'e'], ['c', 'f'],
         ['d', 'b'], ['d', 'e'],
         ['e', 'b'], ['e', 'c'], ['e', 'd'], ['e', 'f'],
         ['f', 'c'], ['f', 'e']
-      ]);
+      ])
 
-      expect(result[1].keys()).to.eql(['g', 'h', 'i', 'j', 'k', 'l']);
-      expect(result[1].edges()).to.eql([
+      assert.deepEqual(result[1].keys(), ['g', 'h', 'i', 'j', 'k', 'l'])
+      assert.deepEqual(result[1].edges(), [
         ['g', 'h'], ['g', 'j'],
         ['h', 'g'], ['h', 'i'], ['h', 'j'], ['h', 'k'],
         ['i', 'h'], ['i', 'k'],
         ['j', 'g'], ['j', 'h'], ['j', 'k'], ['j', 'l'],
         ['k', 'h'], ['k', 'i'], ['k', 'j'], ['k', 'l'],
         ['l', 'j'], ['l', 'k']
-      ]);
-    });
-  });
-});
+      ])
+    })
+  })
+})

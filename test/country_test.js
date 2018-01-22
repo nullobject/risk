@@ -1,23 +1,24 @@
-import factory from './support/factory';
+import factory from './support/factory'
+import {assert} from 'chai'
 
 describe('Country', () => {
-  let country = factory.buildCountry(1, [2, 3], 2, 3);
+  const country = factory.buildCountry(1, [2, 3], 2, 3)
 
   describe('#availableSlots', () => {
     it('should add armies', () => {
-      expect(country.availableSlots).to.equal(1);
-    });
-  });
+      assert.equal(country.availableSlots, 1)
+    })
+  })
 
   describe('#reinforce', () => {
     it('should add armies', () => {
-      let result = country.reinforce(1);
-      expect(result.armies).to.equal(3);
-    });
+      let result = country.reinforce(1)
+      assert.equal(result.armies, 3)
+    })
 
     it('should not add more armies than available slots', () => {
-      let result = country.reinforce(2);
-      expect(result.armies).to.equal(3);
-    });
-  });
-});
+      let result = country.reinforce(2)
+      assert.equal(result.armies, 3)
+    })
+  })
+})
