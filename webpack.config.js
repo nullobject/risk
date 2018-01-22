@@ -5,7 +5,7 @@ var DefinePlugin      = require('webpack').DefinePlugin,
 var exclude = /(lib|node_modules)/;
 
 module.exports = {
-  entry: {app: path.join(__dirname, 'src', 'main.js')},
+  entry: {app: path.join(__dirname, 'src', 'index.js')},
   output: {
     path:       path.join(__dirname, 'build'),
     publicPath: '/build/',
