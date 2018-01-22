@@ -3,15 +3,10 @@ import F from 'fkit';
 import React from 'react';
 import classnames from 'classnames'
 
-export default class PlayersComponent extends React.Component {
+export default class PlayersComponent extends React.PureComponent {
   classes(player) {
     let selected = player === this.props.currentPlayer;
     return F.set(player, true, {selected});
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.currentPlayer !== this.props.currentPlayer ||
-      nextProps.game.world !== this.props.game.world;
   }
 
   render() {

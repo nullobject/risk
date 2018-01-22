@@ -7,11 +7,7 @@ import GameComponent from './game_component';
 import HexgridComponent from './hexgrid_component';
 import PlayersComponent from './players_component';
 
-export default class RootComponent extends React.Component {
-  shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.game !== this.props.game;
-  }
-
+export default class RootComponent extends React.PureComponent {
   render() {
     let stream = this.props.stream,
         game   = this.props.game;

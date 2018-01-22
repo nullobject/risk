@@ -2,7 +2,7 @@ import React from 'react';
 
 function polygon(d) { return 'M' + d.join('L') + 'Z'; }
 
-export default class PathsComponent extends React.Component {
+export default class PathsComponent extends React.PureComponent {
   render() {
     return (
       /* jshint ignore:start */

@@ -4,7 +4,7 @@ import F from 'fkit';
 import React from 'react';
 import classnames from 'classnames'
 
-export default class CountryComponent extends React.Component {
+export default class CountryComponent extends React.PureComponent {
   didSelectCountry(country) {
     this.props.stream.push({type: 'select-country', country: country});
   }
@@ -18,12 +18,6 @@ export default class CountryComponent extends React.Component {
       nearby:   this.props.nearby,
       selected: this.props.selected
     });
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.country !== this.props.country ||
-      nextProps.nearby !== this.props.nearby ||
-      nextProps.selected !== this.props.selected;
   }
 
   render() {

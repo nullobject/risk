@@ -2,13 +2,9 @@ import * as core from '../core';
 import Bacon from 'baconjs';
 import React from 'react';
 
-export default class ControlsComponent extends React.Component {
+export default class ControlsComponent extends React.PureComponent {
   didEndTurn() {
     this.props.stream.push({type: 'end-turn'});
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.currentPlayer !== this.props.currentPlayer;
   }
 
   render() {

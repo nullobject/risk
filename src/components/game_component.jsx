@@ -9,11 +9,7 @@ import PathsComponent from './paths_component';
 function isNearby(game, country) { return game.canMoveToCountry(country); }
 function isSelected(game, country) { return country === game.selectedCountry; }
 
-export default class GameComponent extends React.Component {
-  shouldComponentUpdate(nextProps, nextState) {
-    return nextProps.game !== this.props.game;
-  }
-
+export default class GameComponent extends React.PureComponent {
   render() {
     let stream = this.props.stream,
         game   = this.props.game;
