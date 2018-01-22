@@ -33,7 +33,7 @@
     "autoprefixer": "^7.2.5",
     "baconjs": "^0.7.53",
     "classnames": "^2.2.5",
-    "fkit": "^1.1.0",
+    "fkit": "^1.2.0",
     "immutable": "^3.7.1",
     "node-sass": "^4.7.2",
     "normalize.css": "^7.0.0",
