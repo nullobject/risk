@@ -1,6 +1,6 @@
 import AI from './ai'
 import Bacon from 'baconjs'
-import F from 'fkit'
+import {drop, equal, range} from 'fkit'
 import Game from './game'
 import Player from './player'
 import React from 'react'
@@ -41,7 +41,7 @@ function transformGameState (game, event) {
 }
 
 // Create the players.
-let players = F.range(0, PLAYERS).map(id => new Player(id))
+let players = range(0, PLAYERS).map(id => new Player(id))
 
 // Create the world.
 let world = WorldBuilder.build(WIDTH, HEIGHT)
@@ -63,7 +63,7 @@ let clock = Bacon.interval(CLOCK_INTERVAL, CLOCK_INTERVAL)
 let gameProperty = mainBus.scan(game, transformGameState)
 
 // Map player IDs to AI streams.
-let aiStream = Bacon.mergeAll(F.drop(HUMANS, game.players).map(playerAI))
+let aiStream = Bacon.mergeAll(drop(HUMANS, game.players).map(playerAI))
 
 // Plug the input bus into the main bus.
 mainBus.plug(inputBus)
@@ -102,5 +102,5 @@ function playerAI (player) {
  */
 function playerClock (player) {
   let currentPlayerProperty = gameProperty.map('.currentPlayer')
-  return clock.map(currentPlayerProperty).filter(F.equal(player))
+  return clock.map(currentPlayerProperty).filter(equal(player))
 }

@@ -1,5 +1,5 @@
 import clipper from '../../lib/clipper'
-import F from 'fkit'
+import {curry, compare} from 'fkit'
 import Point from './point'
 
 const SCALE = 100
@@ -121,11 +121,11 @@ export default class Polygon {
    * Compares the distance of `a` and `b` to the polygon `p`.
    */
   static get distanceComparator () {
-    return F.curry((p, a, b) => {
+    return curry((p, a, b) => {
       const da = a.centroid().distance(p.centroid())
       const db = b.centroid().distance(p.centroid())
 
-      return F.compare(da, db)
+      return compare(da, db)
     })
   }
 }

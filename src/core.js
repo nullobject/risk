@@ -4,7 +4,7 @@
  * @module
  */
 
-import F from 'fkit'
+import * as F from 'fkit'
 
 /**
  * Logs a message to the console.

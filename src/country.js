@@ -1,4 +1,4 @@
-import F from 'fkit'
+import {add, compose, min, update} from 'fkit'
 
 export default class Country {
   constructor (id, size, polygon, slots) {
@@ -28,8 +28,8 @@ export default class Country {
     if (n <= 0) {
       return this
     } else {
-      let f = F.compose(F.min(this.slots.length), F.add(n))
-      return F.update('armies', f, this)
+      let f = compose(min(this.slots.length), add(n))
+      return update('armies', f, this)
     }
   }
 }

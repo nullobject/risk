@@ -8,8 +8,8 @@ import styles from '../styles.scss'
 
 export default class RootComponent extends React.PureComponent {
   render () {
-    let stream = this.props.stream,
-      game = this.props.game
+    const stream = this.props.stream
+    const game = this.props.game
 
     core.log('RootComponent#render')
 

@@ -3,8 +3,8 @@ import React from 'react'
 import styles from '../styles.scss'
 
 // Tile size.
-const TILE_COLS = 3,
-  TILE_ROWS = 3
+const TILE_COLS = 3
+const TILE_ROWS = 3
 
 export default class HexgridComponent extends React.Component {
   shouldComponentUpdate (nextProps, nextState) {
@@ -13,11 +13,11 @@ export default class HexgridComponent extends React.Component {
   }
 
   render () {
-    let hexgrid = this.props.hexgrid
+    const hexgrid = this.props.hexgrid
 
     // Calculate the dimensions of the tile.
-    let width = hexgrid.width * 2,
-      height = hexgrid.height * 2
+    const width = hexgrid.width * 2
+    const height = hexgrid.height * 2
 
     core.log('HexgridComponent#render')
 
@@ -36,7 +36,7 @@ export default class HexgridComponent extends React.Component {
   }
 
   renderHexgrid (hexgrid) {
-    let hexagons = hexgrid.build([TILE_COLS, TILE_ROWS], [-0.5, -0.5])
+    const hexagons = hexgrid.build([TILE_COLS, TILE_ROWS], [-0.5, -0.5])
     return hexagons.map(this.renderPolygon)
   }
 

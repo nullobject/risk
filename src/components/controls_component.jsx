@@ -8,7 +8,7 @@ export default class ControlsComponent extends React.PureComponent {
   }
 
   render () {
-    let currentPlayer = this.props.currentPlayer ? this.props.currentPlayer.toString() : ''
+    const currentPlayer = this.props.currentPlayer ? this.props.currentPlayer.toString() : ''
 
     core.log('ControlsComponent#render')
 

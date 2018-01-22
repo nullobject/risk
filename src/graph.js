@@ -4,7 +4,7 @@
  * @module
  */
 
-import F from 'fkit'
+import {copy, curry} from 'fkit'
 import Immutable from 'immutable'
 
 function keySet (graph) {
@@ -41,7 +41,7 @@ function removeVertex ([vertexMap, adjacencyMap], k) {
 }
 
 function traverse (graph, k) {
-  const traverse_ = F.curry(([visited, vertices], k) => {
+  const traverse_ = curry(([visited, vertices], k) => {
     const adjacentVertices = graph.adjacentVertices(k)
 
     // Add the vertex to the set of visited vertices.
@@ -190,7 +190,7 @@ export default class Graph {
   merge (as) {
     const bs = Immutable.Map(as.map(a => [a.id, a]))
     const vertexMap = this.vertexMap.merge(bs)
-    return F.copy(this, {vertexMap})
+    return copy(this, {vertexMap})
   }
 
   /**
@@ -198,7 +198,7 @@ export default class Graph {
    */
   update (k, f) {
     const vertexMap = this.vertexMap.update(k, f)
-    return F.copy(this, {vertexMap})
+    return copy(this, {vertexMap})
   }
 
   /**
@@ -233,7 +233,7 @@ export default class Graph {
    */
   addVertex (k, v) {
     const vertexMap = this.vertexMap.set(k, v)
-    return F.copy(this, {vertexMap})
+    return copy(this, {vertexMap})
   }
 
   /**
@@ -245,7 +245,7 @@ export default class Graph {
       k
     )
 
-    return F.copy(this, {vertexMap, adjacencyMap})
+    return copy(this, {vertexMap, adjacencyMap})
   }
 
   /**
@@ -253,7 +253,7 @@ export default class Graph {
    */
   addEdge (k, j) {
     const adjacencyMap = this.adjacencyMap.withMutations(m => addEdge(m, [k, j]))
-    return F.copy(this, {adjacencyMap})
+    return copy(this, {adjacencyMap})
   }
 
   /**
@@ -261,7 +261,7 @@ export default class Graph {
    */
   removeEdge (k, j) {
     const adjacencyMap = this.adjacencyMap.withMutations(m => removeEdge(m, [k, j]))
-    return F.copy(this, {adjacencyMap})
+    return copy(this, {adjacencyMap})
   }
 
   /**
@@ -300,7 +300,7 @@ export default class Graph {
       [this.vertexMap, this.adjacencyMap]
     )
 
-    return F.copy(this, {vertexMap: vertexMap, adjacencyMap: adjacencyMap})
+    return copy(this, {vertexMap: vertexMap, adjacencyMap: adjacencyMap})
   }
 
   /**

@@ -1,5 +1,5 @@
 import * as core from './core'
-import F from 'fkit'
+import * as F from 'fkit'
 import Immutable from 'immutable'
 
 /**

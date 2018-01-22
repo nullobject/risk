@@ -1,6 +1,6 @@
 import * as core from './core'
 import * as reinforcement from './reinforcement'
-import F from 'fkit'
+import * as F from 'fkit'
 
 /**
  * Returns true if the country is occupied by the given player, false

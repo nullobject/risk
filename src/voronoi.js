@@ -4,7 +4,7 @@
  * @module
  */
 
-import F from 'fkit'
+import {compose, range} from 'fkit'
 import Point from './geom/point'
 import Polygon from './geom/polygon'
 import Voronoi from '../lib/voronoi'
@@ -28,7 +28,7 @@ export function tessellationFunction (width, height) {
  * Returns the polygon for a given `cell`.
  */
 export function polygonForCell (cell) {
-  return F.compose(
+  return compose(
     vertices => new Polygon(vertices),
     verticesForCell
   )(cell)
@@ -53,7 +53,7 @@ export function calculateDiagram (t, sites, relaxations) {
   const diagram = t(sites)
 
   // Apply a number of relaxations to the Voronoi diagram.
-  return F.range(0, relaxations).reduce(diagram => {
+  return range(0, relaxations).reduce(diagram => {
     // Calculate the new sites from the centroids of the cells.
     const sites = diagram.cells.map(cell => polygonForCell(cell).centroid())
 
