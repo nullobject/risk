@@ -62,7 +62,7 @@ const MAX_COUNTRY_SIZE = 128
  */
 function calculateSlotPolygons (polygon, hexagons) {
   // Calculate the number of slots in the country.
-  const n = core.clamp(Math.sqrt(hexagons.length), MIN_SLOTS, MAX_SLOTS)
+  const n = F.clamp(MIN_SLOTS, MAX_SLOTS, Math.sqrt(hexagons.length))
 
   // Calculate the hexagon in the centre of the polygon.
   const centreHexagon = F.head(F.sortBy(Polygon.distanceComparator(polygon), hexagons))

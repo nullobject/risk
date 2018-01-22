@@ -14,13 +14,6 @@ export function log (message) {
 }
 
 /**
- * Clamps the number `n` between `a` and `b`.
- */
-export function clamp (n, a, b) {
-  return Math.min(b, Math.max(a, n))
-}
-
-/**
  * Returns true if `n` is between `a` and `b`, false otherwise.
  */
 export function between (n, a, b) {
