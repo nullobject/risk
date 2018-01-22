@@ -1,15 +1,15 @@
-import * as core from '../core';
-import React from 'react';
+import * as core from '../core'
+import React from 'react'
 import classnames from 'classnames'
 import styles from '../styles.scss'
 
 export default class CountryComponent extends React.PureComponent {
-  didSelectCountry(country) {
-    this.props.stream.push({type: 'select-country', country: country});
+  didSelectCountry (country) {
+    this.props.stream.push({type: 'select-country', country: country})
   }
 
-  render() {
-    const country = this.props.country;
+  render () {
+    const country = this.props.country
     const className = classnames(
       styles[country.player],
       styles.country,
@@ -19,7 +19,7 @@ export default class CountryComponent extends React.PureComponent {
       }
     )
 
-    core.log('CountryComponent#render (' + country + ')');
+    core.log('CountryComponent#render (' + country + ')')
 
     return (
       /* jshint ignore:start */
@@ -32,22 +32,22 @@ export default class CountryComponent extends React.PureComponent {
         {this.renderSlots(country)}
       </g>
       /* jshint ignore:end */
-    );
+    )
   }
 
-  renderSlots(country) {
-    return country.slots.map(this.renderSlot(country));
+  renderSlots (country) {
+    return country.slots.map(this.renderSlot(country))
   }
 
-  renderSlot(country) {
+  renderSlot (country) {
     return (polygon, index) => {
-      const classes = classnames(styles.slot, {[styles.selected]: index < country.armies});
+      const classes = classnames(styles.slot, {[styles.selected]: index < country.armies})
 
       return (
         /* jshint ignore:start */
         <polygon className={classnames(classes)} key={index} points={polygon} />
         /* jshint ignore:end */
-      );
-    };
+      )
+    }
   }
 }

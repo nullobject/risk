@@ -1,17 +1,17 @@
-import * as core from '../core';
-import ControlsComponent from './controls_component';
-import GameComponent from './game_component';
-import HexgridComponent from './hexgrid_component';
-import PlayersComponent from './players_component';
-import React from 'react';
+import * as core from '../core'
+import ControlsComponent from './controls_component'
+import GameComponent from './game_component'
+import HexgridComponent from './hexgrid_component'
+import PlayersComponent from './players_component'
+import React from 'react'
 import styles from '../styles.scss'
 
 export default class RootComponent extends React.PureComponent {
-  render() {
+  render () {
     let stream = this.props.stream,
-        game   = this.props.game;
+      game = this.props.game
 
-    core.log('RootComponent#render');
+    core.log('RootComponent#render')
 
     return (
       /* jshint ignore:start */
@@ -25,17 +25,17 @@ export default class RootComponent extends React.PureComponent {
         <ControlsComponent currentPlayer={game.currentPlayer} stream={stream} />
       </div>
       /* jshint ignore:end */
-    );
+    )
   }
 
-  renderGameOver(game) {
+  renderGameOver (game) {
     return game.over ? (
       /* jshint ignore:start */
       <g className={styles.gameOver}>
-        <rect width="100%" height="100%" />
-        <text x="50%" y="50%">Game Over</text>
+        <rect width='100%' height='100%' />
+        <text x='50%' y='50%'>Game Over</text>
       </g>
       /* jshint ignore:end */
-    ) : null;
+    ) : null
   }
 }

@@ -1,102 +1,102 @@
-import AI from './ai';
-import Bacon from 'baconjs';
-import F from 'fkit';
-import Game from './game';
-import Player from './player';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import RootComponent from './components/root_component';
-import * as WorldBuilder from './world_builder';
+import AI from './ai'
+import Bacon from 'baconjs'
+import F from 'fkit'
+import Game from './game'
+import Player from './player'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import RootComponent from './components/root_component'
+import * as WorldBuilder from './world_builder'
 
 /**
  * The number of milliseconds between clock ticks.
  */
-const CLOCK_INTERVAL = 100;
+const CLOCK_INTERVAL = 100
 
 /**
  * The number of players in the game.
  */
-const PLAYERS = 5;
+const PLAYERS = 5
 
 /**
  * The number of human players in the game.
  */
-const HUMANS = 1;
+const HUMANS = 1
 
-function transformGameState(game, event) {
+function transformGameState (game, event) {
   switch (event.type) {
     case 'end-turn':
-      return game.endTurn();
+      return game.endTurn()
     case 'select-country':
-      return game.selectCountry(event.country);
+      return game.selectCountry(event.country)
     default:
-      return game;
+      return game
   }
 }
 
 export default class GameController {
-  constructor(options) {
+  constructor (options) {
     // Create the players.
-    let players = F.range(0, PLAYERS).map(id => new Player(id));
+    let players = F.range(0, PLAYERS).map(id => new Player(id))
 
     // Create the world.
-    let world = WorldBuilder.build(options.width, options.height);
+    let world = WorldBuilder.build(options.width, options.height)
 
     // Create the game state.
-    let game = new Game(players, world);
+    let game = new Game(players, world)
 
     // Create the input bus.
-    let inputBus = new Bacon.Bus();
+    let inputBus = new Bacon.Bus()
 
     // Create the main app bus.
-    let mainBus = new Bacon.Bus();
+    let mainBus = new Bacon.Bus()
 
     // Create the clock tick stream.
-    let clock = Bacon.interval(CLOCK_INTERVAL, CLOCK_INTERVAL);
+    let clock = Bacon.interval(CLOCK_INTERVAL, CLOCK_INTERVAL)
 
     // The game property scans the game state transformer function over events on
     // the main bus.
-    let gameProperty = mainBus.scan(game, transformGameState);
+    let gameProperty = mainBus.scan(game, transformGameState)
 
     // Map player IDs to AI streams.
-    let aiStream = Bacon.mergeAll(F.drop(HUMANS, game.players).map(playerAI));
+    let aiStream = Bacon.mergeAll(F.drop(HUMANS, game.players).map(playerAI))
 
     // Plug the input bus into the main bus.
-    mainBus.plug(inputBus);
+    mainBus.plug(inputBus)
 
     // Plug the AI stream into the main bus.
-    mainBus.plug(aiStream);
+    mainBus.plug(aiStream)
 
     // Render the UI whenever the game property changes.
     gameProperty.onValue(game =>
       ReactDOM.render(<RootComponent game={game} stream={inputBus} />, options.el)
-    );
+    )
 
     /*
      * The player AI stream emits the moves calculated for a player.
      */
-    function playerAI(player) {
-      let worldProperty = gameProperty.map('.world');
+    function playerAI (player) {
+      let worldProperty = gameProperty.map('.world')
 
       return worldProperty
         .sampledBy(playerClock(player))
         .withStateMachine(new AI(), (ai, event) => {
           if (event.hasValue()) {
-            let [ai_, events] = ai.nextMove(event.value(), player);
-            return [ai_, events.map(move => new Bacon.Next(move))];
+            let [ai_, events] = ai.nextMove(event.value(), player)
+            return [ai_, events.map(move => new Bacon.Next(move))]
           } else {
-            return [ai, [event]];
+            return [ai, [event]]
           }
-        });
+        })
     }
 
     /*
      * Returns a clock stream which emits tick events only when the player is
      * current.
      */
-    function playerClock(player) {
-      let currentPlayerProperty = gameProperty.map('.currentPlayer');
-      return clock.map(currentPlayerProperty).filter(F.equal(player));
+    function playerClock (player) {
+      let currentPlayerProperty = gameProperty.map('.currentPlayer')
+      return clock.map(currentPlayerProperty).filter(F.equal(player))
     }
   }
 }

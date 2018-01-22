@@ -1,46 +1,46 @@
-import clipper from '../../lib/clipper';
-import F from 'fkit';
-import Point from './point';
+import clipper from '../../lib/clipper'
+import F from 'fkit'
+import Point from './point'
 
-const SCALE = 100;
+const SCALE = 100
 
 /**
  * Converts a given polygon to a clipper path.
  */
-function toPath(polygon) {
-  let path = polygon.vertices.map(point => { return {X: point.x, Y: point.y}; });
-  clipper.JS.ScaleUpPath(path, SCALE);
-  return path;
+function toPath (polygon) {
+  const path = polygon.vertices.map(point => { return {X: point.x, Y: point.y} })
+  clipper.JS.ScaleUpPath(path, SCALE)
+  return path
 }
 
 /**
  * Converts a given clipper path to a polygon.
  */
-function toPolygon(path) {
-  clipper.JS.ScaleDownPath(path, SCALE);
-  let vertices = path.map(vertex => new Point(vertex.X, vertex.Y));
-  return new Polygon(vertices);
+function toPolygon (path) {
+  clipper.JS.ScaleDownPath(path, SCALE)
+  const vertices = path.map(vertex => new Point(vertex.X, vertex.Y))
+  return new Polygon(vertices)
 }
 
 /**
  * Returns a new polygon with the given vertices.
  */
 export default class Polygon {
-  constructor(vertices) {
-    this.vertices = vertices;
+  constructor (vertices) {
+    this.vertices = vertices
   }
 
   /**
    * Calculates the centroid of the polygon.
    */
-  centroid() {
+  centroid () {
     if (this.centroid_ === undefined) {
       this.centroid_ = this.vertices
         .reduce((sum, vertex) => sum.add(vertex), Point.zero())
-        .divide(this.vertices.length);
+        .divide(this.vertices.length)
     }
 
-    return this.centroid_;
+    return this.centroid_
   }
 
   /**
@@ -48,21 +48,21 @@ export default class Polygon {
    *
    * See http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
    */
-  containsPoint(point) {
-    let inside = false;
+  containsPoint (point) {
+    let inside = false
 
     for (let i = 0, j = this.vertices.length - 1; i < this.vertices.length; j = i++) {
-      let xi = this.vertices[i].x,
-          yi = this.vertices[i].y,
-          xj = this.vertices[j].x,
-          yj = this.vertices[j].y;
+      const xi = this.vertices[i].x
+      const yi = this.vertices[i].y
+      const xj = this.vertices[j].x
+      const yj = this.vertices[j].y
 
-      let intersect = ((yi > point.y) != (yj > point.y)) && (point.x < (xj - xi) * (point.y - yi) / (yj - yi) + xi);
+      const intersect = ((yi > point.y) !== (yj > point.y)) && (point.x < (xj - xi) * (point.y - yi) / (yj - yi) + xi)
 
-      if (intersect) { inside = !inside; }
+      if (intersect) { inside = !inside }
     }
 
-    return inside;
+    return inside
   }
 
   /**
@@ -70,27 +70,27 @@ export default class Polygon {
    *
    * See http://jsclipper.sourceforge.net/6.1.3.2/
    */
-  offset(delta) {
-    let solutionPaths = [];
+  offset (delta) {
+    const solutionPaths = []
 
     // Create a new clipper offset.
-    let co = new clipper.ClipperOffset();
+    const co = new clipper.ClipperOffset()
 
     // Convert the polygon to a path.
-    let subjectPath = toPath(this);
+    const subjectPath = toPath(this)
 
     // Add the path.
-    co.AddPath(subjectPath, clipper.JoinType.jtMiter, clipper.EndType.etClosedPolygon);
+    co.AddPath(subjectPath, clipper.JoinType.jtMiter, clipper.EndType.etClosedPolygon)
 
     // Run clipper.
-    co.Execute(solutionPaths, delta * SCALE);
+    co.Execute(solutionPaths, delta * SCALE)
 
     // Return a new polygon.
-    return toPolygon(solutionPaths[0]);
+    return toPolygon(solutionPaths[0])
   }
 
-  toString() {
-    return this.vertices.join(' ');
+  toString () {
+    return this.vertices.join(' ')
   }
 
   /**
@@ -98,34 +98,34 @@ export default class Polygon {
    *
    * See http://jsclipper.sourceforge.net/6.1.3.2/
    */
-  static merge(polygons) {
-    let solutionPaths = [];
+  static merge (polygons) {
+    const solutionPaths = []
 
     // Create a new clipper.
-    let c = new clipper.Clipper();
+    const c = new clipper.Clipper()
 
     // Convert the polygons to paths.
-    let subjectPaths = polygons.map(toPath);
+    const subjectPaths = polygons.map(toPath)
 
     // Add the paths.
-    c.AddPaths(subjectPaths, clipper.PolyType.ptSubject, true);
+    c.AddPaths(subjectPaths, clipper.PolyType.ptSubject, true)
 
     // Run clipper.
-    c.Execute(clipper.ClipType.ctUnion, solutionPaths, clipper.PolyFillType.pftNonZero, clipper.PolyFillType.pftNonZero);
+    c.Execute(clipper.ClipType.ctUnion, solutionPaths, clipper.PolyFillType.pftNonZero, clipper.PolyFillType.pftNonZero)
 
     // Return a new polygon.
-    return toPolygon(solutionPaths[0]);
+    return toPolygon(solutionPaths[0])
   }
 
   /**
    * Compares the distance of `a` and `b` to the polygon `p`.
    */
-  static get distanceComparator() {
+  static get distanceComparator () {
     return F.curry((p, a, b) => {
-      let da = a.centroid().distance(p.centroid()),
-          db = b.centroid().distance(p.centroid());
+      const da = a.centroid().distance(p.centroid())
+      const db = b.centroid().distance(p.centroid())
 
-      return F.compare(da, db);
-    });
+      return F.compare(da, db)
+    })
   }
 }
