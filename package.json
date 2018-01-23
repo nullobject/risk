@@ -36,10 +36,11 @@
   },
   "dependencies": {
     "autoprefixer": "^7.2.5",
-    "baconjs": "^0.7.53",
+    "bulb": "^1.1.1",
     "classnames": "^2.2.5",
     "fkit": "^1.2.0",
     "immutable": "^3.7.1",
+    "nanobus": "^4.3.2",
     "node-sass": "^4.7.2",
     "normalize.css": "^7.0.0",
     "postcss-modules": "^1.1.0",

@@ -4,7 +4,7 @@ import styles from '../styles.scss'
 
 export default class ControlsComponent extends React.PureComponent {
   didEndTurn () {
-    this.props.bus.push({type: 'end-turn'})
+    this.props.bus.emit('end-turn')
   }
 
   render () {
