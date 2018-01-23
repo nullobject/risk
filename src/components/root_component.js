@@ -8,7 +8,7 @@ import styles from '../styles.scss'
 
 export default class RootComponent extends React.PureComponent {
   render () {
-    const stream = this.props.stream
+    const bus = this.props.bus
     const game = this.props.game
 
     core.log('RootComponent#render')
@@ -19,10 +19,10 @@ export default class RootComponent extends React.PureComponent {
         <PlayersComponent currentPlayer={game.currentPlayer} game={game} />
         <svg width={game.world.width} height={game.world.height}>
           <HexgridComponent width={game.world.width} height={game.world.height} hexgrid={game.world.hexgrid} />
-          <GameComponent stream={stream} game={game} />
+          <GameComponent bus={bus} game={game} />
           {this.renderGameOver(game)}
         </svg>
-        <ControlsComponent currentPlayer={game.currentPlayer} stream={stream} />
+        <ControlsComponent currentPlayer={game.currentPlayer} bus={bus} />
       </div>
       /* jshint ignore:end */
     )

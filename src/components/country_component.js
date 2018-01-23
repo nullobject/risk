@@ -5,7 +5,7 @@ import styles from '../styles.scss'
 
 export default class CountryComponent extends React.PureComponent {
   didSelectCountry (country) {
-    this.props.stream.push({type: 'select-country', country: country})
+    this.props.bus.push({type: 'select-country', country: country})
   }
 
   render () {

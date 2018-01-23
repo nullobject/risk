@@ -9,7 +9,7 @@ function isSelected (game, country) { return country === game.selectedCountry }
 
 export default class GameComponent extends React.PureComponent {
   render () {
-    const stream = this.props.stream
+    const bus = this.props.bus
     const game = this.props.game
 
     core.log('GameComponent#render')
@@ -17,21 +17,21 @@ export default class GameComponent extends React.PureComponent {
     return (
       /* jshint ignore:start */
       <g className={styles.world}>
-        <g className={styles.countries}>{this.renderCountries(stream, game)}</g>
+        <g className={styles.countries}>{this.renderCountries(bus, game)}</g>
         {this.renderCells(game)}
       </g>
       /* jshint ignore:end */
     )
   }
 
-  renderCountries (stream, game) {
-    return game.world.countries.map(this.renderCountry(stream, game))
+  renderCountries (bus, game) {
+    return game.world.countries.map(this.renderCountry(bus, game))
   }
 
-  renderCountry (stream, game) {
+  renderCountry (bus, game) {
     return (country) => {
-      let nearby = isNearby(game, country),
-        selected = isSelected(game, country)
+      const nearby = isNearby(game, country)
+      const selected = isSelected(game, country)
 
       return (
         /* jshint ignore:start */
@@ -40,7 +40,7 @@ export default class GameComponent extends React.PureComponent {
           country={country}
           nearby={nearby}
           selected={selected}
-          stream={stream}
+          bus={bus}
         />
         /* jshint ignore:end */
       )

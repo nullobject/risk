@@ -75,7 +75,7 @@ const root = document.getElementById('root')
 
 // Render the UI whenever the game property changes.
 gameProperty.onValue(game =>
-  ReactDOM.render(<RootComponent game={game} stream={inputBus} />, root)
+  ReactDOM.render(<RootComponent game={game} bus={inputBus} />, root)
 )
 
 /*
