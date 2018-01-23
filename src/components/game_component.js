@@ -9,8 +9,8 @@ function isSelected (game, country) { return country === game.selectedCountry }
 
 export default class GameComponent extends React.PureComponent {
   render () {
-    let stream = this.props.stream,
-      game = this.props.game
+    const stream = this.props.stream
+    const game = this.props.game
 
     core.log('GameComponent#render')
 
