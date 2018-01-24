@@ -22,7 +22,6 @@ export default class CountryComponent extends React.PureComponent {
     log.debug('CountryComponent#render (' + country + ')')
 
     return (
-      /* jshint ignore:start */
       <g>
         <polygon
           className={className}
@@ -31,7 +30,6 @@ export default class CountryComponent extends React.PureComponent {
         />
         {this.renderSlots(country)}
       </g>
-      /* jshint ignore:end */
     )
   }
 
@@ -44,9 +42,7 @@ export default class CountryComponent extends React.PureComponent {
       const classes = classnames(styles.slot, {[styles.selected]: index < country.armies})
 
       return (
-        /* jshint ignore:start */
         <polygon className={classnames(classes)} key={index} points={polygon} />
-        /* jshint ignore:end */
       )
     }
   }

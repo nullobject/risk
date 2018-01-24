@@ -15,12 +15,10 @@ export default class GameComponent extends React.PureComponent {
     log.debug('GameComponent#render')
 
     return (
-      /* jshint ignore:start */
       <g className={styles.world}>
         <g className={styles.countries}>{this.renderCountries(bus, game)}</g>
         {this.renderCells(game)}
       </g>
-      /* jshint ignore:end */
     )
   }
 
@@ -34,7 +32,6 @@ export default class GameComponent extends React.PureComponent {
       const selected = isSelected(game, country)
 
       return (
-        /* jshint ignore:start */
         <CountryComponent
           key={country}
           country={country}
@@ -42,16 +39,13 @@ export default class GameComponent extends React.PureComponent {
           selected={selected}
           bus={bus}
         />
-        /* jshint ignore:end */
       )
     }
   }
 
   renderCells (game) {
     return this.props.cells ? (
-      /* jshint ignore:start */
       <PathsComponent className={styles.voronoi} paths={game.world.cells} />
-      /* jshint ignore:end */
     ) : null
   }
 }

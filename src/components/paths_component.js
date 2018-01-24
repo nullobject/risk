@@ -5,9 +5,7 @@ function polygon (d) { return 'M' + d.join('L') + 'Z' }
 export default class PathsComponent extends React.PureComponent {
   render () {
     return (
-      /* jshint ignore:start */
       <g className={this.props.className}>{this.renderPaths(this.props.paths)}</g>
-      /* jshint ignore:end */
     )
   }
 
@@ -17,9 +15,7 @@ export default class PathsComponent extends React.PureComponent {
 
   renderPath (path, index) {
     return (
-      /* jshint ignore:start */
       <path key={index} d={polygon(path)} />
-      /* jshint ignore:end */
     )
   }
 }

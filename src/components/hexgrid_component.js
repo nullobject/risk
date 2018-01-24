@@ -22,7 +22,6 @@ export default class HexgridComponent extends React.Component {
     log.debug('HexgridComponent#render')
 
     return (
-      /* jshint ignore:start */
       <g className={styles.hexgrid}>
         <defs>
           <pattern id='tile' width={width} height={height} patternUnits='userSpaceOnUse'>
@@ -31,7 +30,6 @@ export default class HexgridComponent extends React.Component {
         </defs>
         <rect width={this.props.width} height={this.props.height} fill='url(#tile)' />
       </g>
-      /* jshint ignore:end */
     )
   }
 
@@ -42,9 +40,7 @@ export default class HexgridComponent extends React.Component {
 
   renderPolygon (polygon, index) {
     return (
-      /* jshint ignore:start */
       <polygon key={index} points={polygon} />
-      /* jshint ignore:end */
     )
   }
 }

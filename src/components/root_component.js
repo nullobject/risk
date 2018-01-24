@@ -14,7 +14,6 @@ export default class RootComponent extends React.PureComponent {
     log.debug('RootComponent#render')
 
     return (
-      /* jshint ignore:start */
       <div className={styles.game}>
         <PlayersComponent currentPlayer={game.currentPlayer} game={game} />
         <svg width={game.world.width} height={game.world.height}>
@@ -24,18 +23,15 @@ export default class RootComponent extends React.PureComponent {
         </svg>
         <ControlsComponent currentPlayer={game.currentPlayer} bus={bus} />
       </div>
-      /* jshint ignore:end */
     )
   }
 
   renderGameOver (game) {
     return game.over ? (
-      /* jshint ignore:start */
       <g className={styles.gameOver}>
         <rect width='100%' height='100%' />
         <text x='50%' y='50%'>Game Over</text>
       </g>
-      /* jshint ignore:end */
     ) : null
   }
 }
