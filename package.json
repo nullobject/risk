@@ -1,8 +1,8 @@
 {
-  "name": "hexgrid",
-  "version": "0.1.0",
+  "name": "risk",
+  "version": "1.0.0",
   "description": "A game of risk played on a hex grid.",
-  "homepage": "https://github.com/nullobject/hexgrid",
+  "homepage": "https://github.com/nullobject/risk",
   "author": "Josh Bassett <josh.bassett@gmail.com> (http://joshbassett.info)",
   "license": "MIT",
   "private": true,
