@@ -5,6 +5,7 @@
  */
 
 import * as F from 'fkit'
+import {Signal} from 'bulb'
 
 /**
  * Rolls `n` dice and returns the sum of their values.
@@ -23,13 +24,16 @@ export const reverseSort = F.compose(F.reverse, F.sort)
  */
 export const bySize = (a, b) => F.compare(a.size, b.size)
 
+/**
+ * Reverse size comparator.
+ */
 export const bySizeDescending = (a, b) => -F.compare(a.size, b.size)
 
 /**
  * Distributes `n` units round-robin using the availability list of `as`.
  */
 export function distribute (n, as) {
-  let bs = F.replicate(as.length, 0)
+  const bs = F.replicate(as.length, 0)
 
   return distributeInto(n, as, bs)
 
@@ -40,10 +44,10 @@ export function distribute (n, as) {
       return bs
     } else {
       // Calculate the difference list.
-      let cs = F.zip(bs, as).map(F.uncurry(F.sub))
+      const cs = F.zip(bs, as).map(F.uncurry(F.sub))
 
       // Calculate the number of units to distribute in the next pass.
-      let m = Math.min(n, cs.filter(F.id).length)
+      const m = Math.min(n, cs.filter(F.id).length)
 
       return distributeInto(n - m, as, pass(m, bs, cs))
     }
@@ -52,7 +56,7 @@ export function distribute (n, as) {
   // Performs a pass over the list of `bs`, distributing `m` units using the
   // difference list of `cs`.
   function pass (m, bs, cs) {
-    let ds = bs.concat()
+    const ds = bs.concat()
 
     for (let i = 0; i < cs.length && m > 0; i++) {
       if (cs[i] > 0) {
@@ -63,4 +67,20 @@ export function distribute (n, as) {
 
     return ds
   }
+}
+
+/**
+ * Creates a new signal from a bus.
+ *
+ * @param bus A bus.
+ * @returns A new signal.
+ */
+export function fromBus (bus) {
+  return new Signal(emit => {
+    // Emit a value with the event type and data combined.
+    const handler = (type, data) => emit.next({...data, type})
+
+    bus.addListener('*', handler)
+    return () => bus.removeListener('*', handler)
+  })
 }

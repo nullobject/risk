@@ -1,6 +1,7 @@
 export default class Player {
-  constructor (id) {
+  constructor (id, human) {
     this.id = id
+    this.human = human
   }
 
   toString () {
