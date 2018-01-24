@@ -1,5 +1,6 @@
-import * as core from './core'
 import * as F from 'fkit'
+import * as core from './core'
+import log from './log'
 import {Signal} from 'bulb'
 
 /**
@@ -34,7 +35,7 @@ const selectTarget = F.minimumBy((a, b) => a.armies < b.armies)
  * @returns A new signal.
  */
 const nextMove = F.curry((player, world) => {
-  core.log('AI#nextMove')
+  log.debug('AI#nextMove')
 
   const sourceCountries = world
     .countriesOccupiedBy(player)

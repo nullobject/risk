@@ -1,5 +1,5 @@
-import * as core from './core'
 import * as F from 'fkit'
+import log from './log'
 
 export default class Game {
   constructor (players, world) {
@@ -82,7 +82,7 @@ export default class Game {
    * @returns A new game state.
    */
   endTurn () {
-    core.log('Game#endTurn')
+    log.debug('Game#endTurn')
 
     // Find the index of the current and next players.
     const i = F.elemIndex(this.currentPlayer, this.alivePlayers)
@@ -95,7 +95,7 @@ export default class Game {
    * Selects a given player and returns a new game state.
    */
   selectPlayer (player) {
-    core.log('Game#selectPlayer')
+    log.debug('Game#selectPlayer')
 
     if (player === this.currentPlayer) {
       throw new Error('The player is already selected')
@@ -116,7 +116,7 @@ export default class Game {
    * Selects a given country and returns a new game state.
    */
   selectCountry (country) {
-    core.log('Game#selectCountry')
+    log.debug('Game#selectCountry')
 
     if (this.canMoveToCountry(country)) {
       return this.moveToCountry(country)
@@ -135,7 +135,7 @@ export default class Game {
    * attack.
    */
   moveToCountry (country) {
-    core.log('Game#moveToCountry')
+    log.debug('Game#moveToCountry')
 
     let world = country.player
       ? this.world.attack(this.selectedCountry, country)

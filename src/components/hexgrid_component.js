@@ -1,5 +1,5 @@
-import * as core from '../core'
 import React from 'react'
+import log from '../log'
 import styles from '../styles.scss'
 
 // Tile size.
@@ -19,7 +19,7 @@ export default class HexgridComponent extends React.Component {
     const width = hexgrid.width * 2
     const height = hexgrid.height * 2
 
-    core.log('HexgridComponent#render')
+    log.debug('HexgridComponent#render')
 
     return (
       /* jshint ignore:start */

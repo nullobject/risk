@@ -1,9 +1,9 @@
-import * as core from '../core'
 import ControlsComponent from './controls_component'
 import GameComponent from './game_component'
 import HexgridComponent from './hexgrid_component'
 import PlayersComponent from './players_component'
 import React from 'react'
+import log from '../log'
 import styles from '../styles.scss'
 
 export default class RootComponent extends React.PureComponent {
@@ -11,7 +11,7 @@ export default class RootComponent extends React.PureComponent {
     const bus = this.props.bus
     const game = this.props.game
 
-    core.log('RootComponent#render')
+    log.debug('RootComponent#render')
 
     return (
       /* jshint ignore:start */

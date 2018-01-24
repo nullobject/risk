@@ -1,5 +1,5 @@
-import * as core from '../core'
 import React from 'react'
+import log from '../log'
 import styles from '../styles.scss'
 
 export default class ControlsComponent extends React.PureComponent {
@@ -10,7 +10,7 @@ export default class ControlsComponent extends React.PureComponent {
   render () {
     const currentPlayer = this.props.currentPlayer ? this.props.currentPlayer.toString() : ''
 
-    core.log('ControlsComponent#render')
+    log.debug('ControlsComponent#render')
 
     return (
       /* jshint ignore:start */

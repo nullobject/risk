@@ -7,13 +7,6 @@
 import * as F from 'fkit'
 
 /**
- * Logs a message to the console.
- */
-export function log (message) {
-  console.log(message)
-}
-
-/**
  * Rolls `n` dice and returns the sum of their values.
  */
 export function rollDice (n) {

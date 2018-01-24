@@ -1,6 +1,7 @@
+import * as F from 'fkit'
 import * as core from './core'
 import * as reinforcement from './reinforcement'
-import * as F from 'fkit'
+import log from './log'
 
 /**
  * Returns true if the country is occupied by the given player, false
@@ -65,7 +66,7 @@ export default class World {
    * state.
    */
   move (s, t) {
-    core.log('World#move')
+    log.debug('World#move')
 
     // Calculate the number of armies to move.
     const n = F.min(s.armies - 1, t.slots.length)
@@ -81,14 +82,14 @@ export default class World {
    * state.
    */
   attack (s, t) {
-    core.log('World#attack')
+    log.debug('World#attack')
 
     // Roll the dice!
     const attackerDice = core.rollDice(s.armies)
     const defenderDice = core.rollDice(t.armies)
 
-    core.log('attacker: ' + attackerDice)
-    core.log('defender: ' + defenderDice)
+    log.debug('attacker: ' + attackerDice)
+    log.debug('defender: ' + defenderDice)
 
     // Calculate the number of defender dice with a value greater than or equal
     // to the corresponding attacker dice.
@@ -129,7 +130,7 @@ export default class World {
    * Reinforces the given `player` and returns a new world state.
    */
   reinforce (player) {
-    core.log('World#reinforce')
+    log.debug('World#reinforce')
 
     const subgraphs = this.graph
       .filter(country => country.player === player)

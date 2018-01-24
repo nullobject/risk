@@ -1,6 +1,6 @@
-import * as core from '../core'
 import React from 'react'
 import classnames from 'classnames'
+import log from '../log'
 import styles from '../styles.scss'
 
 export default class CountryComponent extends React.PureComponent {
@@ -19,7 +19,7 @@ export default class CountryComponent extends React.PureComponent {
       }
     )
 
-    core.log('CountryComponent#render (' + country + ')')
+    log.debug('CountryComponent#render (' + country + ')')
 
     return (
       /* jshint ignore:start */

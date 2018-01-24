@@ -1,13 +1,13 @@
-import * as core from '../core'
 import React from 'react'
 import classnames from 'classnames'
+import log from '../log'
 import styles from '../styles.scss'
 
 export default class PlayersComponent extends React.PureComponent {
   render () {
     let game = this.props.game
 
-    core.log('PlayersComponent#render')
+    log.debug('PlayersComponent#render')
 
     return (
       /* jshint ignore:start */

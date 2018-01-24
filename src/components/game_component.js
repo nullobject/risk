@@ -1,7 +1,7 @@
-import * as core from '../core'
 import CountryComponent from './country_component'
 import PathsComponent from './paths_component'
 import React from 'react'
+import log from '../log'
 import styles from '../styles.scss'
 
 function isNearby (game, country) { return game.canMoveToCountry(country) }
@@ -12,7 +12,7 @@ export default class GameComponent extends React.PureComponent {
     const bus = this.props.bus
     const game = this.props.game
 
-    core.log('GameComponent#render')
+    log.debug('GameComponent#render')
 
     return (
       /* jshint ignore:start */
