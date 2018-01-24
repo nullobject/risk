@@ -1,6 +1,6 @@
 import React from 'react'
 import log from '../log'
-import styles from '../styles.scss'
+import styles from '../stylesheets/styles.scss'
 
 // Tile size.
 const TILE_COLS = 3

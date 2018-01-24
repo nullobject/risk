@@ -1,7 +1,7 @@
 import React from 'react'
 import classnames from 'classnames'
 import log from '../log'
-import styles from '../styles.scss'
+import styles from '../stylesheets/styles.scss'
 
 export default class PlayersComponent extends React.PureComponent {
   render () {

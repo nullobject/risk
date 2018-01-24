@@ -1,6 +1,6 @@
 import React from 'react'
 import log from '../log'
-import styles from '../styles.scss'
+import styles from '../stylesheets/styles.scss'
 
 export default class ControlsComponent extends React.PureComponent {
   didEndTurn () {

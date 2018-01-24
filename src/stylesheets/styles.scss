@@ -1,0 +1,23 @@
+@import "./animations";
+@import "./controls";
+@import "./game";
+
+* {
+  touch-callout: none;
+  user-select: none;
+}
+
+html {
+  color: #666;
+}
+
+body {
+  background-color: #333;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+html, body {
+  height: 100%;
+}

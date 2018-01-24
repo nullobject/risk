@@ -4,7 +4,7 @@ import HexgridComponent from './hexgrid_component'
 import PlayersComponent from './players_component'
 import React from 'react'
 import log from '../log'
-import styles from '../styles.scss'
+import styles from '../stylesheets/styles.scss'
 
 export default class RootComponent extends React.PureComponent {
   render () {
