@@ -56,7 +56,7 @@ function traverse (graph, k) {
       .reduce(traverse_, [visited, vertices])
   })
 
-  const [_, keys] = traverse_(
+  const [, keys] = traverse_(
     [Immutable.Set(), Immutable.OrderedSet.of(k)],
     k
   )
@@ -65,7 +65,7 @@ function traverse (graph, k) {
 }
 
 function shortestPathBy (graph, p, key) {
-  const [path, _, k] = shortestPathBy_([
+  const [path,, k] = shortestPathBy_([
     Immutable.OrderedMap([[key, null]]),
     Immutable.List.of(key),
     null
