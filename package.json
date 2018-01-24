@@ -7,16 +7,14 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "make start",
-    "build": "make dist",
     "test": "make test"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/nullobject/hexgrid.git"
+    "url": "git://github.com/nullobject/risk.git"
   },
   "bugs": {
-    "url": "https://github.com/nullobject/hexgrid/issues"
+    "url": "https://github.com/nullobject/risk/issues"
   },
   "standard": {
     "env": "mocha"
