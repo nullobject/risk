@@ -4,10 +4,11 @@ import Player from './player'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import RootComponent from './components/root_component'
+import log from './log'
 import nanobus from 'nanobus'
 import nextMove from './ai'
 import {Signal, merge} from 'bulb'
-import {drop, equal, range} from 'fkit'
+import {drop, equal, get, range} from 'fkit'
 
 /**
  * The number of milliseconds between clock ticks.
@@ -55,22 +56,44 @@ const gameSignal = inputSignal.scan(transformGameState, game)
 // Map player IDs to AI signals.
 const aiSignal = merge(drop(HUMANS, game.players).map(playerAI))
 
-// Emit events from the AI signal on the bus.
-aiSignal.subscribe(move => bus.emit(move.type, move))
+const subscriptions = [
+  // Emit events from the AI signal on the bus.
+  aiSignal.subscribe(move => bus.emit(move.type, move)),
 
-// Render the UI whenever the game property changes.
-gameSignal.subscribe(game =>
-  ReactDOM.render(<RootComponent game={game} bus={bus} />, root)
-)
+  // Render the UI whenever the game property changes.
+  gameSignal.subscribe(game => ReactDOM.render(<RootComponent game={game} bus={bus} />, root))
+]
 
+if (module.hot) {
+  module.hot.dispose(() => {
+    log.info('Unsubscribing...')
+    subscriptions.forEach(s => s.unsubscribe())
+  })
+}
+
+/**
+ * Creates a new signal from a bus.
+ *
+ * @param bus A bus.
+ * @returns A new signal.
+ */
 function fromBus (bus) {
   return new Signal(emit => {
+    // Emit a value with the event type and data combined.
     const handler = (type, data) => emit.next({...data, type})
+
     bus.addListener('*', handler)
     return () => bus.removeListener('*', handler)
   })
 }
 
+/**
+ * Applies the event to yield a new game state.
+ *
+ * @param game A game.
+ * @param event An event.
+ * @returns A new game.
+ */
 function transformGameState (game, event) {
   switch (event.type) {
     case 'end-turn':
@@ -84,9 +107,12 @@ function transformGameState (game, event) {
 
 /*
  * The player AI stream emits the moves calculated for a player.
+ *
+ * @param player A player.
+ * @returns A new signal.
  */
 function playerAI (player) {
-  const worldSignal = gameSignal.map(game => game.world)
+  const worldSignal = gameSignal.map(get('world'))
 
   return playerClock(player)
     .sample(worldSignal)
@@ -94,10 +120,12 @@ function playerAI (player) {
 }
 
 /*
- * Returns a clock signal which emits tick events only when the given player is
- * current.
+ * Returns a clock signal that only emits events when a player is current.
+ *
+ * @param player A player.
+ * @returns A new signal.
  */
 function playerClock (player) {
-  const currentPlayerSignal = gameSignal.map(game => game.currentPlayer)
+  const currentPlayerSignal = gameSignal.map(get('currentPlayer'))
   return clockSignal.sample(currentPlayerSignal).filter(equal(player))
 }
