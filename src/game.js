@@ -108,7 +108,7 @@ export default class Game {
     return F.copy(this, {
       currentPlayer: player,
       selectedCountry: null,
-      world: world
+      world
     })
   }
 

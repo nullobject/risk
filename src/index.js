@@ -55,7 +55,7 @@ const gameSignal = inputSignal.scan(transformGameState, game)
 // Map player IDs to AI signals.
 const aiSignal = merge(drop(HUMANS, game.players).map(playerAI))
 
-// Plug the AI signal into the bus.
+// Emit events from the AI signal on the bus.
 aiSignal.subscribe(move => bus.emit(move.type, move))
 
 // Render the UI whenever the game property changes.
