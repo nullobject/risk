@@ -48,7 +48,7 @@ export default class GameComponent extends React.PureComponent {
   }
 
   renderCells (game) {
-    return false ? (
+    return this.props.cells ? (
       /* jshint ignore:start */
       <PathsComponent className={styles.voronoi} paths={game.world.cells} />
       /* jshint ignore:end */

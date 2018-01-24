@@ -19,7 +19,7 @@ export default class RootComponent extends React.PureComponent {
         <PlayersComponent currentPlayer={game.currentPlayer} game={game} />
         <svg width={game.world.width} height={game.world.height}>
           <HexgridComponent width={game.world.width} height={game.world.height} hexgrid={game.world.hexgrid} />
-          <GameComponent bus={bus} game={game} />
+          <GameComponent bus={bus} game={game} cells />
           {this.renderGameOver(game)}
         </svg>
         <ControlsComponent currentPlayer={game.currentPlayer} bus={bus} />
