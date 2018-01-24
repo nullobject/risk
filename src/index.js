@@ -1,11 +1,11 @@
 import * as WorldBuilder from './world_builder'
-import AI from './ai'
 import Game from './game'
 import Player from './player'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import RootComponent from './components/root_component'
 import nanobus from 'nanobus'
+import nextMove from './ai'
 import {Signal, merge} from 'bulb'
 import {drop, equal, range} from 'fkit'
 
@@ -90,11 +90,7 @@ function playerAI (player) {
 
   return playerClock(player)
     .sample(worldSignal)
-    .stateMachine((ai, world, emit) => {
-      const [ai_, events] = ai.nextMove(world, player)
-      events.map(move => emit.next(move))
-      return ai_
-    }, new AI())
+    .concatMap(nextMove(player))
 }
 
 /*
