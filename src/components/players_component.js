@@ -21,7 +21,7 @@ export default class PlayersComponent extends React.PureComponent {
   renderPlayer (game) {
     return (player, index) => {
       const selected = player === this.props.currentPlayer
-      const className = classnames(styles[player], {[styles.selected]: selected})
+      const className = classnames(styles[player], styles['icon-user'], {[styles.selected]: selected})
 
       return (
         <li className={className} key={index}>{game.armiesForPlayer(player)}</li>

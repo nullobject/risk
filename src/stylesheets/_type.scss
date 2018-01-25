@@ -1,0 +1,33 @@
+@charset 'UTF-8';
+
+@font-face {
+	font-display: block;
+	font-family: 'icons';
+	font-style: normal;
+	font-weight: normal;
+	src: url('../fonts/icons.woff2') format('woff2'),
+			 url('../fonts/icons.woff') format('woff');
+
+}
+
+[class^="_icon-"]:before,
+[class*=" _icon-"]:before {
+	font-family: 'icons' !important;
+	font-style: normal !important;
+	font-weight: normal !important;
+	font-variant: normal !important;
+	text-transform: none !important;
+	speak: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.icon-facebook:before   { content: '\61'; }
+.icon-github:before     { content: '\62'; }
+.icon-twitter:before    { content: '\63'; }
+.icon-help:before       { content: '\64'; }
+.icon-bell:before       { content: '\65'; }
+.icon-bell-slash:before { content: '\66'; }
+.icon-gavel:before      { content: '\67'; }
+.icon-user:before       { content: '\68'; }

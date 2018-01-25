@@ -8,11 +8,6 @@
     margin-right: 1rem;
     opacity: 0.7;
 
-    &:before {
-      content: "\265e";
-      margin-right: 0.25rem;
-    }
-
     &.selected {
       opacity: 1.0;
     }
