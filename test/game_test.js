@@ -38,7 +38,7 @@ describe('Game', () => {
       game.selectedCountry = source
     })
 
-    it('should move to the target country if the selected country is unoccupied', () => {
+    it('moves to the target country if the selected country is unoccupied', () => {
       const newWorld = {}
 
       const mock = sandbox
@@ -56,7 +56,7 @@ describe('Game', () => {
       mock.verify()
     })
 
-    it('should attack the target country if the selected country is occupied', () => {
+    it('attacks the target country if the selected country is occupied', () => {
       target.player = {}
 
       const newWorld = {}

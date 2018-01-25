@@ -1,4 +1,4 @@
-import * as F from 'fkit'
+import {compose, eq, find, get} from 'fkit'
 import factory from './support/factory'
 import rewire from 'rewire'
 import sinon from 'sinon'
@@ -16,29 +16,29 @@ function stubRollDice (sandbox, ...xss) {
   xss.forEach((xs, i) => stub.onCall(i).returns(xs))
 }
 
-function find (as, bs) {
+function findCountries (as, bs) {
   return bs.map((q) => {
-    return F.find(comparator(q), as)
+    return find(comparator(q), as)
   })
 
   function comparator (p) {
-    return F.compose(F.eq(p.id), F.get('id'))
+    return compose(eq(p.id), get('id'))
   }
 }
 
 function move (world, a, b) {
   const result = world.move(a, b)
-  return find(result.countries, [a, b])
+  return findCountries(result.countries, [a, b])
 }
 
 function attack (world, a, b) {
   const result = world.attack(a, b)
-  return find(result.countries, [a, b])
+  return findCountries(result.countries, [a, b])
 }
 
 function reinforce (world, player) {
   const result = world.reinforce(player)
-  return find(result.countries, world.countriesOccupiedBy(player))
+  return findCountries(result.countries, world.countriesOccupiedBy(player))
 }
 
 describe('World', () => {

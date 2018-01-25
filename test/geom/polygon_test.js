@@ -11,11 +11,11 @@ describe('Polygon', () => {
   ])
 
   describe('#containsPoint', () => {
-    it('should return true if the polygon contains a given point', () => {
+    it('returns true if the polygon contains a given point', () => {
       assert.isTrue(polygon.containsPoint(new Point(0, 0)))
     })
 
-    it('should return false if the polygon does not contain a given point', () => {
+    it('returns false if the polygon does not contain a given point', () => {
       assert.isFalse(polygon.containsPoint(new Point(2, 2)))
     })
   })

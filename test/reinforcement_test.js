@@ -6,14 +6,14 @@ describe('reinforcement', () => {
   const p = {}
   const q = {}
 
-  const values = [
-    {id: 'a', player: p, availableSlots: 0},
-    {id: 'b', player: q, availableSlots: 2},
-    {id: 'c', player: q, availableSlots: 1},
-    {id: 'd', player: q, availableSlots: 1},
-    {id: 'e', player: q, availableSlots: 0},
-    {id: 'f', player: q, availableSlots: 0}
-  ]
+  const a = {player: p, availableSlots: 0}
+  const b = {player: q, availableSlots: 2}
+  const c = {player: q, availableSlots: 1}
+  const d = {player: q, availableSlots: 1}
+  const e = {player: q, availableSlots: 0}
+  const f = {player: q, availableSlots: 0}
+
+  const values = {a, b, c, d, e, f}
 
   const edges = [
     ['a', 'b'], ['a', 'c'],
@@ -27,7 +27,7 @@ describe('reinforcement', () => {
   const graph = new Graph(values, edges)
 
   describe('.depthIndex', () => {
-    it('should return the depth index for the player subgraphs', () => {
+    it('returns the depth index for the player subgraphs', () => {
       const subgraphs = graph
         .filter(country => country.player === q)
         .connectedComponents()
@@ -37,7 +37,7 @@ describe('reinforcement', () => {
   })
 
   describe('.reinforcementMap', () => {
-    it('should return the reinforcement map for the player countries', () => {
+    it('returns the reinforcement map for the player countries', () => {
       const subgraphs = graph
         .filter(country => country.player === q)
         .connectedComponents()

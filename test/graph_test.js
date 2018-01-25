@@ -41,77 +41,77 @@ describe('Graph', () => {
   const graph = new Graph(values, edges)
 
   describe('#size', () => {
-    it('should return the number of vertices', () => {
+    it('returns the number of vertices', () => {
       assert.strictEqual(graph.size, 12)
     })
   })
 
   describe('#first', () => {
-    it('should return the first vertex', () => {
+    it('returns the first vertex', () => {
       assert.strictEqual(graph.first(), a)
     })
   })
 
   describe('#last', () => {
-    it('should return the last vertex', () => {
+    it('returns the last vertex', () => {
       assert.strictEqual(graph.last(), l)
     })
   })
 
   describe('#get', () => {
-    it('should return the vertex with the given key', () => {
+    it('returns the vertex for a given key', () => {
       assert.strictEqual(graph.get('a'), a)
       assert.strictEqual(graph.get('l'), l)
     })
   })
 
   describe('#merge', () => {
-    it('should merge the given vertices', () => {
+    it('merges the given vertices', () => {
       const m = {id: 'm', player: s, score: 13}
       assert.strictEqual(graph.merge([m]).last(), m)
     })
   })
 
   describe('#update', () => {
-    it('should update the vertex with the given key', () => {
+    it('updates the vertex for a given key', () => {
       const graph_ = graph.update('a', F.update('score', F.inc))
       assert.strictEqual(graph_.get('a').score, 2)
     })
   })
 
   describe('#keys', () => {
-    it('should return the vertex keys', () => {
+    it('returns the vertex keys', () => {
       assert.deepEqual(graph.keys(), ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'])
     })
   })
 
   describe('#values', () => {
-    it('should return the vertex values', () => {
+    it('returns the vertex values', () => {
       assert.deepEqual(graph.values(), values)
     })
   })
 
   describe('#edges', () => {
-    it('should return the edges', () => {
+    it('returns the edges', () => {
       assert.deepEqual(graph.edges(), edges)
     })
   })
 
   describe('#addVertex', () => {
-    it('should add a vertex with the given key and value', () => {
+    it('adds a vertex for a given key and value', () => {
       const m = {id: 'm', player: s, score: 13}
       assert.deepEqual(graph.addVertex(m.id, m).last(), m)
     })
   })
 
   describe('#removeVertex', () => {
-    it('should remove the vertex with the given key', () => {
+    it('removes the vertex for a given key', () => {
       assert.isUndefined(graph.removeVertex('l').get('l'))
     })
   })
 
   describe('#addEdge', () => {
-    it('should connect the vertices with the given keys', () => {
+    it('connects the vertices for the given keys', () => {
       assert.isFalse(graph.adjacent('c', 'd'))
       const graph_ = graph.addEdge('c', 'd')
       assert.isTrue(graph_.adjacent('c', 'd'))
@@ -119,7 +119,7 @@ describe('Graph', () => {
   })
 
   describe('#removeEdge', () => {
-    it('should connect the vertices with the given keys', () => {
+    it('disconnects the vertices for the given keys', () => {
       assert.isTrue(graph.adjacent('a', 'b'))
       const graph_ = graph.removeEdge('a', 'b')
       assert.isFalse(graph_.adjacent('a', 'b'))
@@ -127,19 +127,19 @@ describe('Graph', () => {
   })
 
   describe('#adjacent', () => {
-    it('should return true for vertices that are adjacent', () => {
+    it('returns true for vertices that are adjacent', () => {
       assert.isTrue(graph.adjacent('a', 'b'))
       assert.isTrue(graph.adjacent('b', 'a'))
     })
 
-    it('should return false for vertices that are not adjacent', () => {
+    it('returns false for vertices that are not adjacent', () => {
       assert.isFalse(graph.adjacent('c', 'd'))
       assert.isFalse(graph.adjacent('d', 'c'))
     })
   })
 
   describe('#adjacentVertices', () => {
-    it('should return keys of the vertices that are adjacent to the vertex', () => {
+    it('returns keys of the vertices that are adjacent to the vertex', () => {
       assert.deepEqual(graph.adjacentVertices('a'), ['b', 'c'])
       assert.deepEqual(graph.adjacentVertices('b'), ['a', 'c', 'd', 'e'])
       assert.deepEqual(graph.adjacentVertices('c'), ['a', 'b', 'e', 'f'])
@@ -147,7 +147,7 @@ describe('Graph', () => {
   })
 
   describe('#adjacentValues', () => {
-    it('should return keys of the vertices that are adjacent to the vertex', () => {
+    it('returns keys of the vertices that are adjacent to the vertex', () => {
       assert.deepEqual(graph.adjacentValues('a'), [b, c])
       assert.deepEqual(graph.adjacentValues('b'), [a, c, d, e])
       assert.deepEqual(graph.adjacentValues('c'), [a, b, e, f])
@@ -155,7 +155,7 @@ describe('Graph', () => {
   })
 
   describe('#filter', () => {
-    it('should filter the values', () => {
+    it('filters the values', () => {
       const result = graph.filter((value, key) => F.elem(key, 'abc'))
       assert.deepEqual(result.keys(), ['a', 'b', 'c'])
       assert.deepEqual(result.edges(), [
@@ -165,20 +165,20 @@ describe('Graph', () => {
   })
 
   describe('#traverse', () => {
-    it('should return a traverse of the graph from the starting vertex', () => {
+    it('returns a traverse of the graph from the starting vertex', () => {
       assert.deepEqual(graph.traverse('a'), ['a', 'b', 'c', 'd', 'e', 'f'])
       assert.deepEqual(graph.traverse('g'), ['g', 'h', 'j', 'i', 'k', 'l'])
     })
   })
 
   describe('#shortestPath', () => {
-    it('should return the shortest path to a matching vertex', () => {
+    it('returns the shortest path to a matching vertex', () => {
       assert.deepEqual(graph.shortestPath('a', 'a'), ['a'])
       assert.deepEqual(graph.shortestPath('a', 'b'), ['a', 'b'])
       assert.deepEqual(graph.shortestPath('f', 'a'), ['f', 'c', 'a'])
     })
 
-    it('should return an empty path when no matching vertex is found', () => {
+    it('returns an empty path when no matching vertex is found', () => {
       assert.deepEqual(graph.shortestPath('a', 'z'), [])
     })
   })
@@ -186,19 +186,19 @@ describe('Graph', () => {
   describe('#shortestPathBy', () => {
     const player = F.curry((p, a) => a.player === p)
 
-    it('should return the shortest path to a matching vertex', () => {
+    it('returns the shortest path to a matching vertex', () => {
       assert.deepEqual(graph.shortestPathBy(player(p), 'a'), ['a'])
       assert.deepEqual(graph.shortestPathBy(player(q), 'a'), ['a', 'b'])
       assert.deepEqual(graph.shortestPathBy(player(p), 'f'), ['f', 'c', 'a'])
     })
 
-    it('should return an empty path when no matching vertex is found', () => {
+    it('returns an empty path when no matching vertex is found', () => {
       assert.deepEqual(graph.shortestPathBy(player(r), 'a'), [])
     })
   })
 
   describe('#connectedComponents', () => {
-    it('should return the connected components of a graph', () => {
+    it('returns the connected components of a graph', () => {
       const result = graph.connectedComponents()
 
       assert.strictEqual(result.length, 2)

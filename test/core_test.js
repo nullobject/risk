@@ -3,7 +3,7 @@ import {assert} from 'chai'
 
 describe('core', () => {
   describe('.distribute', () => {
-    it('should distribute the units', () => {
+    it('distributes the units', () => {
       assert.deepEqual(core.distribute(0, [1, 2, 3]), [0, 0, 0])
       assert.deepEqual(core.distribute(1, [1, 2, 3]), [1, 0, 0])
       assert.deepEqual(core.distribute(2, [1, 2, 3]), [1, 1, 0])

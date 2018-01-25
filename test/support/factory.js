@@ -1,4 +1,4 @@
-import * as F from 'fkit'
+import {array} from 'fkit'
 import Country from '../../src/country'
 import Graph from '../../src/graph'
 import World from '../../src/world'
@@ -10,7 +10,7 @@ module.exports = {
     country.id = id
     country.player = player
     country.armies = armies
-    country.slots = F.array(slots)
+    country.slots = array(slots)
 
     return country
   },
