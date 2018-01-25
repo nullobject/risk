@@ -6,9 +6,9 @@ import styles from '../stylesheets/styles.scss'
 const TILE_COLS = 3
 const TILE_ROWS = 3
 
-export default class HexgridComponent extends React.Component {
-  shouldComponentUpdate (nextProps, nextState) {
-    // Don't ever update the component.
+export default class HexgridView extends React.PureComponent {
+  shouldViewUpdate (nextProps, nextState) {
+    // Don't ever update the view.
     return false
   }
 
@@ -19,7 +19,7 @@ export default class HexgridComponent extends React.Component {
     const width = hexgrid.width * 2
     const height = hexgrid.height * 2
 
-    log.debug('HexgridComponent#render')
+    log.debug('HexgridView#render')
 
     return (
       <g className={styles.hexgrid}>

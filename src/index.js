@@ -3,7 +3,7 @@ import Game from './game'
 import Player from './player'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import RootComponent from './components/root_component'
+import RootView from './views/root_view'
 import log from './log'
 import nanobus from 'nanobus'
 import nextMove from './ai'
@@ -61,7 +61,7 @@ const subscriptions = [
   aiSignal.subscribe(move => bus.emit(move.type, move)),
 
   // Render the UI whenever the game property changes.
-  gameSignal.subscribe(game => ReactDOM.render(<RootComponent game={game} bus={bus} />, root))
+  gameSignal.subscribe(game => ReactDOM.render(<RootView game={game} bus={bus} />, root))
 ]
 
 if (module.hot) {

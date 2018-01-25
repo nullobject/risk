@@ -2,7 +2,7 @@ import React from 'react'
 import log from '../log'
 import styles from '../stylesheets/styles.scss'
 
-export default class ControlsComponent extends React.PureComponent {
+export default class ControlsView extends React.PureComponent {
   didEndTurn () {
     this.props.bus.emit('end-turn')
   }
@@ -10,7 +10,7 @@ export default class ControlsComponent extends React.PureComponent {
   render () {
     const currentPlayer = this.props.currentPlayer ? this.props.currentPlayer.toString() : ''
 
-    log.debug('ControlsComponent#render')
+    log.debug('ControlsView#render')
 
     return (
       <div className={styles.controls}>

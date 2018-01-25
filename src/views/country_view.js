@@ -3,7 +3,7 @@ import classnames from 'classnames'
 import log from '../log'
 import styles from '../stylesheets/styles.scss'
 
-export default class CountryComponent extends React.PureComponent {
+export default class CountryView extends React.PureComponent {
   didSelectCountry (country) {
     this.props.bus.emit('select-country', {country})
   }
@@ -19,7 +19,7 @@ export default class CountryComponent extends React.PureComponent {
       }
     )
 
-    log.debug('CountryComponent#render (' + country + ')')
+    log.debug('CountryView#render (' + country + ')')
 
     return (
       <g>

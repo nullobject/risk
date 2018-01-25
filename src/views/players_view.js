@@ -3,11 +3,11 @@ import classnames from 'classnames'
 import log from '../log'
 import styles from '../stylesheets/styles.scss'
 
-export default class PlayersComponent extends React.PureComponent {
+export default class PlayersView extends React.PureComponent {
   render () {
     let game = this.props.game
 
-    log.debug('PlayersComponent#render')
+    log.debug('PlayersView#render')
 
     return (
       <ul className={styles.players}>{this.renderPlayers(game)}</ul>

@@ -1,5 +1,5 @@
-import CountryComponent from './country_component'
-import PathsComponent from './paths_component'
+import CountryView from './country_view'
+import PathsView from './paths_view'
 import React from 'react'
 import log from '../log'
 import styles from '../stylesheets/styles.scss'
@@ -7,12 +7,12 @@ import styles from '../stylesheets/styles.scss'
 function isNearby (game, country) { return game.canMoveToCountry(country) }
 function isSelected (game, country) { return country === game.selectedCountry }
 
-export default class GameComponent extends React.PureComponent {
+export default class GameView extends React.PureComponent {
   render () {
     const bus = this.props.bus
     const game = this.props.game
 
-    log.debug('GameComponent#render')
+    log.debug('GameView#render')
 
     return (
       <g className={styles.world}>
@@ -32,7 +32,7 @@ export default class GameComponent extends React.PureComponent {
       const selected = isSelected(game, country)
 
       return (
-        <CountryComponent
+        <CountryView
           key={country}
           country={country}
           nearby={nearby}
@@ -45,7 +45,7 @@ export default class GameComponent extends React.PureComponent {
 
   renderCells (game) {
     return this.props.cells ? (
-      <PathsComponent className={styles.voronoi} paths={game.world.cells} />
+      <PathsView className={styles.voronoi} paths={game.world.cells} />
     ) : null
   }
 }
