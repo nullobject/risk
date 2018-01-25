@@ -25,7 +25,7 @@ const PLAYERS = 5
 /**
  * The dimensions.
  */
-const WIDTH = 800
+const WIDTH = 600
 const HEIGHT = 600
 
 const root = document.getElementById('root')

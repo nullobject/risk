@@ -1,18 +1,28 @@
 .players {
-  margin: 0;
-  padding: 0.5rem 0;
+  font-weight: 700;
+  letter-spacing: 0 !important;
+  margin: 0 0 1rem 0;
   text-align: center;
 
   li {
+    border: 2px solid;
+    border-radius: 50%;
     display: inline-block;
     margin-right: 1rem;
-    opacity: 0.7;
+    width: 1.75rem;
+    height: 1.75rem;
+    line-height: 1.75rem;
+    transition: color 0.1s ease-in-out, background-color 0.1s ease-in-out;
 
     &.selected {
-      opacity: 1.0;
+      background-color: currentColor;
+      span { color: black; }
     }
   }
 }
 
 .controls {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.5rem;
 }
