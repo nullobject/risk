@@ -53,7 +53,7 @@ const gameSignal = inputSignal.scan(transformGameState, game)
 // The player AI stream emits the moves calculated for the current player.
 const aiSignal = clockSignal
   .sample(gameSignal)
-  .filter(game => !game.currentPlayer.human)
+  .filter(game => !(game.over || game.currentPlayer.human))
   .concatMap(game => nextMove(game.currentPlayer, game.world))
 
 const subscriptions = [
