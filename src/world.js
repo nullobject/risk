@@ -80,6 +80,19 @@ export default class World {
   /**
    * Attacks the country `t` from the country `s` and returns a new world
    * state.
+   *
+   * - If the attacker total is much higher than the defender, then the
+   *   defender should lose all of their armies and the attacker should move to
+   *   the defender's country.
+   *
+   * - If the defender total is much higher than the attacker, then the
+   *   attacker should lose all of their armies.
+   *
+   * - If the totals are equal, then the attacker and defender should lose all
+   *   of their armies.
+   *
+   * - If the totals are close, then the attacker and defender should lose some
+   *   of their armies.
    */
   attack (s, t) {
     log.debug('World#attack')
@@ -87,9 +100,11 @@ export default class World {
     // Roll the dice!
     const attackerDice = core.rollDice(s.armies)
     const defenderDice = core.rollDice(t.armies)
+    const attackerTotal = F.sum(attackerDice)
+    const defenderTotal = F.sum(defenderDice)
 
-    log.debug('attacker: ' + attackerDice)
-    log.debug('defender: ' + defenderDice)
+    log.debug(`attacker: ${attackerDice} (${attackerTotal})`)
+    log.debug(`defender: ${defenderDice} (${defenderTotal})`)
 
     // Calculate the number of defender dice with a value greater than or equal
     // to the corresponding attacker dice.
@@ -104,26 +119,24 @@ export default class World {
     // Calculate the number of armies to move.
     const movers = F.min(s.armies - 1, t.slots.length)
 
-    // Calculate the result.
-    const as = F.sum(attackerDice) > F.sum(defenderDice)
-      ? calculateWin()
-      : calculateLose()
-
-    return F.set('graph', this.graph.merge(as), this)
-
-    function calculateWin () {
+    // Calculate the outcome for a win.
+    const win = () => {
       const u = F.set('armies', s.armies - movers, s)
       const v = F.copy(t, {armies: F.max(movers - attackerCasualties, 1), player: s.player})
-
       return [u, v]
     }
 
-    function calculateLose () {
+    // Calculate the outcome for a loss.
+    const lose = () => {
       const u = F.set('armies', F.max(s.armies - attackerCasualties, 1), s)
       const v = F.set('armies', F.max(t.armies - defenderCasualties, 1), t)
-
       return [u, v]
     }
+
+    // Calculate the result.
+    const as = attackerTotal > defenderTotal ? win() : lose()
+
+    return F.set('graph', this.graph.merge(as), this)
   }
 
   /**
