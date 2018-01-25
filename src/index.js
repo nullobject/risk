@@ -33,11 +33,8 @@ const root = document.getElementById('root')
 // players.
 const players = range(0, PLAYERS).map(id => new Player(id, id === 0))
 
-// Create the world.
-const world = WorldBuilder.build(WIDTH, HEIGHT)
-
 // Create the game state.
-const game = new Game(players, world)
+const game = buildGame(players)
 
 // Create the bus signal.
 const bus = nanobus()
@@ -71,6 +68,11 @@ if (module.hot) {
   })
 }
 
+function buildGame (players) {
+  const world = WorldBuilder.build(WIDTH, HEIGHT)
+  return new Game(players, world)
+}
+
 /**
  * Applies the event to yield a new game state.
  *
@@ -84,6 +86,8 @@ function transformGameState (game, event) {
       return game.endTurn()
     case 'select-country':
       return game.selectCountry(event.country)
+    case 'restart':
+      return buildGame(game.players)
     default:
       return game
   }
