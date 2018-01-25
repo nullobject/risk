@@ -1,11 +1,11 @@
-import Country from '../../src/country'
 import * as F from 'fkit'
+import Country from '../../src/country'
 import Graph from '../../src/graph'
 import World from '../../src/world'
 
 module.exports = {
   buildCountry: function (id, player, armies, slots) {
-    let country = new Country()
+    const country = new Country()
 
     country.id = id
     country.player = player
@@ -16,7 +16,7 @@ module.exports = {
   },
 
   buildWorld: function (countries) {
-    let world = new World()
+    const world = new World()
 
     world.graph = new Graph(countries, [])
 

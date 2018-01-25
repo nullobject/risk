@@ -81,17 +81,17 @@ export default class World {
    * Attacks the country `t` from the country `s` and returns a new world
    * state.
    *
-   * - If the attacker total is much higher than the defender, then the
-   *   defender should lose all of their armies and the attacker should move to
-   *   the defender's country.
+   * Rules of engagement:
    *
-   * - If the defender total is much higher than the attacker, then the
-   *   attacker should lose all of their armies.
+   * - If the attacker's total is higher than the defender's, then the attacker
+   *   should move to the defender's country. If the totals were close, then
+   *   the attacker should lose some of their armies (attrition).
+   *
+   * - If the defender's total is higher than the attacker's, then the attacker
+   *   should lose all of their armies. If the totals were close, then the
+   *   defender should lose some of their armies (attrition).
    *
    * - If the totals are equal, then the attacker and defender should lose all
-   *   of their armies.
-   *
-   * - If the totals are close, then the attacker and defender should lose some
    *   of their armies.
    */
   attack (s, t) {
@@ -102,19 +102,14 @@ export default class World {
     const defenderDice = core.rollDice(t.armies)
     const attackerTotal = F.sum(attackerDice)
     const defenderTotal = F.sum(defenderDice)
-
-    log.debug(`attacker: ${attackerDice} (${attackerTotal})`)
-    log.debug(`defender: ${defenderDice} (${defenderTotal})`)
-
-    // Calculate the number of defender dice with a value greater than or equal
-    // to the corresponding attacker dice.
-    const comparisons = F
-      .zip(core.reverseSort(attackerDice), core.reverseSort(defenderDice))
-      .map(F.uncurry(F.gte))
+    const delta = attackerTotal - defenderTotal
 
     // Calculate the casualties.
-    const attackerCasualties = comparisons.filter(F.id).length
-    const defenderCasualties = comparisons.filter(F.not).length
+    const attackerCasualties = delta > 0 ? Math.round(s.armies / (Math.abs(delta) + 1)) : s.armies
+    const defenderCasualties = delta < 0 ? Math.round(t.armies / (Math.abs(delta) + 1)) : t.armies
+
+    log.debug(`attacker: ${attackerDice} (${attackerTotal}), casualties: ${attackerCasualties}`)
+    log.debug(`defender: ${defenderDice} (${defenderTotal}), casualties: ${defenderCasualties}`)
 
     // Calculate the number of armies to move.
     const movers = F.min(s.armies - 1, t.slots.length)
@@ -134,7 +129,7 @@ export default class World {
     }
 
     // Calculate the result.
-    const as = attackerTotal > defenderTotal ? win() : lose()
+    const as = delta > 0 ? win() : lose()
 
     return F.set('graph', this.graph.merge(as), this)
   }

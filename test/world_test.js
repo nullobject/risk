@@ -9,12 +9,12 @@ const World = rewire('../src/world')
 const core = World.__get__('core')
 const reinforcement = World.__get__('reinforcement')
 
-// Stub each call to the `rollDice` function with the return values in the
-// list of `xss`.
-const stubRollDice = F.variadic((sandbox, xss) => {
+// Stub each call to the `rollDice` function with the return values in the list
+// of `xss`.
+function stubRollDice (sandbox, ...xss) {
   const stub = sandbox.stub(core, 'rollDice')
-  xss.map((xs, i) => { stub.onCall(i).returns(xs) })
-})
+  xss.forEach((xs, i) => stub.onCall(i).returns(xs))
+}
 
 function find (as, bs) {
   return bs.map((q) => {
@@ -53,8 +53,9 @@ describe('World', () => {
   const p2 = factory.buildCountry('b', p, 2, 3)
   const p3 = factory.buildCountry('c', p, 1, 2)
   const q1 = factory.buildCountry('d', q, 2, 2)
+  const q2 = factory.buildCountry('e', null, 0, 2)
 
-  const world = factory.buildWorld([p1, p2, p3, q1])
+  const world = factory.buildWorld([p1, p2, p3, q1, q2])
 
   beforeEach(() => {
     sandbox = sinon.sandbox.create()
@@ -66,15 +67,15 @@ describe('World', () => {
 
   describe('#move', () => {
     beforeEach(() => {
-      [x, y] = move(world, p1, q1)
+      [x, y] = move(world, p1, q2)
     })
 
-    it('should move to the target country', () => {
+    it('moves the player to the target country', () => {
       assert.equal(x.player, p)
       assert.equal(y.player, p)
     })
 
-    it('should distribute the armies', () => {
+    it('updates the armies', () => {
       assert.equal(x.armies, 2)
       assert.equal(y.armies, 2)
     })
@@ -87,12 +88,12 @@ describe('World', () => {
         [x, y] = attack(world, p1, q1)
       })
 
-      it('should move the attacker to target country', () => {
+      it('moves the attacker to the target country', () => {
         assert.equal(x.player, p)
         assert.equal(y.player, p)
       })
 
-      it('should update the armies', () => {
+      it('updates the armies', () => {
         assert.equal(x.armies, 2)
         assert.equal(y.armies, 1)
       })
@@ -104,14 +105,14 @@ describe('World', () => {
         [x, y] = attack(world, p1, q1)
       })
 
-      it('should not move the attacker', () => {
+      it('does not move the attacker', () => {
         assert.equal(x.player, p)
         assert.equal(y.player, q)
       })
 
-      it('should update the armies', () => {
-        assert.equal(x.armies, 2)
-        assert.equal(y.armies, 2)
+      it('updates the armies', () => {
+        assert.equal(x.armies, 1)
+        assert.equal(y.armies, 1)
       })
     })
 
@@ -121,14 +122,14 @@ describe('World', () => {
         [x, y] = attack(world, p1, q1)
       })
 
-      it('should not move the attacker', () => {
+      it('does not move the attacker', () => {
         assert.equal(x.player, p)
         assert.equal(y.player, q)
       })
 
-      it('should update the armies', () => {
-        assert.equal(x.armies, 2)
-        assert.equal(y.armies, 2)
+      it('updates the armies', () => {
+        assert.equal(x.armies, 1)
+        assert.equal(y.armies, 1)
       })
     })
   })
@@ -140,7 +141,7 @@ describe('World', () => {
       [x, y, z] = reinforce(world, p)
     })
 
-    it('should reinforce the countries', () => {
+    it('reinforces the countries', () => {
       assert.equal(x.armies, 4)
       assert.equal(y.armies, 3)
       assert.equal(z.armies, 2)
