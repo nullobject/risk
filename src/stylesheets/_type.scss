@@ -31,3 +31,85 @@
 .icon-bell-slash:before { content: '\66'; }
 .icon-gavel:before      { content: '\67'; }
 .icon-user:before       { content: '\68'; }
+
+@font-face {
+  font-display: optional;
+  font-family: proxima-nova;
+  font-weight: 100;
+  src: url('../fonts/proxima-nova-thin.woff2') format('woff2'),
+       url('../fonts/proxima-nova-thin.woff') format('woff');
+}
+
+@font-face {
+  font-display: optional;
+  font-family: proxima-nova;
+  font-weight: 300;
+  src: url('../fonts/proxima-nova-light.woff2') format('woff2'),
+       url('../fonts/proxima-nova-light.woff') format('woff');
+}
+
+@font-face {
+  font-display: optional;
+  font-family: proxima-nova;
+  font-weight: 400;
+  src: url('../fonts/proxima-nova-regular.woff2') format('woff2'),
+       url('../fonts/proxima-nova-regular.woff') format('woff');
+}
+
+@font-face {
+  font-display: optional;
+  font-family: proxima-nova;
+  font-weight: 700;
+  src: url('../fonts/proxima-nova-bold.woff2') format('woff2'),
+       url('../fonts/proxima-nova-bold.woff') format('woff');
+}
+
+html {
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-family: proxima-nova, sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.125rem;
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+h1 {
+  font-size: 4rem;
+  font-weight: 100;
+  letter-spacing: 0.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 300;
+}
+
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1rem; }
+
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: text-shadow 0.15s ease-in-out;
+
+  &:hover {
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+  }
+
+  &:active {
+    text-shadow: none;
+  }
+}

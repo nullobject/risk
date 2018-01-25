@@ -4,70 +4,71 @@
 .player-3 { color: rgb(152, 78, 163); }
 .player-4 { color: rgb(255, 127, 0); }
 
-.game {
-  svg {
-    #tile {
-      stroke: black;
-      stroke-width: 0.25px;
-    }
+svg {
+  // TODO: Move to the containing element.
+  color: #666;
 
-    .voronoi {
-      fill: none;
-      stroke: #1cadcf;
-    }
+  #tile {
+    stroke: black;
+    stroke-width: 0.25px;
+  }
 
-    .hexgrid polygon {
-      fill: #333;
-      stroke: #111;
-      stroke-width: 0.25px;
-    }
+  .voronoi {
+    fill: none;
+    stroke: #1cadcf;
+  }
 
-    .world polygon {
-      &.country {
-        fill: currentColor;
-        fill-opacity: 0.6;
-        stroke: currentColor;
-        stroke-opacity: 0.8;
-        stroke-width: 3px;
-        pointer-events: all;
+  .hexgrid polygon {
+    fill: #333;
+    stroke: #111;
+    stroke-width: 0.25px;
+  }
 
-        &.selected {
-          fill-opacity: 0.8;
-          stroke-opacity: 1.0;
-        }
+  .world polygon {
+    &.country {
+      fill: currentColor;
+      fill-opacity: 0.6;
+      stroke: currentColor;
+      stroke-opacity: 0.8;
+      stroke-width: 3px;
+      pointer-events: all;
 
-        &.nearby {
-          -webkit-animation: pulsate 1.0s ease-in-out 0s infinite alternate;
-        }
+      &.selected {
+        fill-opacity: 0.8;
+        stroke-opacity: 1.0;
       }
 
-      &.slot {
-        fill: currentColor;
-        fill-opacity: 0.6;
-        stroke: currentColor;
-        stroke-opacity: 0.4;
-        stroke-width: 1px;
-        pointer-events: none;
-
-        &.selected {
-          color: white;
-        }
+      &.nearby {
+        -webkit-animation: pulsate 1.0s ease-in-out 0s infinite alternate;
       }
     }
 
-    .gameOver {
-      rect {
-        fill: black;
-        fill-opacity: 0.6;
-      }
+    &.slot {
+      fill: currentColor;
+      fill-opacity: 0.6;
+      stroke: currentColor;
+      stroke-opacity: 0.4;
+      stroke-width: 1px;
+      pointer-events: none;
 
-      text {
-        fill: white;
-        font-family: sans-serif;
-        font-size: 20px;
-        text-anchor: middle;
-        alignment-baseline: middle;
+      &.selected {
+        color: white;
       }
+    }
+  }
+
+  .gameOver {
+    rect {
+      fill: black;
+      fill-opacity: 0.6;
+    }
+
+    text {
+      fill: white;
+      font-family: sans-serif;
+      font-size: 20px;
+      text-anchor: middle;
+      alignment-baseline: middle;
     }
   }
 }

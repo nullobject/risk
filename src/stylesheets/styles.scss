@@ -1,6 +1,8 @@
 @import "./animations";
+@import "./buttons";
 @import "./controls";
 @import "./game";
+@import "./modal";
 @import "./type";
 
 * {
@@ -9,7 +11,7 @@
 }
 
 html {
-  color: #666;
+  color: white;
 }
 
 body {
@@ -21,4 +23,22 @@ body {
 
 html, body {
   height: 100%;
+}
+
+.container {
+  margin-right: auto;
+  margin-left: auto;
+  padding: 1rem;
+}
+
+.center {
+  text-align: center;
+}
+
+.row {
+  display: flex;
+}
+
+.align-self-center {
+  align-self: center !important;
 }

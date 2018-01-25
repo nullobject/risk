@@ -1,0 +1,11 @@
+.modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow-y: auto;
+  outline: 0;
+  background: rgba(0, 0, 0, 0.9);
+  animation: zoom-in 0.2s ease-out both;
+}
