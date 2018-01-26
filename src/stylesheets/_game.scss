@@ -54,3 +54,14 @@ svg {
     }
   }
 }
+
+.game {
+  header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  nav {
+    font-size: 2rem;
+  }
+}
