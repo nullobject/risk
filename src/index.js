@@ -10,7 +10,7 @@ import nanobus from 'nanobus'
 import nextMove from './ai'
 import {Signal} from 'bulb'
 import {fromBus} from './core'
-import {range} from 'fkit'
+import {range, set} from 'fkit'
 
 /**
  * The number of milliseconds between clock ticks.
@@ -87,6 +87,8 @@ function transformGameState (game, event) {
       return game.endTurn()
     case 'select-country':
       return game.selectCountry(event.country)
+    case 'pause':
+      return set('paused', !game.paused, game)
     case 'restart':
       return buildGame(game.players)
     default:
