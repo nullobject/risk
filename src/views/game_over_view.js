@@ -1,3 +1,4 @@
+import ButtonView from './button_view'
 import React from 'react'
 import classnames from 'classnames'
 import styles from '../stylesheets/styles.scss'
@@ -10,7 +11,7 @@ export default class GameOverView extends React.PureComponent {
       <div className={classnames(styles.modal, styles.row)}>
         <div className={classnames(styles.container, styles.center, styles['align-self-center'])}>
           <h1>Game Over</h1>
-          <button onClick={() => bus.emit('restart')}>Restart</button>
+          <ButtonView onClick={() => bus.emit('restart')}>Restart</ButtonView>
         </div>
       </div>
     )
