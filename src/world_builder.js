@@ -129,14 +129,14 @@ export function build (width, height) {
   // Calculate the Voronoi diagram.
   const diagram = voronoi.calculateDiagram(t, sites, RELAXATIONS)
 
-  // Calculate the countries.
-  const countries = calculateCountries(hexagons, diagram)
+  // Calculate the vertices.
+  const vertices = core.toVertices(calculateCountries(hexagons, diagram))
 
-  // Calculate the graph edges.
+  // Calculate the edges.
   const edges = calculateEdges(diagram)
 
   // Calculate the subgraphs.
-  const subgraphs = new Graph(countries, edges)
+  const subgraphs = new Graph(vertices, edges)
     .filter(byCountrySize)
     .connectedComponents()
 

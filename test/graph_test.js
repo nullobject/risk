@@ -8,20 +8,20 @@ describe('Graph', () => {
   const r = {}
   const s = {}
 
-  const a = {id: 'a', player: p, score: 1}
-  const b = {id: 'b', player: q, score: 2}
-  const c = {id: 'c', player: q, score: 3}
-  const d = {id: 'd', player: q, score: 4}
-  const e = {id: 'e', player: q, score: 5}
-  const f = {id: 'f', player: q, score: 6}
-  const g = {id: 'g', player: r, score: 7}
-  const h = {id: 'h', player: r, score: 8}
-  const i = {id: 'i', player: r, score: 9}
-  const j = {id: 'j', player: r, score: 10}
-  const k = {id: 'k', player: r, score: 11}
-  const l = {id: 'l', player: s, score: 12}
+  const a = {player: p, score: 1}
+  const b = {player: q, score: 2}
+  const c = {player: q, score: 3}
+  const d = {player: q, score: 4}
+  const e = {player: q, score: 5}
+  const f = {player: q, score: 6}
+  const g = {player: r, score: 7}
+  const h = {player: r, score: 8}
+  const i = {player: r, score: 9}
+  const j = {player: r, score: 10}
+  const k = {player: r, score: 11}
+  const l = {player: s, score: 12}
 
-  const values = [a, b, c, d, e, f, g, h, i, j, k, l]
+  const values = {a, b, c, d, e, f, g, h, i, j, k, l}
 
   const edges = [
     ['a', 'b'], ['a', 'c'],
@@ -67,8 +67,8 @@ describe('Graph', () => {
 
   describe('#merge', () => {
     it('merges the given vertices', () => {
-      const m = {id: 'm', player: s, score: 13}
-      assert.strictEqual(graph.merge([m]).last(), m)
+      const m = {player: s, score: 13}
+      assert.strictEqual(graph.merge({m}).last(), m)
     })
   })
 
@@ -87,7 +87,7 @@ describe('Graph', () => {
 
   describe('#values', () => {
     it('returns the vertex values', () => {
-      assert.deepEqual(graph.values(), values)
+      assert.deepEqual(graph.values(), Object.values(values))
     })
   })
 

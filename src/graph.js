@@ -143,13 +143,11 @@ function connectedComponents (graph) {
 }
 
 export default class Graph {
-  constructor (values, edges) {
+  constructor (vertices, edges) {
     const a = arguments
 
     if (a.length > 0) {
-      this.vertexMap = Immutable.Map(
-        values.map(value => [value.id, value])
-      )
+      this.vertexMap = Immutable.Map(Object.entries(vertices))
 
       this.adjacencyMap = edges.reduce(
         addEdge,
@@ -188,7 +186,7 @@ export default class Graph {
    * Merges the list of `as` into the graph.
    */
   merge (as) {
-    const bs = Immutable.Map(as.map(a => [a.id, a]))
+    const bs = Immutable.Map(Object.entries(as))
     const vertexMap = this.vertexMap.merge(bs)
     return copy(this, {vertexMap})
   }
