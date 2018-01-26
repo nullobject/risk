@@ -1,3 +1,4 @@
+import * as core from '../../src/core'
 import {array} from 'fkit'
 import Country from '../../src/country'
 import Graph from '../../src/graph'
@@ -18,7 +19,7 @@ module.exports = {
   buildWorld: function (countries) {
     const world = new World()
 
-    world.graph = new Graph(countries, [])
+    world.graph = new Graph(core.toVertices(countries), [])
 
     return world
   }

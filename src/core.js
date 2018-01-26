@@ -15,6 +15,16 @@ export function rollDice (n) {
 }
 
 /**
+ * Convert the given list of identifiable objects to a hash of vertices.
+ */
+export function toVertices (as) {
+  return as.reduce((vs, a) => {
+    vs[a.id] = a
+    return vs
+  }, {})
+}
+
+/**
  * Reverse sorts a list using natural ordering.
  */
 export const reverseSort = F.compose(F.reverse, F.sort)

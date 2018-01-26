@@ -58,7 +58,7 @@ export default class World {
       F.copy(country, {player: players[index], armies: 2})
     )
 
-    return F.set('graph', this.graph.merge(bs), this)
+    return F.set('graph', this.graph.merge(core.toVertices(bs)), this)
   }
 
   /**
@@ -74,7 +74,7 @@ export default class World {
     const u = F.set('armies', s.armies - n, s)
     const v = F.copy(t, {armies: n, player: s.player})
 
-    return F.set('graph', this.graph.merge([u, v]), this)
+    return F.set('graph', this.graph.merge(core.toVertices([u, v])), this)
   }
 
   /**
@@ -131,7 +131,7 @@ export default class World {
     // Calculate the result.
     const as = delta > 0 ? win() : lose()
 
-    return F.set('graph', this.graph.merge(as), this)
+    return F.set('graph', this.graph.merge(core.toVertices(as)), this)
   }
 
   /**
