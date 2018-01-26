@@ -1,6 +1,5 @@
 import React from 'react'
 import classnames from 'classnames'
-import log from '../log'
 import styles from '../stylesheets/styles.scss'
 
 export default class CountryView extends React.PureComponent {
@@ -18,8 +17,6 @@ export default class CountryView extends React.PureComponent {
         [styles.selected]: this.props.selected
       }
     )
-
-    log.debug('CountryView#render (' + country + ')')
 
     return (
       <g>

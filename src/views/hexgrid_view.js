@@ -1,5 +1,4 @@
 import React from 'react'
-import log from '../log'
 import styles from '../stylesheets/styles.scss'
 
 // Tile size.
@@ -18,8 +17,6 @@ export default class HexgridView extends React.PureComponent {
     // Calculate the dimensions of the tile.
     const width = hexgrid.width * 2
     const height = hexgrid.height * 2
-
-    log.debug('HexgridView#render')
 
     return (
       <g className={styles.hexgrid}>

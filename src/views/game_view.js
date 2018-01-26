@@ -1,51 +1,33 @@
-import CountryView from './country_view'
-import PathsView from './paths_view'
+import ControlsView from './controls_view'
+import HexgridView from './hexgrid_view'
+import PlayersView from './players_view'
 import React from 'react'
-import log from '../log'
+import WorldView from './world_view'
 import styles from '../stylesheets/styles.scss'
 
-function isNearby (game, country) { return game.canMoveToCountry(country) }
-function isSelected (game, country) { return country === game.selectedCountry }
-
-export default class GameView extends React.PureComponent {
+export default class RootView extends React.PureComponent {
   render () {
     const bus = this.props.bus
     const game = this.props.game
 
-    log.debug('GameView#render')
-
     return (
-      <g className={styles.world}>
-        <g className={styles.countries}>{this.renderCountries(bus, game)}</g>
-        {this.renderCells(game)}
-      </g>
+      <div className={styles.game}>
+        <header>
+          <PlayersView currentPlayer={game.currentPlayer} game={game} />
+          <nav>
+            <a href='#' onClick={() => bus.emit('pause')}><span className={styles['icon-help']} /></a>
+          </nav>
+        </header>
+
+        <svg width={game.world.width} height={game.world.height}>
+          <HexgridView width={game.world.width} height={game.world.height} hexgrid={game.world.hexgrid} />
+          <WorldView bus={bus} game={game} />
+        </svg>
+
+        <footer>
+          <ControlsView currentPlayer={game.currentPlayer} bus={bus} />
+        </footer>
+      </div>
     )
-  }
-
-  renderCountries (bus, game) {
-    return game.world.countries.map(this.renderCountry(bus, game))
-  }
-
-  renderCountry (bus, game) {
-    return (country) => {
-      const nearby = isNearby(game, country)
-      const selected = isSelected(game, country)
-
-      return (
-        <CountryView
-          key={country}
-          country={country}
-          nearby={nearby}
-          selected={selected}
-          bus={bus}
-        />
-      )
-    }
-  }
-
-  renderCells (game) {
-    return this.props.cells ? (
-      <PathsView className={styles.voronoi} paths={game.world.cells} />
-    ) : null
   }
 }
