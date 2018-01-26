@@ -1,3 +1,6 @@
+$bg_color_1: #61eafa;
+$bg_color_2: #f76b1c;
+
 @import "./animations";
 @import "./buttons";
 @import "./controls";
@@ -15,7 +18,7 @@ html {
 }
 
 body {
-  background-color: black;
+  background-image: linear-gradient(to bottom, $bg_color_1, $bg_color_2);
   align-items: center;
   display: flex;
   justify-content: center;
