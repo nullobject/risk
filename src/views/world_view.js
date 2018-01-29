@@ -1,7 +1,7 @@
 import CountryView from './country_view'
 import PathsView from './paths_view'
 import React from 'react'
-import styles from '../stylesheets/styles.scss'
+import styles from '../../assets/stylesheets/styles.scss'
 
 function isNearby (game, country) { return game.canMoveToCountry(country) }
 function isSelected (game, country) { return country === game.selectedCountry }

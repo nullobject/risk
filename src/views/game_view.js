@@ -3,7 +3,7 @@ import HexgridView from './hexgrid_view'
 import PlayersView from './players_view'
 import React from 'react'
 import WorldView from './world_view'
-import styles from '../stylesheets/styles.scss'
+import styles from '../../assets/stylesheets/styles.scss'
 
 export default class RootView extends React.PureComponent {
   render () {

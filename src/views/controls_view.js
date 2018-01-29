@@ -1,6 +1,6 @@
 import ButtonView from './button_view'
 import React from 'react'
-import styles from '../stylesheets/styles.scss'
+import styles from '../../assets/stylesheets/styles.scss'
 
 export default class ControlsView extends React.PureComponent {
   render () {

@@ -1,7 +1,7 @@
 import ButtonView from './button_view'
 import React from 'react'
 import classnames from 'classnames'
-import styles from '../stylesheets/styles.scss'
+import styles from '../../assets/stylesheets/styles.scss'
 
 export default class GameOverView extends React.PureComponent {
   render () {

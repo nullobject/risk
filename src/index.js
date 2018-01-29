@@ -1,4 +1,3 @@
-import 'normalize.css'
 import * as WorldBuilder from './world_builder'
 import Game from './game'
 import Player from './player'
