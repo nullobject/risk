@@ -32,4 +32,12 @@ button {
     border-color: inherit;
     color: inherit;
   }
+
+  &:disabled {
+    background-color: inherit;
+    border-color: inherit;
+    color: inherit;
+    opacity: 0.5;
+    cursor: default;
+  }
 }

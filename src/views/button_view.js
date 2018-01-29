@@ -5,7 +5,7 @@ export default class ButtonView extends React.PureComponent {
     const {disabled, onClick} = this.props
 
     return (
-      <button type='button' disabled={disabled} onClick={onClick}>{this.props.children}</button>
+      <button type='button' aria-disabled={disabled} disabled={disabled} onClick={onClick}>{this.props.children}</button>
     )
   }
 }
