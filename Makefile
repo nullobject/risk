@@ -1,4 +1,4 @@
-.PHONY: clean lint production start test unit
+.PHONY: clean lint production start test unit watch
 
 start: node_modules
 	@node_modules/.bin/parcel -p 4001 index.html
