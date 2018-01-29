@@ -13,15 +13,11 @@ function occupiedBy (player) {
 
 export default class World {
   constructor (width, height, hexgrid, cells, graph) {
-    const a = arguments
-
-    if (a.length > 0) {
-      this.width = width
-      this.height = height
-      this.hexgrid = hexgrid
-      this.cells = cells
-      this.graph = graph
-    }
+    this.width = width
+    this.height = height
+    this.hexgrid = hexgrid
+    this.cells = cells
+    this.graph = graph
   }
 
   get countries () { return this.graph.values() }

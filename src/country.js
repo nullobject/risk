@@ -2,16 +2,12 @@ import {add, compose, min, update} from 'fkit'
 
 export default class Country {
   constructor (id, size, polygon, slots) {
-    let a = arguments
-
-    if (a.length > 0) {
-      this.id = id
-      this.size = size
-      this.polygon = polygon
-      this.slots = slots
-      this.armies = 0
-      this.player = null
-    }
+    this.id = id
+    this.size = size
+    this.polygon = polygon
+    this.slots = slots
+    this.armies = 0
+    this.player = null
   }
 
   get availableSlots () { return this.slots.length - this.armies }
@@ -28,7 +24,7 @@ export default class Country {
     if (n <= 0) {
       return this
     } else {
-      let f = compose(min(this.slots.length), add(n))
+      const f = compose(min(this.slots.length), add(n))
       return update('armies', f, this)
     }
   }

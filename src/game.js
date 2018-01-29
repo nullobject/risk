@@ -3,17 +3,13 @@ import log from './log'
 
 export default class Game {
   constructor (players, world) {
-    let a = arguments
+    // Assign each player to a random country.
+    world = world.assignPlayers(players)
 
-    if (a.length > 0) {
-      // Assign each player to a random country.
-      world = world.assignPlayers(players)
-
-      this.world = world
-      this.players = players
-      this.currentPlayer = F.head(players)
-      this.selectedCountry = null
-    }
+    this.world = world
+    this.players = players
+    this.currentPlayer = F.head(players)
+    this.selectedCountry = null
   }
 
   /**

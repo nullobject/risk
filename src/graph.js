@@ -144,16 +144,12 @@ function connectedComponents (graph) {
 
 export default class Graph {
   constructor (vertices, edges) {
-    const a = arguments
+    this.vertexMap = Immutable.Map(Object.entries(vertices))
 
-    if (a.length > 0) {
-      this.vertexMap = Immutable.Map(Object.entries(vertices))
-
-      this.adjacencyMap = edges.reduce(
-        addEdge,
-        Immutable.Map()
-      )
-    }
+    this.adjacencyMap = edges.reduce(
+      addEdge,
+      Immutable.Map()
+    )
   }
 
   /**

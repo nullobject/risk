@@ -35,7 +35,7 @@
     "autoprefixer": "^7.2.5",
     "bulb": "^1.1.1",
     "classnames": "^2.2.5",
-    "fkit": "^1.2.0",
+    "fkit": "^1.3.0",
     "immutable": "^3.8.2",
     "nanobus": "^4.3.2",
     "nanologger": "^1.3.1",
