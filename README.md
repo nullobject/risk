@@ -1,12 +1,10 @@
-# Hexgrid
+# Risk
 
-[![Build Status](https://travis-ci.org/nullobject/hexgrid.svg?branch=master)](https://travis-ci.org/nullobject/hexgrid)
+[![Build Status](https://travis-ci.org/nullobject/risk.svg?branch=master)](https://travis-ci.org/nullobject/risk)
 
-## The game
-
-The game is played with two or more players on a map. The object of the game is
-for a player to occupy every country on the map. Players take turns advancing
-their armies or attacking other countries.
+The game of Risk is played with two or more players on a map. The object of the
+game is for a player to defeat the other players on the map. Players take turns
+advancing their armies or attacking other countries.
 
 During their turn, a player chooses one of their occupied countries and a
 neighbouring country. If a neighbouring country is occupied then the player
@@ -19,6 +17,6 @@ They can place these armies in any of their occupied countries.
 
 ## Licence
 
-Hexgrid is licensed under the MIT licence. See the
-[LICENCE](https://github.com/nullobject/hexgrid/blob/master/LICENCE.md) file
+Risk is licensed under the MIT licence. See the
+[LICENCE](https://github.com/nullobject/risk/blob/master/LICENCE.md) file
 for more details.

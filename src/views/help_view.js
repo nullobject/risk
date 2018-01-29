@@ -10,42 +10,18 @@ export default class HelpView extends React.PureComponent {
         <div className={styles.container}>
           <h2>How to Play</h2>
 
-          <p>The goal of Tetris is to score as many points as possible by
-          clearing horizontal lines of blocks. The player must rotate, move, and
-          drop the falling tetriminos inside the playfield. Lines are cleared when
-          they are filled with blocks and have no empty spaces.</p>
+          <p>The game of Risk is played with two or more players on a map. The object of the
+          game is for a player to defeat the other players on the map. Players take turns
+          advancing their armies or attacking other countries.</p>
 
-          <p>As lines are cleared, the level increases and tetriminos fall
-          faster, making the game progressively more challenging. If the blocks
-          land above the top of the playfield, then the game is over.</p>
+          <p>During their turn, a player chooses one of their occupied countries and a
+          neighbouring country. If a neighbouring country is occupied then the player
+          will attack, otherwise the player will move armies into the unoccupied country.
+          A player may only move or attack from an occupied country with two or more
+          armies. During a turn a player can move or attack as many times as they wish.</p>
 
-          <dl>
-            <dt>LEFT</dt>
-            <dd>Move the falling tetromino left.</dd>
-
-            <dt>RIGHT</dt>
-            <dd>Move the falling tetromino right.</dd>
-
-            <dt>DOWN</dt>
-            <dd>Move the falling tetromino down (soft drop).</dd>
-
-            <dt>Z</dt>
-            <dd>Rotate the falling tetromino left.</dd>
-
-            <dt>X/UP</dt>
-            <dd>Rotate the falling tetromino right.</dd>
-
-            <dt>C</dt>
-            <dd>Store the falling tetromino for later use.</dd>
-
-            <dt>SPACE</dt>
-            <dd>Drop the falling tetromino to the bottom of the playfield and lock it immediately (hard drop).</dd>
-
-            <dt>RETURN</dt>
-            <dd>Drop the falling tetromino to the bottom of the playfield, but don't lock it (firm drop).</dd>
-          </dl>
-
-          <h2>Credits</h2>
+          <p>At the end of their turn, a player is rewarded a number of additional armies.
+          They can place these armies in any of their occupied countries.</p>
 
           <h2>Credits</h2>
 
