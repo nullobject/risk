@@ -7,6 +7,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "start": "make start",
     "test": "make test"
   },
   "repository": {
