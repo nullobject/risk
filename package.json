@@ -21,6 +21,7 @@
     "env": "mocha"
   },
   "devDependencies": {
+    "audiosprite": "^0.7.0",
     "babel-core": "^6.26.0",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
@@ -37,6 +38,7 @@
     "bulb": "^1.1.1",
     "classnames": "^2.2.5",
     "fkit": "^1.4.0",
+    "howler": "^2.0.8",
     "immutable": "^3.8.2",
     "nanobus": "^4.3.2",
     "nanologger": "^1.3.1",
