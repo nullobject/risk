@@ -19,6 +19,10 @@
       background-color: currentColor;
       span { color: white; }
     }
+
+    &.disabled {
+      opacity: 0.5;
+    }
   }
 }
 
