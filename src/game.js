@@ -23,10 +23,24 @@ export default class Game {
   }
 
   /**
+   * Returns the humans.
+   */
+  get humanPlayers () {
+    return this.players.filter(player => player.human)
+  }
+
+  /**
    * Returns true if the game is over, false otherwise.
    */
   get over () {
     return this.alivePlayers.length === 1
+  }
+
+  /**
+   * Returns true if the human won the game, false otherwise.
+   */
+  get win () {
+    return this.currentPlayer === this.humanPlayers[0]
   }
 
   /**

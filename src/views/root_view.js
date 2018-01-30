@@ -13,7 +13,7 @@ export default class RootView extends React.PureComponent {
       <React.Fragment>
         <GameView bus={bus} game={game} />
         {game.paused ? <HelpView bus={bus} /> : null}
-        {game.over ? <GameOverView bus={bus} /> : null}
+        {game.over ? <GameOverView bus={bus} win={game.win} /> : null}
       </React.Fragment>
     )
   }

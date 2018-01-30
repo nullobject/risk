@@ -5,8 +5,9 @@ import {assert} from 'chai'
 describe('Game', () => {
   let sandbox, game
 
-  // Player stub.
-  const player = {}
+  // Player stubs.
+  const ai = {human: false}
+  const human = {human: true}
 
   // Country stubs.
   const source = {}
@@ -25,16 +26,22 @@ describe('Game', () => {
     sandbox = sinon.sandbox.create()
     sandbox.stub(world, 'assignPlayers').returns(world)
     sandbox.stub(world, 'countriesOccupiedBy').returns(1)
-    game = new Game([player], world)
+    game = new Game([human, ai], world)
   })
 
   afterEach(() => {
     sandbox.restore()
   })
 
+  describe('#humanPlayers', () => {
+    it('returns the human players', () => {
+      assert.deepEqual(game.humanPlayers, [human])
+    })
+  })
+
   describe('#moveToCountry', () => {
     beforeEach(() => {
-      game.currentPlayer = player
+      game.currentPlayer = human
       game.selectedCountry = source
     })
 
