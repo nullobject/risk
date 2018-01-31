@@ -23,24 +23,31 @@ export default class Game {
   }
 
   /**
-   * Returns the humans.
+   * Returns the computer players that are alive.
    */
-  get humanPlayers () {
-    return this.players.filter(player => player.human)
+  get aliveComputerPlayers () {
+    return this.alivePlayers.filter(player => !player.human)
+  }
+
+  /**
+   * Returns the human players that are alive.
+   */
+  get aliveHumanPlayers () {
+    return this.alivePlayers.filter(player => player.human)
   }
 
   /**
    * Returns true if the game is over, false otherwise.
    */
   get over () {
-    return this.alivePlayers.length === 1
+    return this.aliveHumanPlayers.length === 0 || this.aliveComputerPlayers.length === 0
   }
 
   /**
-   * Returns true if the human won the game, false otherwise.
+   * Returns true if a human won the game, false otherwise.
    */
   get win () {
-    return this.currentPlayer === this.humanPlayers[0]
+    return this.over && this.currentPlayer.human
   }
 
   /**

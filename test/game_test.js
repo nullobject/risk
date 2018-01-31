@@ -6,7 +6,7 @@ describe('Game', () => {
   let sandbox, game
 
   // Player stubs.
-  const ai = {human: false}
+  const computer = {human: false}
   const human = {human: true}
 
   // Country stubs.
@@ -25,17 +25,29 @@ describe('Game', () => {
   beforeEach(() => {
     sandbox = sinon.sandbox.create()
     sandbox.stub(world, 'assignPlayers').returns(world)
-    sandbox.stub(world, 'countriesOccupiedBy').returns(1)
-    game = new Game([human, ai], world)
+    sandbox.stub(world, 'countriesOccupiedBy').returns([source])
+    game = new Game([human, computer], world)
   })
 
   afterEach(() => {
     sandbox.restore()
   })
 
-  describe('#humanPlayers', () => {
-    it('returns the human players', () => {
-      assert.deepEqual(game.humanPlayers, [human])
+  describe('#alivePlayers', () => {
+    it('returns the alive players', () => {
+      assert.deepEqual(game.alivePlayers, [human, computer])
+    })
+  })
+
+  describe('#aliveComputerPlayers', () => {
+    it('returns the alive computer players', () => {
+      assert.deepEqual(game.aliveComputerPlayers, [computer])
+    })
+  })
+
+  describe('#aliveHumanPlayers', () => {
+    it('returns the alive human players', () => {
+      assert.deepEqual(game.aliveHumanPlayers, [human])
     })
   })
 

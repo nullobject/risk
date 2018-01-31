@@ -14,7 +14,7 @@ import {range, set} from 'fkit'
 /**
  * The number of milliseconds between clock ticks.
  */
-const CLOCK_INTERVAL = 500
+const CLOCK_INTERVAL = 250
 
 /**
  * The number of players in the game.

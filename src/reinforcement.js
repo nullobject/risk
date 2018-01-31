@@ -1,6 +1,5 @@
 import * as F from 'fkit'
 import * as core from './core'
-import Immutable from 'immutable'
 
 /**
  * Calculates the depth index for the player subgraphs.
@@ -25,11 +24,10 @@ export function depthIndex (graph, playerSubgraphs) {
     }
 
     const depth = path.length - 2
+    list[depth] = (list[depth] || new Set()).add(key)
 
-    return list.update(depth, set =>
-      (set || Immutable.Set()).add(key)
-    )
-  }, Immutable.List()).toJS()
+    return list
+  }, []).map(set => Array.from(set))
 }
 
 /**
