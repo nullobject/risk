@@ -136,12 +136,12 @@ export default class World {
   reinforce (player) {
     log.debug('World#reinforce')
 
-    const subgraphs = this.graph
+    const playerSubgraphs = this.graph
       .filter(country => country.player === player)
       .connectedComponents()
 
-    const depthIndex = reinforcement.depthIndex(this.graph, subgraphs)
-    const reinforcementMap = reinforcement.reinforcementMap(this.graph, subgraphs, depthIndex)
+    const depthIndex = reinforcement.depthIndex(this.graph, playerSubgraphs)
+    const reinforcementMap = reinforcement.reinforcementMap(this.graph, playerSubgraphs, depthIndex)
 
     const graph = F.pairs(reinforcementMap).reduce((graph, [key, n]) => {
       return graph.update(key, country => country.reinforce(n))
