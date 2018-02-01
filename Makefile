@@ -1,24 +1,27 @@
-.PHONY: clean lint production start test unit watch
-
-start: node_modules
-	@node_modules/.bin/parcel -p 4001 index.html
-
-dist: node_modules
-	@node_modules/.bin/parcel build index.html --public-url ./
-
-test: unit lint
-
-watch: node_modules
-	@./node_modules/.bin/mocha -w
-
-clean:
-	@rm -rf node_modules
+.PHONY: build clean deploy lint start test unit watch
 
 node_modules:
 	@npm install
 
+start: node_modules
+	@node_modules/.bin/parcel -p 4001 index.html
+
+build: node_modules
+	@node_modules/.bin/parcel build index.html --public-url ./
+
+deploy: build
+	@aws --profile personal s3 sync ./dist/ s3://risk.joshbassett.info/ --acl public-read --delete --cache-control 'max-age=300'
+
+test: unit lint
+
 unit: node_modules
 	@node_modules/.bin/mocha
 
+watch: node_modules
+	@./node_modules/.bin/mocha -w
+
 lint: node_modules
-	@node_modules/.bin/standard "*.js" "src/**/*.js" "test/**/*.js"
+	@node_modules/.bin/standard "src/**/*.js" "test/**/*.js"
+
+clean:
+	@rm -rf dist node_modules
