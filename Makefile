@@ -10,7 +10,7 @@ build: node_modules
 	@node_modules/.bin/parcel build index.html --public-url ./
 
 deploy: build
-	@aws --profile personal s3 sync ./dist/ s3://risk.joshbassett.info/ --acl public-read --delete --cache-control 'max-age=300'
+	@aws s3 sync ./dist/ s3://risk.joshbassett.info/ --acl public-read --delete --cache-control 'max-age=300'
 
 test: unit lint
 

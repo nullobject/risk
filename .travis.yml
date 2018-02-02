@@ -1,3 +1,14 @@
 language: node_js
 node_js:
   - "8"
+env:
+  global:
+    - PATH=$HOME/.local/bin:$PATH
+before_install: pip install --user awscli
+before_deploy: make build
+deploy:
+  on:
+    branch: master
+  provider: script
+  script: make deploy
+  skip_cleanup: true
