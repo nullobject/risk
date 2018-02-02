@@ -19,7 +19,7 @@ export default class RootView extends React.PureComponent {
           <PlayersView currentPlayer={game.currentPlayer} game={game} />
           <nav>
             <a href='#' onClick={() => bus.emit('pause')}><span className={styles['icon-help']} /></a>
-            <a href={TWITTER_URL}><span className={styles['icon-twitter']} /></a>
+            <a href={TWITTER_URL} target='_blank'><span className={styles['icon-twitter']} /></a>
             <a href={GITHUB_URL} target='_blank'><span className={styles['icon-github']} /></a>
           </nav>
         </header>
