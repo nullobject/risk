@@ -1,21 +1,8 @@
 import React from 'react'
 
+export default ({className, paths}) =>
+  <g className={className}>
+    {paths.map((path, index) => <path key={index} d={polygon(path)} />)}
+  </g>
+
 function polygon (d) { return 'M' + d.join('L') + 'Z' }
-
-export default class PathsView extends React.PureComponent {
-  render () {
-    return (
-      <g className={this.props.className}>{this.renderPaths(this.props.paths)}</g>
-    )
-  }
-
-  renderPaths (paths) {
-    return paths.map(this.renderPath)
-  }
-
-  renderPath (path, index) {
-    return (
-      <path key={index} d={polygon(path)} />
-    )
-  }
-}
