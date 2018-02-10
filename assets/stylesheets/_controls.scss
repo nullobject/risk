@@ -6,18 +6,19 @@
   text-align: center;
 
   li {
-    border: 2px solid;
     border-radius: 50%;
     display: inline-block;
     margin-right: 0.5rem;
     width: 1.75rem;
     height: 1.75rem;
     line-height: 1.75rem;
-    transition: color 0.1s ease-in-out, background-color 0.1s ease-in-out;
+    transition: box-shadow 0.1s ease-in-out;
+    background-color: currentColor;
+
+    span { color: white; }
 
     &.selected {
-      background-color: currentColor;
-      span { color: white; }
+      box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
     }
 
     &.disabled {
