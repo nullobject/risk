@@ -1,8 +1,14 @@
-.player-0 { color: rgb(55, 126, 184); }
-.player-1 { color: rgb(228, 26, 28); }
-.player-2 { color: rgb(77, 175, 74); }
-.player-3 { color: rgb(152, 78, 163); }
-.player-4 { color: rgb(255, 127, 0); }
+$blue: rgb(55, 126, 184);
+$red: rgb(228, 26, 28);
+$green: rgb(77, 175, 74);
+$purple: rgb(152, 78, 163);
+$orange: rgb(255, 127, 0);
+
+.player-0 { color: $blue; }
+.player-1 { color: $red; }
+.player-2 { color: $green; }
+.player-3 { color: $purple; }
+.player-4 { color: $orange; }
 
 svg {
   // TODO: Move to the containing element.
@@ -33,7 +39,12 @@ svg {
 
       &.selected {
         fill-opacity: 0.8;
-        stroke-opacity: 1.0;
+
+        &.player-0 { stroke: lighten(saturate($blue,   80%), 20%); }
+        &.player-1 { stroke: lighten(saturate($red,    80%), 20%); }
+        &.player-2 { stroke: lighten(saturate($green,  80%), 20%); }
+        &.player-3 { stroke: lighten(saturate($purple, 80%), 20%); }
+        &.player-4 { stroke: lighten(saturate($orange, 80%), 20%); }
       }
 
       &.nearby {
