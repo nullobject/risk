@@ -9,6 +9,9 @@ start: node_modules
 build: node_modules
 	@node_modules/.bin/parcel build index.html --public-url ./
 
+sounds:
+	@node_modules/.bin/audiosprite -e mp3 -f howler -o assets/sounds assets/samples/*.wav
+
 deploy: build
 	@aws s3 sync ./dist/ s3://risk.joshbassett.info/ --acl public-read --delete --cache-control 'max-age=300'
 
@@ -18,10 +21,10 @@ unit: node_modules
 	@node_modules/.bin/mocha
 
 watch: node_modules
-	@./node_modules/.bin/mocha -w
+	@node_modules/.bin/mocha -w
 
 lint: node_modules
 	@node_modules/.bin/standard "src/**/*.js" "test/**/*.js"
 
 clean:
-	@rm -rf dist node_modules
+	@rm -rf dist node_modules sounds.*

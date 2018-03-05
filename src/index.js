@@ -9,6 +9,7 @@ import nanobus from 'nanobus'
 import nextMove from './ai'
 import {Signal} from 'bulb'
 import {fromBus} from './core'
+import {play} from './sound'
 import {range, set} from 'fkit'
 
 /**
@@ -33,8 +34,11 @@ const root = document.getElementById('root')
 // players.
 const players = range(0, PLAYERS).map(id => new Player(id, id === 0))
 
-// Create the game state.
-const game = buildGame(players)
+// Create the initial state.
+const initialState = {
+  game: buildGame(players),
+  muted: window.localStorage.getItem('muted') === 'true'
+}
 
 // Create the bus signal.
 const bus = nanobus()
@@ -43,22 +47,22 @@ const inputSignal = fromBus(bus)
 // Create the clock signal.
 const clockSignal = Signal.periodic(CLOCK_INTERVAL)
 
-// The game signal scans the game state transformer function over events on the
-// input signal.
-const gameSignal = inputSignal.scan(transformGameState, game)
+// The state signal scans the game state transformer function over events on
+// the input signal.
+const stateSignal = inputSignal.scan(transformer, initialState)
 
 // The player AI stream emits the moves calculated for the current player.
 const aiSignal = clockSignal
-  .sample(gameSignal)
-  .filter(game => !(game.over || game.currentPlayer.human))
-  .concatMap(game => nextMove(game.currentPlayer, game.world))
+  .sample(stateSignal)
+  .filter(state => !(state.game.over || state.game.currentPlayer.human))
+  .concatMap(state => nextMove(state.game.currentPlayer, state.game.world))
 
 const subscriptions = [
   // Emit events from the AI signal on the bus.
   aiSignal.subscribe(move => bus.emit(move.type, move)),
 
-  // Render the UI whenever the game property changes.
-  gameSignal.subscribe(game => ReactDOM.render(<RootView game={game} bus={bus} />, root))
+  // Render the UI whenever the state changes.
+  stateSignal.subscribe(state => ReactDOM.render(<RootView bus={bus} state={state} />, root))
 ]
 
 if (module.hot) {
@@ -68,29 +72,43 @@ if (module.hot) {
   })
 }
 
+/**
+ * Builds a new game.
+ *
+ * @param players The players of the game.
+ * @returns A new game.
+ */
 function buildGame (players) {
   const world = WorldBuilder.build(WIDTH, HEIGHT)
   return new Game(players, world)
 }
 
 /**
- * Applies the event to yield a new game state.
+ * Applies an event to yield a new state.
  *
- * @param game A game.
+ * @param state The current state.
  * @param event An event.
  * @returns A new game.
  */
-function transformGameState (game, event) {
-  switch (event.type) {
-    case 'end-turn':
-      return game.endTurn()
-    case 'select-country':
-      return game.selectCountry(event.country)
-    case 'pause':
-      return set('paused', !game.paused, game)
-    case 'restart':
-      return buildGame(game.players)
-    default:
-      return game
+function transformer (state, event) {
+  let {game, muted} = state
+
+  console.log(event)
+
+  if (event.type === 'end-turn') {
+    game = game.endTurn()
+  } else if (event.type === 'select-country') {
+    const result = game.selectCountry(event.country)
+    game = result.game
+    if (!muted) { play(result.action) }
+  } else if (event.type === 'pause') {
+    game = set('paused', !game.paused, game)
+  } else if (event.type === 'mute') {
+    muted = !muted
+    window.localStorage.setItem('muted', muted)
+  } else if (event.type === 'restart') {
+    game = buildGame(game.players)
   }
+
+  return {...state, game, muted}
 }
