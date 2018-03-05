@@ -7,7 +7,7 @@ import log from './log'
  * Returns true if the country is occupied by the given player, false
  * otherwise.
  */
-function occupiedBy (player) {
+function isOccupiedBy (player) {
   return F.compose(F.equal(player), F.get('player'))
 }
 
@@ -26,7 +26,7 @@ export default class World {
    * Returns the countries occupied by a player.
    */
   countriesOccupiedBy (player) {
-    return this.countries.filter(occupiedBy(player))
+    return this.countries.filter(isOccupiedBy(player))
   }
 
   /**
@@ -41,6 +41,13 @@ export default class World {
    */
   neighbouring (a, b) {
     return this.graph.adjacent(a.id, b.id)
+  }
+
+  /**
+   * Returns the player who occupies the given `country`.
+   */
+  occupier (country) {
+    return this.graph.get(country.id).player
   }
 
   /**

@@ -1,4 +1,4 @@
-import * as F from 'fkit'
+import {copy, elemIndex, get, head, set, sum} from 'fkit'
 import log from './log'
 
 export default class Game {
@@ -8,7 +8,7 @@ export default class Game {
 
     this.world = world
     this.players = players
-    this.currentPlayer = F.head(players)
+    this.currentPlayer = head(players)
     this.selectedCountry = null
   }
 
@@ -54,10 +54,10 @@ export default class Game {
    * Returns the total number of armies for a given player.
    */
   armiesForPlayer (player) {
-    return F.sum(
+    return sum(
       this.world
         .countriesOccupiedBy(player)
-        .map(F.get('armies'))
+        .map(get('armies'))
     )
   }
 
@@ -102,7 +102,7 @@ export default class Game {
     log.debug('Game#endTurn')
 
     // Find the index of the current and next players.
-    const i = F.elemIndex(this.currentPlayer, this.alivePlayers)
+    const i = elemIndex(this.currentPlayer, this.alivePlayers)
     const j = (i + 1) % this.alivePlayers.length
 
     return this.selectPlayer(this.alivePlayers[j])
@@ -122,7 +122,7 @@ export default class Game {
       ? this.world.reinforce(this.currentPlayer)
       : this.world
 
-    return F.copy(this, {
+    return copy(this, {
       currentPlayer: player,
       selectedCountry: null,
       world
@@ -133,17 +133,24 @@ export default class Game {
    * Selects a given country and returns a new game state.
    */
   selectCountry (country) {
+    let game = this
+    let action
+
     log.debug('Game#selectCountry')
 
     if (this.canMoveToCountry(country)) {
-      return this.moveToCountry(country)
-    } else if (this.canUnsetCountry(country)) {
-      return F.set('selectedCountry', null, this)
-    } else if (this.canSetCountry(country)) {
-      return F.set('selectedCountry', country, this)
-    } else {
-      return this
+      game = game.moveToCountry(country)
+      const won = game.world.occupier(country) === this.currentPlayer
+      action = won ? 'move' : 'defend'
+    } else if (game.canUnsetCountry(country)) {
+      game = set('selectedCountry', null, this)
+      action = 'select'
+    } else if (game.canSetCountry(country)) {
+      game = set('selectedCountry', country, this)
+      action = 'select'
     }
+
+    return {game, action}
   }
 
   /**
@@ -152,13 +159,17 @@ export default class Game {
    * attack.
    */
   moveToCountry (country) {
+    let world
+
     log.debug('Game#moveToCountry')
 
-    let world = country.player
-      ? this.world.attack(this.selectedCountry, country)
-      : this.world.move(this.selectedCountry, country)
+    if (country.player) {
+      world = this.world.attack(this.selectedCountry, country)
+    } else {
+      world = this.world.move(this.selectedCountry, country)
+    }
 
-    return F.copy(this, {
+    return copy(this, {
       selectedCountry: null,
       world: world
     })

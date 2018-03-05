@@ -5,12 +5,13 @@ import React from 'react'
 import WorldView from './world_view'
 import styles from '../../assets/stylesheets/styles.scss'
 
-export default ({bus, game}) =>
+export default ({bus, game, muted}) =>
   <div className={styles.game}>
     <header>
       <PlayersView game={game} />
       <nav>
         <a href='#' onClick={() => bus.emit('pause')}><span className={styles['icon-help']} /></a>
+        <a href='#' onClick={() => bus.emit('mute')}><span className={muted ? styles['icon-bell-slash'] : styles['icon-bell']} /></a>
       </nav>
     </header>
 
