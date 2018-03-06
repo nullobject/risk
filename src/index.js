@@ -93,8 +93,6 @@ function buildGame (players) {
 function transformer (state, event) {
   let {game, muted} = state
 
-  console.log(event)
-
   if (event.type === 'end-turn') {
     game = game.endTurn()
   } else if (event.type === 'select-country') {
@@ -108,6 +106,12 @@ function transformer (state, event) {
     window.localStorage.setItem('muted', muted)
   } else if (event.type === 'restart') {
     game = buildGame(game.players)
+  }
+
+  if (!muted && game.win) {
+    play('win')
+  } else if (!muted && game.over) {
+    play('lose')
   }
 
   return {...state, game, muted}
