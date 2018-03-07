@@ -10,7 +10,7 @@ build: node_modules
 	@node_modules/.bin/parcel build index.html --public-url ./
 
 sounds:
-	@node_modules/.bin/audiosprite -e mp3 -f howler -o assets/sounds assets/samples/*.wav
+	@node_modules/.bin/audiosprite -e mp3 -f howler -o assets/sounds assets/audio/*.wav
 
 deploy: build
 	@aws s3 sync ./dist/ s3://risk.joshbassett.info/ --acl public-read --delete --cache-control 'max-age=300'
