@@ -40,6 +40,10 @@ svg {
         pointer-events: all;
       }
 
+      &.nearby {
+        -webkit-animation: pulsate 1.0s ease-in-out 0s infinite alternate;
+      }
+
       &.selected {
         fill-opacity: 0.8;
 
@@ -48,10 +52,6 @@ svg {
         &.player-2 { stroke: lighten(saturate($green,  80%), 20%); }
         &.player-3 { stroke: lighten(saturate($purple, 80%), 20%); }
         &.player-4 { stroke: lighten(saturate($orange, 80%), 20%); }
-      }
-
-      &.nearby {
-        -webkit-animation: pulsate 1.0s ease-in-out 0s infinite alternate;
       }
     }
 

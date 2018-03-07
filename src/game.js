@@ -65,7 +65,7 @@ export default class Game {
    * Returns true if the current player can select a given country, false
    * otherwise.
    */
-  canSetCountry (country) {
+  canSelectCountry (country) {
     return country !== null && country.player === this.currentPlayer
   }
 
@@ -73,7 +73,7 @@ export default class Game {
    * Returns true if the current player can deselect a given country, false
    * otherwise.
    */
-  canUnsetCountry (country) {
+  canDeselectCountry (country) {
     return country !== null &&
       country.player === this.currentPlayer &&
       country === this.selectedCountry
@@ -138,15 +138,15 @@ export default class Game {
 
     log.debug('Game#selectCountry')
 
-    if (this.canMoveToCountry(country)) {
+    if (game.canMoveToCountry(country)) {
       game = game.moveToCountry(country)
-      const won = game.world.occupier(country) === this.currentPlayer
+      const won = game.world.occupier(country) === game.currentPlayer
       action = won ? 'move' : 'defend'
-    } else if (game.canUnsetCountry(country)) {
-      game = set('selectedCountry', null, this)
+    } else if (game.canDeselectCountry(country)) {
+      game = set('selectedCountry', null, game)
       action = 'select'
-    } else if (game.canSetCountry(country)) {
-      game = set('selectedCountry', country, this)
+    } else if (game.canSelectCountry(country)) {
+      game = set('selectedCountry', country, game)
       action = 'select'
     }
 

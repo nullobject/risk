@@ -9,32 +9,20 @@ export default ({bus, cells, game}) =>
     {renderCells(game, cells)}
   </g>
 
-function isNearby (game, country) {
-  return game.canMoveToCountry(country)
-}
-
-function isSelected (game, country) {
-  return country === game.selectedCountry
-}
-
-function isEnabled (game, country) {
-  return game.canSetCountry(country) || game.canMoveToCountry(country)
-}
-
 function renderCountries (bus, game) {
   return game.world.countries.map(country => {
-    const nearby = isNearby(game, country)
-    const selected = isSelected(game, country)
-    const enabled = isEnabled(game, country)
+    const enabled = game.canSelectCountry(country) || game.canMoveToCountry(country)
+    const nearby = game.canMoveToCountry(country)
+    const selected = country === game.selectedCountry
 
     return (
       <CountryView
-        key={country}
+        bus={bus}
         country={country}
         enabled={enabled}
+        key={country}
         nearby={nearby}
         selected={selected}
-        bus={bus}
       />
     )
   })
