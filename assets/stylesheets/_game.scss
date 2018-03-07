@@ -34,8 +34,11 @@ svg {
       stroke: currentColor;
       stroke-opacity: 0.8;
       stroke-width: 3px;
-      cursor: pointer;
-      pointer-events: all;
+
+      &.enabled {
+        cursor: pointer;
+        pointer-events: all;
+      }
 
       &.selected {
         fill-opacity: 0.8;

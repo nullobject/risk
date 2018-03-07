@@ -2,11 +2,12 @@ import React from 'react'
 import classnames from 'classnames'
 import styles from '../../assets/stylesheets/styles.scss'
 
-export default ({bus, country, nearby, selected}) => {
+export default ({bus, country, enabled, nearby, selected}) => {
   const className = classnames(
     styles[country.player],
     styles.country,
     {
+      [styles.enabled]: enabled,
       [styles.nearby]: nearby,
       [styles.selected]: selected
     }
