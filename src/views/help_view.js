@@ -9,18 +9,27 @@ export default ({bus}) =>
 
       <h2>How to Play</h2>
 
-      <p>The game of Risk is played with two or more players on a map. The object of the
-      game is for a player to defeat the other players on the map. Players take turns
-      advancing their armies or attacking other countries.</p>
+      <p>The game of Risk is played on a map divided up into countries. You
+      control the blue player, the other players are all controlled by the computer.
+      The players all take turns advancing their armies and attacking other
+      countries. The object of the game is to defeat all the other players on the
+      map.</p>
 
-      <p>During their turn, a player chooses one of their occupied countries and a
-      neighbouring country. If a neighbouring country is occupied then the player
-      will attack, otherwise the player will move armies into the unoccupied country.
-      A player may only move or attack from an occupied country with two or more
-      armies. During a turn a player can move or attack as many times as they wish.</p>
+      <p>During their turn, a player selects one of their occupied countries
+      and a neighbouring country. If the neighbouring country is already occupied by
+      another player, then the player will attack. Otherwise the player will immediately move
+      their armies into the unoccupied territory. During their turn, a player can move or attack as many times as they wish.</p>
 
-      <p>At the end of their turn, a player is rewarded a number of additional armies.
-      They can place these armies in any of their occupied countries.</p>
+      <p>A player may only mount an attack from a country that contains at
+      least two armies. If they win the battle, then the player move into the new
+      territory - although they may lose some armies during the battle. If the
+      battle is lost, then the player will lose all of their armies in the attacking
+      country.</p>
+
+      <p>At the end of their turn, a player is awarded additional armies. The
+      number of additional armies awarded is equal to the size of the largest
+      contiguous group of countries occupied by the player. The additional armies are
+      automatically distributed amoung the player's countries.</p>
 
       <h2>Credits</h2>
 
