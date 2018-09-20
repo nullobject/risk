@@ -7,7 +7,7 @@ start: node_modules
 	@node_modules/.bin/parcel -p 4001 index.html
 
 build: node_modules
-	@node_modules/.bin/parcel build index.html --public-url ./
+	@node_modules/.bin/parcel build index.html --public-url .
 
 sounds:
 	@node_modules/.bin/audiosprite -e mp3 -f howler -o assets/sounds assets/audio/*.wav
