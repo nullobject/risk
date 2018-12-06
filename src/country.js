@@ -1,4 +1,4 @@
-import {add, compose, min, update} from 'fkit'
+import { add, compose, min, update } from 'fkit'
 
 export default class Country {
   constructor (id, size, polygon, slots) {

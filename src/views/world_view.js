@@ -3,7 +3,7 @@ import PathsView from './paths_view'
 import React from 'react'
 import styles from '../../assets/stylesheets/styles.scss'
 
-export default ({bus, cells, game}) =>
+export default ({ bus, cells, game }) =>
   <g className={styles.world}>
     <g className={styles.countries}>{renderCountries(bus, game)}</g>
     {renderCells(game, cells)}

@@ -2,7 +2,7 @@ import React from 'react'
 import SocialView from './social_view'
 import styles from '../../assets/stylesheets/styles.scss'
 
-export default ({bus}) =>
+export default ({ bus }) =>
   <div className={styles.modal} onClick={() => bus.emit('pause')}>
     <div className={styles.container}>
       <h1>Risk</h1>

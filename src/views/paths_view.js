@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default ({className, paths}) =>
+export default ({ className, paths }) =>
   <g className={className}>
     {paths.map((path, index) => <path key={index} d={polygon(path)} />)}
   </g>

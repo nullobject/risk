@@ -1,8 +1,8 @@
-import {compose, eq, find, get} from 'fkit'
+import { compose, eq, find, get } from 'fkit'
 import factory from './support/factory'
 import rewire from 'rewire'
 import sinon from 'sinon'
-import {assert} from 'chai'
+import { assert } from 'chai'
 
 const World = rewire('../src/world')
 
@@ -137,7 +137,7 @@ describe('World', () => {
   describe('#reinforce', () => {
     beforeEach(() => {
       sandbox.stub(reinforcement, 'depthIndex').returns([['a', 'b', 'c']])
-      sandbox.stub(reinforcement, 'reinforcementMap').returns({a: 1, b: 1, c: 1});
+      sandbox.stub(reinforcement, 'reinforcementMap').returns({ a: 1, b: 1, c: 1 });
       [x, y, z] = reinforce(world, p)
     })
 

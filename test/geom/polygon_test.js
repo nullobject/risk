@@ -1,6 +1,6 @@
 import Point from '../../src/geom/point'
 import Polygon from '../../src/geom/polygon'
-import {assert} from 'chai'
+import { assert } from 'chai'
 
 describe('Polygon', () => {
   const polygon = new Polygon([

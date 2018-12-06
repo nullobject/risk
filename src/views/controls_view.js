@@ -4,7 +4,7 @@ import styles from '../../assets/stylesheets/styles.scss'
 
 const PLAYER_NAMES = ['your', "red's", "green's", "purple's", "orange's"]
 
-export default ({bus, currentPlayer}) => {
+export default ({ bus, currentPlayer }) => {
   const text = currentPlayer ? `It's ${PLAYER_NAMES[currentPlayer.id]} turn.` : ''
 
   return (

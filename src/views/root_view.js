@@ -4,7 +4,7 @@ import GameOverView from './game_over_view'
 import HelpView from './help_view'
 import React from 'react'
 
-export default ({bus, state: {game, muted}}) =>
+export default ({ bus, state: { game, muted } }) =>
   <React.Fragment>
     <GameView bus={bus} game={game} muted={muted} />
     {game.paused ? <HelpView bus={bus} /> : null}

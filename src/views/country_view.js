@@ -2,7 +2,7 @@ import React from 'react'
 import classnames from 'classnames'
 import styles from '../../assets/stylesheets/styles.scss'
 
-export default ({bus, country, enabled, nearby, selected}) => {
+export default ({ bus, country, enabled, nearby, selected }) => {
   const className = classnames(
     styles[country.player],
     styles.country,
@@ -18,7 +18,7 @@ export default ({bus, country, enabled, nearby, selected}) => {
       <polygon
         className={className}
         points={country.polygon}
-        onClick={() => bus.emit('select-country', {country})}
+        onClick={() => bus.emit('select-country', { country })}
       />
       {renderSlots(country)}
     </g>
@@ -27,7 +27,7 @@ export default ({bus, country, enabled, nearby, selected}) => {
 
 function renderSlots (country) {
   return country.slots.map((polygon, index) => {
-    const classes = classnames(styles.slot, {[styles.selected]: index < country.armies})
+    const classes = classnames(styles.slot, { [styles.selected]: index < country.armies })
     return <polygon className={classnames(classes)} key={index} points={polygon} />
   })
 }

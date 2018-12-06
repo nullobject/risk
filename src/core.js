@@ -5,7 +5,7 @@
  */
 
 import * as F from 'fkit'
-import {Signal} from 'bulb'
+import { Signal } from 'bulb'
 
 /**
  * Rolls `n` dice and returns the sum of their values.
@@ -88,7 +88,7 @@ export function distribute (n, as) {
 export function fromBus (bus) {
   return new Signal(emit => {
     // Emit a value with the event type and data combined.
-    const handler = (type, data) => emit.next({...data, type})
+    const handler = (type, data) => emit.next({ ...data, type })
 
     bus.addListener('*', handler)
     return () => bus.removeListener('*', handler)

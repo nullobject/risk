@@ -58,7 +58,7 @@ export default class World {
     const as = F.sample(players.length, this.countries)
 
     const bs = as.map((country, index) =>
-      F.copy(country, {player: players[index], armies: 2})
+      F.copy(country, { player: players[index], armies: 2 })
     )
 
     return F.set('graph', this.graph.merge(core.toVertices(bs)), this)
@@ -75,7 +75,7 @@ export default class World {
     const n = F.min(s.armies - 1, t.slots.length)
 
     const u = F.set('armies', s.armies - n, s)
-    const v = F.copy(t, {armies: n, player: s.player})
+    const v = F.copy(t, { armies: n, player: s.player })
 
     return F.set('graph', this.graph.merge(core.toVertices([u, v])), this)
   }
@@ -120,7 +120,7 @@ export default class World {
     // Calculate the outcome for a win.
     const win = () => {
       const u = F.set('armies', s.armies - movers, s)
-      const v = F.copy(t, {armies: F.max(movers - attackerCasualties, 1), player: s.player})
+      const v = F.copy(t, { armies: F.max(movers - attackerCasualties, 1), player: s.player })
       return [u, v]
     }
 

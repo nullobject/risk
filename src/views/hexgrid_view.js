@@ -5,7 +5,7 @@ import styles from '../../assets/stylesheets/styles.scss'
 const TILE_COLS = 3
 const TILE_ROWS = 3
 
-export default ({hexgrid, height, width}) => {
+export default ({ hexgrid, height, width }) => {
   // Calculate the dimensions of the tile.
   const tileWidth = hexgrid.width * 2
   const tileHeight = hexgrid.height * 2

@@ -1,6 +1,6 @@
 import * as F from 'fkit'
 import log from './log'
-import {Signal} from 'bulb'
+import { Signal } from 'bulb'
 
 /**
  * Returns true if the country is not occupied by the given player, false
@@ -50,13 +50,13 @@ const nextMove = F.curry((player, world) => {
 
     if (targetCountry) {
       return Signal.fromArray([
-        {type: 'select-country', country: sourceCountry},
-        {type: 'select-country', country: targetCountry}
+        { type: 'select-country', country: sourceCountry },
+        { type: 'select-country', country: targetCountry }
       ])
     }
   }
 
-  return Signal.of({type: 'end-turn'})
+  return Signal.of({ type: 'end-turn' })
 })
 
 export default nextMove

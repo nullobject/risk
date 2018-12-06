@@ -1,13 +1,13 @@
 import Game from '../src/game'
 import sinon from 'sinon'
-import {assert} from 'chai'
+import { assert } from 'chai'
 
 describe('Game', () => {
   let sandbox, game
 
   // Player stubs.
-  const computer = {human: false}
-  const human = {human: true}
+  const computer = { human: false }
+  const human = { human: true }
 
   // Country stubs.
   const source = {}

@@ -1,4 +1,4 @@
-import {copy, elemIndex, get, head, set, sum} from 'fkit'
+import { copy, elemIndex, get, head, set, sum } from 'fkit'
 import log from './log'
 
 export default class Game {
@@ -150,7 +150,7 @@ export default class Game {
       action = 'select'
     }
 
-    return {game, action}
+    return { game, action }
   }
 
   /**
