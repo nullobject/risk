@@ -21,7 +21,7 @@ export default ({bus}) =>
       their armies into the unoccupied territory. During their turn, a player can move or attack as many times as they wish.</p>
 
       <p>A player may only mount an attack from a country that contains at
-      least two armies. If they win the battle, then the player move into the new
+      least two armies. If they win the battle, then the player moves into the new
       territory - although they may lose some armies during the battle. If the
       battle is lost, then the player will lose all of their armies in the attacking
       country.</p>
