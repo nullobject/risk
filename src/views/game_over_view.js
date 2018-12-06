@@ -4,7 +4,7 @@ import SocialView from './social_view'
 import classnames from 'classnames'
 import styles from '../../assets/stylesheets/styles.scss'
 
-export default ({bus, win}) =>
+export default ({ bus, win }) =>
   <div className={classnames(styles.modal, styles.row)}>
     <div className={classnames(styles.container, styles['align-self-center'])}>
       <h1>{win ? 'You Win' : 'You Lose'}</h1>

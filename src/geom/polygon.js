@@ -1,5 +1,5 @@
 import clipper from '../../lib/clipper'
-import {curry, compare} from 'fkit'
+import { curry, compare } from 'fkit'
 import Point from './point'
 
 const SCALE = 100
@@ -8,7 +8,7 @@ const SCALE = 100
  * Converts a given polygon to a clipper path.
  */
 function toPath (polygon) {
-  const path = polygon.vertices.map(point => { return {X: point.x, Y: point.y} })
+  const path = polygon.vertices.map(point => { return { X: point.x, Y: point.y } })
   clipper.JS.ScaleUpPath(path, SCALE)
   return path
 }

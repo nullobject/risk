@@ -1,5 +1,5 @@
 import * as core from '../src/core'
-import {assert} from 'chai'
+import { assert } from 'chai'
 
 describe('core', () => {
   describe('.distribute', () => {

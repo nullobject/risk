@@ -7,10 +7,10 @@ import RootView from './views/root_view'
 import log from './log'
 import nanobus from 'nanobus'
 import nextMove from './ai'
-import {Signal} from 'bulb'
-import {fromBus} from './core'
-import {play} from './sound'
-import {range, set} from 'fkit'
+import { Signal } from 'bulb'
+import { fromBus } from './core'
+import { play } from './sound'
+import { range, set } from 'fkit'
 
 /**
  * The number of milliseconds between clock ticks.
@@ -91,7 +91,7 @@ function buildGame (players) {
  * @returns A new game.
  */
 function transformer (state, event) {
-  let {game, muted} = state
+  let { game, muted } = state
 
   if (event.type === 'end-turn') {
     game = game.endTurn()
@@ -114,5 +114,5 @@ function transformer (state, event) {
     play('lose')
   }
 
-  return {...state, game, muted}
+  return { ...state, game, muted }
 }

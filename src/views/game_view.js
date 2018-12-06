@@ -5,7 +5,7 @@ import React from 'react'
 import WorldView from './world_view'
 import styles from '../../assets/stylesheets/styles.scss'
 
-export default ({bus, game, muted}) =>
+export default ({ bus, game, muted }) =>
   <div className={styles.game}>
     <header>
       <PlayersView game={game} />

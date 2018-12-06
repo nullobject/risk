@@ -1,5 +1,5 @@
 import factory from './support/factory'
-import {assert} from 'chai'
+import { assert } from 'chai'
 
 describe('Country', () => {
   const country = factory.buildCountry(1, [2, 3], 2, 3)

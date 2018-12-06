@@ -4,7 +4,7 @@
  * @module
  */
 
-import {compose, range} from 'fkit'
+import { compose, range } from 'fkit'
 import Point from './geom/point'
 import Polygon from './geom/polygon'
 import Voronoi from '../lib/voronoi'
@@ -15,7 +15,7 @@ import Voronoi from '../lib/voronoi'
  */
 export function tessellationFunction (width, height) {
   const voronoi = new Voronoi()
-  const box = {xl: 0, xr: width, yt: 0, yb: height}
+  const box = { xl: 0, xr: width, yt: 0, yb: height }
 
   return points => {
     const diagram = voronoi.compute(points, box)

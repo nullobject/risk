@@ -1,5 +1,5 @@
 import * as core from '../../src/core'
-import {array} from 'fkit'
+import { array } from 'fkit'
 import Country from '../../src/country'
 import Graph from '../../src/graph'
 import World from '../../src/world'
