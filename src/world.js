@@ -1,4 +1,5 @@
-import * as F from 'fkit'
+import { compose, copy, equal, get, max, min, pairs, sample, set, sum } from 'fkit'
+
 import * as core from './core'
 import * as reinforcement from './reinforcement'
 import log from './log'
@@ -8,7 +9,7 @@ import log from './log'
  * otherwise.
  */
 function isOccupiedBy (player) {
-  return F.compose(F.equal(player), F.get('player'))
+  return compose(equal(player), get('player'))
 }
 
 export default class World {
@@ -55,13 +56,13 @@ export default class World {
    * state.
    */
   assignPlayers (players) {
-    const as = F.sample(players.length, this.countries)
+    const as = sample(players.length, this.countries)
 
     const bs = as.map((country, index) =>
-      F.copy(country, { player: players[index], armies: 2 })
+      copy(country, { player: players[index], armies: 2 })
     )
 
-    return F.set('graph', this.graph.merge(core.toVertices(bs)), this)
+    return set('graph', this.graph.merge(core.toVertices(bs)), this)
   }
 
   /**
@@ -72,12 +73,12 @@ export default class World {
     log.debug('World#move')
 
     // Calculate the number of armies to move.
-    const n = F.min(s.armies - 1, t.slots.length)
+    const n = min(s.armies - 1, t.slots.length)
 
-    const u = F.set('armies', s.armies - n, s)
-    const v = F.copy(t, { armies: n, player: s.player })
+    const u = set('armies', s.armies - n, s)
+    const v = copy(t, { armies: n, player: s.player })
 
-    return F.set('graph', this.graph.merge(core.toVertices([u, v])), this)
+    return set('graph', this.graph.merge(core.toVertices([u, v])), this)
   }
 
   /**
@@ -103,8 +104,8 @@ export default class World {
     // Roll the dice!
     const attackerDice = core.rollDice(s.armies)
     const defenderDice = core.rollDice(t.armies)
-    const attackerTotal = F.sum(attackerDice)
-    const defenderTotal = F.sum(defenderDice)
+    const attackerTotal = sum(attackerDice)
+    const defenderTotal = sum(defenderDice)
     const delta = attackerTotal - defenderTotal
 
     // Calculate the casualties.
@@ -115,26 +116,26 @@ export default class World {
     log.debug(`defender: ${defenderDice} (${defenderTotal}), casualties: ${defenderCasualties}`)
 
     // Calculate the number of armies to move.
-    const movers = F.min(s.armies - 1, t.slots.length)
+    const movers = min(s.armies - 1, t.slots.length)
 
     // Calculate the outcome for a win.
     const win = () => {
-      const u = F.set('armies', s.armies - movers, s)
-      const v = F.copy(t, { armies: F.max(movers - attackerCasualties, 1), player: s.player })
+      const u = set('armies', s.armies - movers, s)
+      const v = copy(t, { armies: max(movers - attackerCasualties, 1), player: s.player })
       return [u, v]
     }
 
     // Calculate the outcome for a loss.
     const lose = () => {
-      const u = F.set('armies', F.max(s.armies - attackerCasualties, 1), s)
-      const v = F.set('armies', F.max(t.armies - defenderCasualties, 1), t)
+      const u = set('armies', max(s.armies - attackerCasualties, 1), s)
+      const v = set('armies', max(t.armies - defenderCasualties, 1), t)
       return [u, v]
     }
 
     // Calculate the result.
     const as = delta > 0 ? win() : lose()
 
-    return F.set('graph', this.graph.merge(core.toVertices(as)), this)
+    return set('graph', this.graph.merge(core.toVertices(as)), this)
   }
 
   /**
@@ -150,10 +151,10 @@ export default class World {
     const depthIndex = reinforcement.depthIndex(this.graph, playerSubgraphs)
     const reinforcementMap = reinforcement.reinforcementMap(this.graph, playerSubgraphs, depthIndex)
 
-    const graph = F.pairs(reinforcementMap).reduce((graph, [key, n]) => {
+    const graph = pairs(reinforcementMap).reduce((graph, [key, n]) => {
       return graph.update(key, country => country.reinforce(n))
     }, this.graph)
 
-    return F.set('graph', graph, this)
+    return set('graph', graph, this)
   }
 }

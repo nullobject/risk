@@ -1,16 +1,17 @@
+import React from 'react'
+import { render } from 'react-dom'
+import nanobus from 'nanobus'
+import { range, set } from 'fkit'
+
 import * as WorldBuilder from './world_builder'
 import Game from './game'
 import Player from './player'
-import React from 'react'
-import ReactDOM from 'react-dom'
 import RootView from './views/root_view'
 import log from './log'
-import nanobus from 'nanobus'
 import nextMove from './ai'
 import { Signal } from 'bulb'
 import { fromBus } from './core'
 import { play } from './sound'
-import { range, set } from 'fkit'
 
 /**
  * The number of milliseconds between clock ticks.
@@ -62,7 +63,7 @@ const subscriptions = [
   aiSignal.subscribe(move => bus.emit(move.type, move)),
 
   // Render the UI whenever the state changes.
-  stateSignal.subscribe(state => ReactDOM.render(<RootView bus={bus} state={state} />, root))
+  stateSignal.subscribe(state => render(<RootView bus={bus} state={state} />, root))
 ]
 
 if (module.hot) {

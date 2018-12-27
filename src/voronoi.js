@@ -5,6 +5,7 @@
  */
 
 import { compose, range } from 'fkit'
+
 import Point from './geom/point'
 import Polygon from './geom/polygon'
 import Voronoi from '../lib/voronoi'

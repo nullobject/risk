@@ -1,9 +1,10 @@
+import { applyMethod, between, clamp, concat, curry, head, maximumBy, randomFloat, range, sortBy, take } from 'fkit'
+
 import * as core from './core'
 import * as voronoi from './voronoi'
 import Country from './country'
 import Graph from './graph'
 import Hexgrid from './geom/hexgrid'
-import * as F from 'fkit'
 import Point from './geom/point'
 import Polygon from './geom/polygon'
 import World from './world'
@@ -62,21 +63,21 @@ const MAX_COUNTRY_SIZE = 128
  */
 function calculateSlotPolygons (polygon, hexagons) {
   // Calculate the number of slots in the country.
-  const n = F.clamp(MIN_SLOTS, MAX_SLOTS, Math.sqrt(hexagons.length))
+  const n = clamp(MIN_SLOTS, MAX_SLOTS, Math.sqrt(hexagons.length))
 
   // Calculate the hexagon in the centre of the polygon.
-  const centreHexagon = F.head(F.sortBy(Polygon.distanceComparator(polygon), hexagons))
+  const centreHexagon = head(sortBy(Polygon.distanceComparator(polygon), hexagons))
 
   // Calculate the `n` hexagons in centre of the polygon.
-  const centreHexagons = F.take(n, F.sortBy(Polygon.distanceComparator(centreHexagon), hexagons))
+  const centreHexagons = take(n, sortBy(Polygon.distanceComparator(centreHexagon), hexagons))
 
-  return centreHexagons.map(F.applyMethod('offset', -SLOT_POLYGON_INSET))
+  return centreHexagons.map(applyMethod('offset', -SLOT_POLYGON_INSET))
 }
 
 /**
  * Merges the given set of hexagons inside the Voronoi cells into countries.
  */
-const calculateCountries = F.curry((hexagons, diagram) =>
+const calculateCountries = curry((hexagons, diagram) =>
   diagram.cells.map(cell => {
     // Find the hexagons inside the cell.
     const countryHexagons = hexagons.filter(hexagon =>
@@ -101,14 +102,14 @@ const calculateCountries = F.curry((hexagons, diagram) =>
 
 function calculateEdges (diagram) {
   // FIXME: FKit `concatMap` should handle arrays of strings properly.
-  return F.concat(diagram.cells.map(cell => {
+  return concat(diagram.cells.map(cell => {
     const a = cell.site.voronoiId
     return cell.getNeighborIds().map(b => [a.toString(), b.toString()])
   }))
 }
 
 // Filters countries that are too small/big.
-const byCountrySize = country => F.between(MIN_COUNTRY_SIZE, MAX_COUNTRY_SIZE, country.size)
+const byCountrySize = country => between(MIN_COUNTRY_SIZE, MAX_COUNTRY_SIZE, country.size)
 
 /**
  * Builds a new world with the given width and height.
@@ -122,8 +123,8 @@ export function build (width, height) {
   const t = voronoi.tessellationFunction(width, height)
 
   // Generate a list of random "seed" sites within the clipping region.
-  const sites = F.range(0, SEEDS).map(() =>
-    new Point(F.randomFloat(0, width), F.randomFloat(0, height))
+  const sites = range(0, SEEDS).map(() =>
+    new Point(randomFloat(0, width), randomFloat(0, height))
   )
 
   // Calculate the Voronoi diagram.
@@ -141,7 +142,7 @@ export function build (width, height) {
     .connectedComponents()
 
   // Choose the largest subgraph.
-  const graph = F.maximumBy(core.bySize, subgraphs)
+  const graph = maximumBy(core.bySize, subgraphs)
 
   // Calculate the Voronoi cells for debugging.
   const cells = diagram.cells.map(voronoi.verticesForCell)

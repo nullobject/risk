@@ -4,22 +4,22 @@
  * @module
  */
 
+import { List, Map, OrderedMap, OrderedSet, Set, Stack } from 'immutable'
 import { copy, curry } from 'fkit'
-import Immutable from 'immutable'
 
 function keySet (graph) {
   return graph.vertexMap.keySeq().toSet()
 }
 
 function addEdge (adjacencyMap, [k, j]) {
-  const kSet = adjacencyMap.get(k) || Immutable.Set()
-  const jSet = adjacencyMap.get(j) || Immutable.Set()
+  const kSet = adjacencyMap.get(k) || Set()
+  const jSet = adjacencyMap.get(j) || Set()
   return adjacencyMap.set(k, kSet.add(j)).set(j, jSet.add(k))
 }
 
 function removeEdge (adjacencyMap, [k, j]) {
-  const kSet = adjacencyMap.get(k) || Immutable.Set()
-  const jSet = adjacencyMap.get(j) || Immutable.Set()
+  const kSet = adjacencyMap.get(k) || Set()
+  const jSet = adjacencyMap.get(j) || Set()
   return adjacencyMap.set(k, kSet.delete(j)).set(j, jSet.delete(k))
 }
 
@@ -57,7 +57,7 @@ function traverse (graph, k) {
   })
 
   const [, keys] = traverse_(
-    [Immutable.Set(), Immutable.OrderedSet.of(k)],
+    [Set(), OrderedSet.of(k)],
     k
   )
 
@@ -66,8 +66,8 @@ function traverse (graph, k) {
 
 function shortestPathBy (graph, p, key) {
   const [path,, k] = shortestPathBy_([
-    Immutable.OrderedMap([[key, null]]),
-    Immutable.List.of(key),
+    OrderedMap([[key, null]]),
+    List.of(key),
     null
   ])
 
@@ -97,7 +97,7 @@ function shortestPathBy (graph, p, key) {
   }
 
   function reconstructPath (k, path) {
-    let result = Immutable.Stack()
+    let result = Stack()
 
     return k !== null
       ? reconstructPath_(result, path, k)
@@ -138,17 +138,17 @@ function connectedComponents (graph) {
 
   return traverseComponents(
     keys,
-    Immutable.OrderedSet()
+    OrderedSet()
   )
 }
 
 export default class Graph {
   constructor (vertices, edges) {
-    this.vertexMap = Immutable.Map(Object.entries(vertices))
+    this.vertexMap = Map(vertices)
 
     this.adjacencyMap = edges.reduce(
       addEdge,
-      Immutable.Map()
+      Map()
     )
   }
 
@@ -182,7 +182,7 @@ export default class Graph {
    * Merges the list of `as` into the graph.
    */
   merge (as) {
-    const bs = Immutable.Map(Object.entries(as))
+    const bs = Map(as)
     const vertexMap = this.vertexMap.merge(bs)
     return copy(this, { vertexMap })
   }
@@ -214,7 +214,7 @@ export default class Graph {
    */
   edges () {
     return this.adjacencyMap
-      .reduce(addEdges, Immutable.List())
+      .reduce(addEdges, List())
       .toArray()
 
     function addEdges (edges, kSet, k) {
@@ -263,7 +263,7 @@ export default class Graph {
    * graph.
    */
   adjacent (k, j) {
-    const kSet = this.adjacencyMap.get(k, Immutable.Set())
+    const kSet = this.adjacencyMap.get(k, Set())
     return kSet.has(j)
   }
 
@@ -271,7 +271,7 @@ export default class Graph {
    * Returns the keys of the vertices adjacent to the vertex with key `k`.
    */
   adjacentVertices (k) {
-    const kSet = this.adjacencyMap.get(k, Immutable.Set())
+    const kSet = this.adjacencyMap.get(k, Set())
     return kSet.toArray()
   }
 
@@ -280,7 +280,7 @@ export default class Graph {
    */
   adjacentValues (k) {
     const kSet = this.adjacencyMap.get(k)
-    return kSet.reduce((values, key) => values.push(this.get(key)), Immutable.List()).toArray()
+    return kSet.reduce((values, key) => values.push(this.get(key)), List()).toArray()
   }
 
   /**

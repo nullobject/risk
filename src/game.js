@@ -1,4 +1,5 @@
 import { copy, elemIndex, get, head, set, sum } from 'fkit'
+
 import log from './log'
 
 export default class Game {

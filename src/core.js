@@ -4,14 +4,14 @@
  * @module
  */
 
-import * as F from 'fkit'
 import { Signal } from 'bulb'
+import { array, compare, compose, id, randomInt, replicate, reverse, sort, sub, sum, uncurry, zip } from 'fkit'
 
 /**
  * Rolls `n` dice and returns the sum of their values.
  */
 export function rollDice (n) {
-  return F.array(n).map(() => F.randomInt(1, 6))
+  return array(n).map(() => randomInt(1, 6))
 }
 
 /**
@@ -27,37 +27,37 @@ export function toVertices (as) {
 /**
  * Reverse sorts a list using natural ordering.
  */
-export const reverseSort = F.compose(F.reverse, F.sort)
+export const reverseSort = compose(reverse, sort)
 
 /**
  * Size comparator.
  */
-export const bySize = (a, b) => F.compare(a.size, b.size)
+export const bySize = (a, b) => compare(a.size, b.size)
 
 /**
  * Reverse size comparator.
  */
-export const bySizeDescending = (a, b) => -F.compare(a.size, b.size)
+export const bySizeDescending = (a, b) => -compare(a.size, b.size)
 
 /**
  * Distributes `n` units round-robin using the availability list of `as`.
  */
 export function distribute (n, as) {
-  const bs = F.replicate(as.length, 0)
+  const bs = replicate(as.length, 0)
 
   return distributeInto(n, as, bs)
 
   // Recursively distributes `n` units into the list of `bs` using the
   // availability list of `as`.
   function distributeInto (n, as, bs) {
-    if (n <= 0 || F.sum(bs) >= F.sum(as)) {
+    if (n <= 0 || sum(bs) >= sum(as)) {
       return bs
     } else {
       // Calculate the difference list.
-      const cs = F.zip(bs, as).map(F.uncurry(F.sub))
+      const cs = zip(bs, as).map(uncurry(sub))
 
       // Calculate the number of units to distribute in the next pass.
-      const m = Math.min(n, cs.filter(F.id).length)
+      const m = Math.min(n, cs.filter(id).length)
 
       return distributeInto(n - m, as, pass(m, bs, cs))
     }

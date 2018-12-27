@@ -1,4 +1,5 @@
-import * as F from 'fkit'
+import { cartesian, compose, curry, range } from 'fkit'
+
 import Point from './point'
 import Polygon from './polygon'
 
@@ -50,7 +51,7 @@ export default class Hexgrid {
     this.height = this.radius + this.h + this.d
 
     // Calculates the vertices of a hexagon at a given coordinate.
-    this.hexagonVertices = F.curry((origin, coordinate) => {
+    this.hexagonVertices = curry((origin, coordinate) => {
       const position = calculatePosition(coordinate, this.width, this.height)
       return calculateVertices(origin.add(position), this.r, this.h, this.radius)
     })
@@ -62,13 +63,13 @@ export default class Hexgrid {
    */
   build (size, offset) {
     // Generate the coordinates of the cells in the hexgrid.
-    const coordinates = F.cartesian(F.range(0, size[0]), F.range(0, size[1]))
+    const coordinates = cartesian(range(0, size[0]), range(0, size[1]))
 
     // Calculate the origin of the hexgrid.
     const origin = new Point(this.width * offset[0], this.height * offset[1])
 
     // Create haxagons for every coordinate.
-    return coordinates.map(F.compose(vertices => new Polygon(vertices), this.hexagonVertices(origin)))
+    return coordinates.map(compose(vertices => new Polygon(vertices), this.hexagonVertices(origin)))
   }
 
   /**

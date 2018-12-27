@@ -1,4 +1,5 @@
-import * as F from 'fkit'
+import { concat, concatMap, empty, get, maximumBy, set, sum } from 'fkit'
+
 import * as core from './core'
 
 /**
@@ -14,12 +15,12 @@ export function depthIndex (graph, playerSubgraphs) {
   const player = playerSubgraphs[0].first().player
 
   // FIXME: FKit `concatMap` should handle arrays of strings properly.
-  const keys = F.concat(playerSubgraphs.map(subgraph => subgraph.keys()))
+  const keys = concat(playerSubgraphs.map(subgraph => subgraph.keys()))
 
   return keys.reduce((list, key) => {
     const path = graph.shortestPathBy(country => country.player !== player, key)
 
-    if (F.empty(path)) {
+    if (empty(path)) {
       throw new Error("Can't calculate depth map from empty path.")
     }
 
@@ -36,9 +37,9 @@ export function depthIndex (graph, playerSubgraphs) {
  * @param playerSubgraphs A list of player subgraphs.
  */
 function calculateTotalReinforcements (playerSubgraphs) {
-  const maxSubgraphSize = F.maximumBy(core.bySize, playerSubgraphs).size
-  const countries = F.concatMap(subgraph => subgraph.values(), playerSubgraphs)
-  const totalAvailableSlots = F.sum(countries.map(F.get('availableSlots')))
+  const maxSubgraphSize = maximumBy(core.bySize, playerSubgraphs).size
+  const countries = concatMap(subgraph => subgraph.values(), playerSubgraphs)
+  const totalAvailableSlots = sum(countries.map(get('availableSlots')))
   return Math.min(maxSubgraphSize, totalAvailableSlots)
 }
 
@@ -56,15 +57,15 @@ export function reinforcementMap (graph, playerSubgraphs, depthIndex) {
     const countries = keys.map(key => graph.get(key))
 
     // Calculate the availability list.
-    const as = countries.map(F.get('availableSlots'))
+    const as = countries.map(get('availableSlots'))
 
     // Calculate the distribution list.
     const bs = core.distribute(n, as)
 
-    n -= F.sum(bs)
+    n -= sum(bs)
 
     result = keys.reduce((result, key, index) => {
-      return F.set(key, bs[index], result)
+      return set(key, bs[index], result)
     }, result)
 
     return [n, result]

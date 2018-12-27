@@ -1,5 +1,6 @@
-import clipper from '../../lib/clipper'
 import { curry, compare } from 'fkit'
+
+import clipper from '../../lib/clipper'
 import Point from './point'
 
 const SCALE = 100

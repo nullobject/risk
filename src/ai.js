@@ -1,39 +1,40 @@
-import * as F from 'fkit'
-import log from './log'
 import { Signal } from 'bulb'
+import { any, compose, curry, head, get, gte, minimumBy, notEqual } from 'fkit'
+
+import log from './log'
 
 /**
  * Returns true if the country is not occupied by the given player, false
  * otherwise.
  */
 const notOccupiedByPlayer = player =>
-  F.compose(F.notEqual(player), F.get('player'))
+  compose(notEqual(player), get('player'))
 
 /**
  * Returns true if the player can attack/move neighbouring countries with the
  * given country, false otherwise.
  */
-const canMove = F.curry((player, world, country) => {
+const canMove = curry((player, world, country) => {
   const neighbouringCountries = world.countriesNeighbouring(country)
-  return F.any(notOccupiedByPlayer(player), neighbouringCountries)
+  return any(notOccupiedByPlayer(player), neighbouringCountries)
 })
 
 /**
  * Returns true if the country has more than two armies, false otherwise.
  */
-const withArmies = F.compose(F.gte(2), F.get('armies'))
+const withArmies = compose(gte(2), get('armies'))
 
 /**
  * Selects a target country using a heuristic function.
  */
-const selectTarget = F.minimumBy((a, b) => a.armies < b.armies)
+const selectTarget = minimumBy((a, b) => a.armies < b.armies)
 
 /**
  * Calculates the next move the given player and world state.
  *
  * @returns A new signal.
  */
-const nextMove = F.curry((player, world) => {
+const nextMove = curry((player, world) => {
   log.debug('AI.nextMove')
 
   const sourceCountries = world
@@ -41,7 +42,7 @@ const nextMove = F.curry((player, world) => {
     .filter(withArmies)
     .filter(canMove(player, world))
 
-  const sourceCountry = F.head(sourceCountries)
+  const sourceCountry = head(sourceCountries)
 
   if (sourceCountry) {
     const neighbouringCountries = world.countriesNeighbouring(sourceCountry)
