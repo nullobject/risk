@@ -1,7 +1,8 @@
+import React from 'react'
+
 import ControlsView from './controls_view'
 import HexgridView from './hexgrid_view'
 import PlayersView from './players_view'
-import React from 'react'
 import WorldView from './world_view'
 import styles from '../../assets/stylesheets/styles.scss'
 

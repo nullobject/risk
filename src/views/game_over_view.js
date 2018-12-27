@@ -1,7 +1,8 @@
-import ButtonView from './button_view'
 import React from 'react'
-import SocialView from './social_view'
 import classnames from 'classnames'
+
+import ButtonView from './button_view'
+import SocialView from './social_view'
 import styles from '../../assets/stylesheets/styles.scss'
 
 export default ({ bus, win }) =>

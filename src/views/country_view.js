@@ -1,5 +1,6 @@
 import React from 'react'
 import classnames from 'classnames'
+
 import styles from '../../assets/stylesheets/styles.scss'
 
 export default ({ bus, country, enabled, nearby, selected }) => {

@@ -1,4 +1,5 @@
 import React from 'react'
+
 import SocialView from './social_view'
 import styles from '../../assets/stylesheets/styles.scss'
 

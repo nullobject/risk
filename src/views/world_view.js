@@ -1,6 +1,7 @@
+import React from 'react'
+
 import CountryView from './country_view'
 import PathsView from './paths_view'
-import React from 'react'
 import styles from '../../assets/stylesheets/styles.scss'
 
 export default ({ bus, cells, game }) =>

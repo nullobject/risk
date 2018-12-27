@@ -1,4 +1,5 @@
 import React from 'react'
+
 import styles from '../../assets/stylesheets/styles.scss'
 
 const TWITTER_URL = 'https://twitter.com/intent/tweet?text=Wanna%20play%20some%20Risk%3F&url=https%3A%2F%2Frisk.joshbassett.info'

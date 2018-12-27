@@ -1,8 +1,9 @@
 import 'normalize.css'
-import GameView from './game_view'
-import GameOverView from './game_over_view'
-import HelpView from './help_view'
 import React from 'react'
+
+import GameOverView from './game_over_view'
+import GameView from './game_view'
+import HelpView from './help_view'
 
 export default ({ bus, state: { game, muted } }) =>
   <React.Fragment>
