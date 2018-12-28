@@ -1,6 +1,6 @@
 import React from 'react'
 
-import ButtonView from './button_view'
+import ButtonView from './ButtonView'
 import styles from '../../assets/stylesheets/styles.scss'
 
 const PLAYER_NAMES = ['your', "red's", "green's", "purple's", "orange's"]

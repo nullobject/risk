@@ -2,12 +2,12 @@ import { applyMethod, between, clamp, concat, curry, head, maximumBy, randomFloa
 
 import * as core from './core'
 import * as voronoi from './voronoi'
-import Country from './country'
-import Graph from './graph'
-import Hexgrid from './geom/hexgrid'
-import Point from './geom/point'
-import Polygon from './geom/polygon'
-import World from './world'
+import Country from './Country'
+import Graph from './Graph'
+import Hexgrid from './geom/Hexgrid'
+import Point from './geom/Point'
+import Polygon from './geom/Polygon'
+import World from './World'
 
 /**
  * Hexgrid cell size.

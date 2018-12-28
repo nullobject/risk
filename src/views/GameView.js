@@ -1,9 +1,9 @@
 import React from 'react'
 
-import ControlsView from './controls_view'
-import HexgridView from './hexgrid_view'
-import PlayersView from './players_view'
-import WorldView from './world_view'
+import ControlsView from './ControlsView'
+import HexgridView from './HexgridView'
+import PlayersView from './PlayersView'
+import WorldView from './WorldView'
 import styles from '../../assets/stylesheets/styles.scss'
 
 export default ({ bus, game, muted }) =>
