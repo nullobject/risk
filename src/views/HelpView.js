@@ -1,6 +1,6 @@
 import React from 'react'
 
-import SocialView from './social_view'
+import SocialView from './SocialView'
 import styles from '../../assets/stylesheets/styles.scss'
 
 export default ({ bus }) =>

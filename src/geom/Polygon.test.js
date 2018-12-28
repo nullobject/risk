@@ -1,6 +1,5 @@
-import Point from '../../src/geom/point'
-import Polygon from '../../src/geom/polygon'
-import { assert } from 'chai'
+import Point from './Point'
+import Polygon from './Polygon'
 
 describe('Polygon', () => {
   const polygon = new Polygon([
@@ -12,11 +11,11 @@ describe('Polygon', () => {
 
   describe('#containsPoint', () => {
     it('returns true if the polygon contains a given point', () => {
-      assert.isTrue(polygon.containsPoint(new Point(0, 0)))
+      expect(polygon.containsPoint(new Point(0, 0))).toBe(true)
     })
 
     it('returns false if the polygon does not contain a given point', () => {
-      assert.isFalse(polygon.containsPoint(new Point(2, 2)))
+      expect(polygon.containsPoint(new Point(2, 2))).toBe(false)
     })
   })
 })

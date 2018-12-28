@@ -1,7 +1,7 @@
 import { cartesian, compose, curry, range } from 'fkit'
 
-import Point from './point'
-import Polygon from './polygon'
+import Point from './Point'
+import Polygon from './Polygon'
 
 function degreesToRadians (degrees) {
   return degrees * Math.PI / 180

@@ -1,26 +1,25 @@
-import * as core from '../../src/core'
 import { array } from 'fkit'
-import Country from '../../src/country'
-import Graph from '../../src/graph'
-import World from '../../src/world'
 
-module.exports = {
-  buildCountry: function (id, player, armies, slots) {
-    const country = new Country()
+import * as core from '../../src/core'
+import Country from '../../src/Country'
+import Graph from '../../src/Graph'
+import World from '../../src/World'
 
-    country.id = id
-    country.player = player
-    country.armies = armies
-    country.slots = array(slots)
+export function buildCountry (id, player, armies, slots) {
+  const country = new Country()
 
-    return country
-  },
+  country.id = id
+  country.player = player
+  country.armies = armies
+  country.slots = array(slots)
 
-  buildWorld: function (countries) {
-    const world = new World()
+  return country
+}
 
-    world.graph = new Graph(core.toVertices(countries), [])
+export function buildWorld (countries) {
+  const world = new World()
 
-    return world
-  }
+  world.graph = new Graph(core.toVertices(countries), [])
+
+  return world
 }

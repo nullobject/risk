@@ -1,6 +1,5 @@
-import * as reinforcement from '../src/reinforcement'
-import Graph from '../src/graph'
-import { assert } from 'chai'
+import * as reinforcement from './reinforcement'
+import Graph from './Graph'
 
 describe('reinforcement', () => {
   const p = {}
@@ -31,8 +30,7 @@ describe('reinforcement', () => {
       const subgraphs = graph
         .filter(country => country.player === q)
         .connectedComponents()
-
-      assert.deepEqual(reinforcement.depthIndex(graph, subgraphs), [['b', 'c'], ['f', 'd', 'e']])
+      expect(reinforcement.depthIndex(graph, subgraphs)).toEqual([['b', 'c'], ['f', 'd', 'e']])
     })
   })
 
@@ -42,7 +40,7 @@ describe('reinforcement', () => {
         .filter(country => country.player === q)
         .connectedComponents()
       const depthIndex = [['b', 'c'], ['f', 'd', 'e']]
-      assert.deepEqual(reinforcement.reinforcementMap(graph, subgraphs, depthIndex), { 'b': 2, 'c': 1, 'd': 1, 'e': 0, 'f': 0 })
+      expect(reinforcement.reinforcementMap(graph, subgraphs, depthIndex)).toEqual({ 'b': 2, 'c': 1, 'd': 1, 'e': 0, 'f': 0 })
     })
   })
 })

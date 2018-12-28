@@ -18,10 +18,10 @@ deploy: build
 test: unit lint
 
 unit: node_modules
-	@node_modules/.bin/mocha
+	@node_modules/.bin/jest
 
 watch: node_modules
-	@node_modules/.bin/mocha -w
+	@node_modules/.bin/jest --watch
 
 lint: node_modules
 	@node_modules/.bin/standard "src/**/*.js" "test/**/*.js"
