@@ -88,7 +88,7 @@ export function distribute (n, as) {
 export function fromBus (bus) {
   return new Signal(emit => {
     // Emit a value with the event type and data combined.
-    const handler = (type, data) => emit.next({ ...data, type })
+    const handler = (type, data) => emit.value({ ...data, type })
 
     bus.addListener('*', handler)
     return () => bus.removeListener('*', handler)
