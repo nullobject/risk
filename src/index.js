@@ -59,11 +59,11 @@ const aiSignal = clockSignal
   .concatMap(state => nextMove(state.game.currentPlayer, state.game.world))
 
 const subscriptions = [
-  // Emit events from the AI signal on the bus.
-  aiSignal.subscribe(move => bus.emit(move.type, move)),
-
   // Render the UI whenever the state changes.
-  stateSignal.subscribe(state => render(<RootView bus={bus} state={state} />, root))
+  stateSignal.subscribe(state => render(<RootView bus={bus} state={state} />, root)),
+
+  // Emit events from the AI signal on the bus.
+  aiSignal.subscribe(move => bus.emit(move.type, move))
 ]
 
 if (module.hot) {
