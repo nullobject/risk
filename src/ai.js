@@ -1,5 +1,5 @@
 import { Signal } from 'bulb'
-import { any, compose, curry, head, get, gte, minimumBy, notEqual } from 'fkit'
+import { any, compose, curry, head, get, gte, minimumBy, neq } from 'fkit'
 
 import log from './log'
 
@@ -8,7 +8,7 @@ import log from './log'
  * otherwise.
  */
 const notOccupiedByPlayer = player =>
-  compose(notEqual(player), get('player'))
+  compose(neq(player), get('player'))
 
 /**
  * Returns true if the player can attack/move neighbouring countries with the

@@ -1,4 +1,4 @@
-import { compose, copy, equal, get, max, min, pairs, sample, set, sum } from 'fkit'
+import { compose, copy, eq, get, max, min, pairs, sample, set, sum } from 'fkit'
 
 import * as core from './core'
 import * as reinforcement from './reinforcement'
@@ -9,7 +9,7 @@ import log from './log'
  * otherwise.
  */
 function isOccupiedBy (player) {
-  return compose(equal(player), get('player'))
+  return compose(eq(player), get('player'))
 }
 
 export default class World {
