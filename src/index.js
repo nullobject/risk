@@ -53,8 +53,8 @@ const clockSignal = Signal.periodic(CLOCK_INTERVAL)
 const stateSignal = inputSignal.scan(transformer, initialState)
 
 // The player AI stream emits the moves calculated for the current player.
-const aiSignal = clockSignal
-  .sample(stateSignal)
+const aiSignal = stateSignal
+  .sample(clockSignal)
   .filter(state => !(state.game.over || state.game.currentPlayer.human))
   .concatMap(state => nextMove(state.game.currentPlayer, state.game.world))
 
