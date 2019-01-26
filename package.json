@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "autoprefixer": "^9.1.5",
-    "bulb": "^2.0.0",
+    "bulb": "^3.0.2",
     "classnames": "^2.2.6",
     "fkit": "^1.5.0",
     "howler": "^2.1.1",
