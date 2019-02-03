@@ -4,7 +4,6 @@
  * @module
  */
 
-import { Signal } from 'bulb'
 import { array, compare, compose, id, randomInt, replicate, reverse, sort, sub, sum, uncurry, zip } from 'fkit'
 
 /**
@@ -77,20 +76,4 @@ export function distribute (n, as) {
 
     return ds
   }
-}
-
-/**
- * Creates a new signal from a bus.
- *
- * @param bus A bus.
- * @returns A new signal.
- */
-export function fromBus (bus) {
-  return new Signal(emit => {
-    // Emit a value with the event type and data combined.
-    const handler = (type, data) => emit.value({ ...data, type })
-
-    bus.addListener('*', handler)
-    return () => bus.removeListener('*', handler)
-  })
 }

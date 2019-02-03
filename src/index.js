@@ -1,7 +1,7 @@
 import React from 'react'
-import { render } from 'react-dom'
-import nanobus from 'nanobus'
+import { Bus, Signal } from 'bulb'
 import { range, set } from 'fkit'
+import { render } from 'react-dom'
 
 import * as WorldBuilder from './world_builder'
 import Game from './Game'
@@ -9,8 +9,6 @@ import Player from './Player'
 import RootView from './views/RootView'
 import log from './log'
 import nextMove from './ai'
-import { Signal } from 'bulb'
-import { fromBus } from './core'
 import { play } from './sound'
 
 /**
@@ -42,15 +40,14 @@ const initialState = {
 }
 
 // Create the bus signal.
-const bus = nanobus()
-const inputSignal = fromBus(bus)
+const bus = new Bus()
 
 // Create the clock signal.
 const clockSignal = Signal.periodic(CLOCK_INTERVAL)
 
 // The state signal scans the game state transformer function over events on
 // the input signal.
-const stateSignal = inputSignal.scan(transformer, initialState)
+const stateSignal = bus.scan(transformer, initialState).dedupe()
 
 // The player AI stream emits the moves calculated for the current player.
 const aiSignal = stateSignal
@@ -59,11 +56,11 @@ const aiSignal = stateSignal
   .concatMap(state => nextMove(state.game.currentPlayer, state.game.world))
 
 const subscriptions = [
-  // Render the UI whenever the state changes.
-  stateSignal.subscribe(state => render(<RootView bus={bus} state={state} />, root)),
+  // Forward events from the AI signal to the bus.
+  bus.connect(aiSignal),
 
-  // Emit events from the AI signal on the bus.
-  aiSignal.subscribe(move => bus.emit(move.type, move))
+  // Render the UI whenever the state changes.
+  stateSignal.subscribe(state => render(<RootView bus={bus} state={state} />, root))
 ]
 
 if (module.hot) {
@@ -94,19 +91,19 @@ function buildGame (players) {
 function transformer (state, event) {
   let { game, muted } = state
 
-  if (event.type === 'end-turn') {
+  if (event === 'pause') {
+    game = set('paused', !game.paused, game)
+  } else if (event === 'mute') {
+    muted = !muted
+    window.localStorage.setItem('muted', muted)
+  } else if (event === 'restart') {
+    game = buildGame(game.players)
+  } else if (event === 'end-turn') {
     game = game.endTurn()
   } else if (event.type === 'select-country') {
     const result = game.selectCountry(event.country)
     game = result.game
     if (!muted) { play(result.action) }
-  } else if (event.type === 'pause') {
-    game = set('paused', !game.paused, game)
-  } else if (event.type === 'mute') {
-    muted = !muted
-    window.localStorage.setItem('muted', muted)
-  } else if (event.type === 'restart') {
-    game = buildGame(game.players)
   }
 
   if (!muted && game.win) {
