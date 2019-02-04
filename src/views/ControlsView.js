@@ -13,7 +13,7 @@ export default ({ bus, currentPlayer }) => {
       <span>{text}</span>
       <ButtonView
         disabled={currentPlayer && !currentPlayer.human}
-        onClick={() => bus.emit('end-turn')}
+        onClick={() => bus.value('end-turn')}
       >End Turn</ButtonView>
     </div>
   )

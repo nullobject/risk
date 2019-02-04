@@ -57,7 +57,7 @@ const nextMove = curry((player, world) => {
     }
   }
 
-  return Signal.of({ type: 'end-turn' })
+  return Signal.of('end-turn')
 })
 
 export default nextMove
