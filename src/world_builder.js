@@ -114,7 +114,7 @@ const byCountrySize = country => between(MIN_COUNTRY_SIZE, MAX_COUNTRY_SIZE, cou
 /**
  * Builds a new world with the given width and height.
  */
-export function build (width, height) {
+export default function build (width, height) {
   const hexgrid = new Hexgrid(CELL_SIZE)
   const size = hexgrid.sizeForRect(width, height)
   const hexagons = hexgrid.build(size, [1.0, 0.5])

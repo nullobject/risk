@@ -3,10 +3,10 @@ import { Bus, Signal } from 'bulb'
 import { range, set } from 'fkit'
 import { render } from 'react-dom'
 
-import * as WorldBuilder from './world_builder'
 import Game from './Game'
 import Player from './Player'
 import RootView from './views/RootView'
+import build from './world_builder'
 import log from './log'
 import nextMove from './ai'
 import { play } from './sound'
@@ -77,7 +77,7 @@ if (module.hot) {
  * @returns A new game.
  */
 function buildGame (players) {
-  const world = WorldBuilder.build(WIDTH, HEIGHT)
+  const world = build(WIDTH, HEIGHT)
   return new Game(players, world)
 }
 
