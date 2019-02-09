@@ -50,10 +50,10 @@ const nextMove = curry((player, world) => {
     const targetCountry = selectTarget(targetCountries)
 
     if (targetCountry) {
-      return Signal.fromArray([
+      return Signal.of(
         { type: 'select-country', country: sourceCountry },
         { type: 'select-country', country: targetCountry }
-      ])
+      )
     }
   }
 

@@ -19,7 +19,7 @@ export default ({ bus, country, enabled, nearby, selected }) => {
       <polygon
         className={className}
         points={country.polygon}
-        onClick={() => bus.value({ type: 'select-country', country })}
+        onClick={() => bus.next({ type: 'select-country', country })}
       />
       {renderSlots(country)}
     </g>
