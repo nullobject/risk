@@ -45,9 +45,8 @@ const bus = new Bus()
 // Create the clock signal.
 const clockSignal = Signal.periodic(CLOCK_INTERVAL)
 
-// The state signal scans the game state transformer function over events on
-// the input signal.
-const stateSignal = bus.scan(transformer, initialState).dedupe()
+// The state signal scans the reducer function over events on the input signal.
+const stateSignal = bus.scan(reducer, initialState).dedupe()
 
 // The player AI stream emits the moves calculated for the current player.
 const aiSignal = stateSignal
@@ -86,9 +85,9 @@ function buildGame (players) {
  *
  * @param state The current state.
  * @param event An event.
- * @returns A new game.
+ * @returns A new state.
  */
-function transformer (state, event) {
+function reducer (state, event) {
   let { game, muted } = state
 
   if (event === 'pause') {
